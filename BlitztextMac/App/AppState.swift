@@ -100,7 +100,8 @@ final class AppState {
         MeetingController.Settings(
             language: self.transcriptionSettings.language,
             postProcessor: self.postProcessor,
-            summarizes: self.appSettings.summarizesMeetings
+            summarizes: self.appSettings.summarizesMeetings,
+            prefersServerOnThisMac: self.appSettings.rewriteEngine == .provider
         )
     }
 
@@ -261,6 +262,14 @@ final class AppState {
         )
     }
 
+    var speechCleanup: SpeechCleanup.Configuration {
+        SpeechCleanup.Configuration(
+            level: appSettings.speechCleanupLevel,
+            engine: appSettings.rewriteEngine,
+            protectedTerms: textImprovementSettings.protectedTerms
+        )
+    }
+
     var resolvedLocalModelName: String {
         LocalTranscriptionService.resolvedModelName(appSettings.selectedLocalTranscriptionModelName)
     }
@@ -315,7 +324,8 @@ final class AppState {
             let workflow = TranscriptionWorkflow(
                 language: transcriptionSettings.language,
                 localModelName: selectedLocalModelName,
-                postProcessor: postProcessor
+                postProcessor: postProcessor,
+                cleanup: speechCleanup
             )
             configureWorkflowHandlers(workflow)
             activeWorkflow = workflow
@@ -326,7 +336,8 @@ final class AppState {
                 type: .localTapTalk,
                 language: transcriptionSettings.language,
                 localModelName: selectedLocalModelName,
-                postProcessor: postProcessor
+                postProcessor: postProcessor,
+                cleanup: speechCleanup
             )
             configureWorkflowHandlers(workflow)
             activeWorkflow = workflow

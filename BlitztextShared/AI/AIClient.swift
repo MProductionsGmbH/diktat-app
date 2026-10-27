@@ -59,7 +59,8 @@ enum AIClient {
         }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.timeoutInterval = 60
+        // A local model may first have to be loaded into memory.
+        request.timeoutInterval = config.isLocalServer ? 120 : 60
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if let key {
             request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
@@ -68,7 +69,7 @@ enum AIClient {
         request.httpBody = try JSONSerialization.data(withJSONObject: [
             "model": config.model,
             "messages": [
-                ["role": "system", "content": instruction],
+                ["role": "system", "content": systemMessage(instruction, for: config)],
                 ["role": "user", "content": text],
             ],
         ])
@@ -82,7 +83,24 @@ enum AIClient {
         else {
             throw AIClientError.emptyResponse
         }
-        return content.trimmingCharacters(in: .whitespacesAndNewlines)
+        let answer = strippingReasoning(content)
+        guard !answer.isEmpty else { throw AIClientError.emptyResponse }
+        return answer
+    }
+
+    /// Qwen3 thinks before it answers, which takes long and is not wanted for a rewrite;
+    /// its "/no_think" switch in the instruction turns that off. Other models never see it.
+    static func systemMessage(_ instruction: String, for config: AIProviderConfig) -> String {
+        guard config.isLocalServer, config.model.lowercased().contains("qwen3") else { return instruction }
+        return instruction + "\n\n/no_think"
+    }
+
+    /// Reasoning models (Qwen3, DeepSeek-R1) put their thoughts in `<think>` tags in front of the
+    /// answer. Only the answer is text for the user.
+    static func strippingReasoning(_ content: String) -> String {
+        content
+            .replacingOccurrences(of: "(?s)<think>.*?</think>", with: "", options: [.regularExpression, .caseInsensitive])
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     // MARK: - Anthropic Messages API

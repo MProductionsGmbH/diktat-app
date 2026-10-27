@@ -140,6 +140,8 @@ struct AppSettings: Codable {
     var restoreClipboardAfterPaste: Bool = true
     var correctCustomTermsEnabled: Bool = true
     var removeFillerWordsEnabled: Bool = true
+    /// How much word-for-word dictation (Blitztext) tidies up: stutters, restarts, grammar.
+    var speechCleanupLevel: SpeechCleanupLevel = .light
     var historyRetention: HistoryRetention = .day
     /// `WhatsNew.version` the user already confirmed; nil before the first note.
     var lastSeenWhatsNewVersion: String?
@@ -185,6 +187,7 @@ struct AppSettings: Codable {
         case restoreClipboardAfterPaste
         case correctCustomTermsEnabled
         case removeFillerWordsEnabled
+        case speechCleanupLevel
         case historyRetention
         case lastSeenWhatsNewVersion
         case appModeRules
@@ -216,6 +219,7 @@ struct AppSettings: Codable {
         restoreClipboardAfterPaste = try container.decodeIfPresent(Bool.self, forKey: .restoreClipboardAfterPaste) ?? true
         correctCustomTermsEnabled = try container.decodeIfPresent(Bool.self, forKey: .correctCustomTermsEnabled) ?? true
         removeFillerWordsEnabled = try container.decodeIfPresent(Bool.self, forKey: .removeFillerWordsEnabled) ?? true
+        speechCleanupLevel = (try? container.decodeIfPresent(SpeechCleanupLevel.self, forKey: .speechCleanupLevel)) ?? .light
         historyRetention = (try? container.decodeIfPresent(HistoryRetention.self, forKey: .historyRetention)) ?? .day
         lastSeenWhatsNewVersion = try container.decodeIfPresent(String.self, forKey: .lastSeenWhatsNewVersion)
         appModeRules = (try? container.decodeIfPresent([AppModeRule].self, forKey: .appModeRules)) ?? []

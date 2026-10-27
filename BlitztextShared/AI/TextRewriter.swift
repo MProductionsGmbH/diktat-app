@@ -111,6 +111,21 @@ enum TextRewriter {
         return try await rewriteLocally(text, instruction: instruction, deterministic: deterministic)
     }
 
+    /// The connected provider when it is a model server on this Mac itself (Ollama, LM Studio on
+    /// localhost). Meetings may use it: the text never leaves the Mac. A server elsewhere in the
+    /// network or on the internet is never returned.
+    static var serverOnThisMac: AIProviderConfig? {
+        guard let config = AIProviderStore.config, AIProviderStore.isConfigured, config.isOnThisMac else { return nil }
+        return config
+    }
+
+    /// The model server on this Mac and nothing else, for features that promise the text stays
+    /// on the Mac whatever the engine setting. Throws when no such server is set up.
+    static func rewriteOnServerOnThisMac(_ text: String, instruction: String) async throws -> String {
+        guard let config = serverOnThisMac else { throw RewriteError.noModel }
+        return try await AIClient.complete(instruction: instruction, text: text, config: config)
+    }
+
     private static func rewriteLocally(_ text: String, instruction: String, deterministic: Bool) async throws -> String {
         #if canImport(FoundationModels)
         if #available(iOS 26.0, macOS 26.0, *) {

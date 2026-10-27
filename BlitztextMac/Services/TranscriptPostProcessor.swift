@@ -580,6 +580,52 @@ struct TranscriptPostProcessor {
         return result
     }
 
+    /// "wir müssen wir müssen das klären" -> "wir müssen das klären": a group of two to four
+    /// words said twice in a row (case and commas ignored) is a restart, not a statement.
+    /// The first copy stays, the second copy hands over its punctuation. A sentence end
+    /// between the copies means deliberate repetition, and numbers are left alone.
+    static func collapseRepeatedPhrases(_ text: String) -> String {
+        var result = text
+        // A phrase said three times collapses in two passes.
+        for _ in 0..<3 {
+            let collapsed = collapseRepeatedPhrasesOnce(result)
+            if collapsed == result { break }
+            result = collapsed
+        }
+        return result
+    }
+
+    private static func collapseRepeatedPhrasesOnce(_ text: String) -> String {
+        let tokens = tokenize(text)
+        let words = tokens.map { text[$0.core].filter(\.isLetter).lowercased() }
+
+        var result = ""
+        var position = text.startIndex
+        var index = 0
+        var collapsedAny = false
+        outer: while index < tokens.count {
+            for length in stride(from: 4, through: 2, by: -1) {
+                let end = index + 2 * length
+                guard end <= tokens.count else { continue }
+                let phrase = words[index..<index + length]
+                guard !phrase.contains(where: \.isEmpty), Set(phrase).count > 1,
+                      phrase.elementsEqual(words[index + length..<end]),
+                      !tokens[index..<end - 1].contains(where: { endsSentence($0, in: text) }) else { continue }
+                let last = tokens[end - 1]
+                result += text[position..<tokens[index + length - 1].core.upperBound]
+                result += text[last.core.upperBound..<last.range.upperBound]
+                position = last.range.upperBound
+                index = end
+                collapsedAny = true
+                continue outer
+            }
+            index += 1
+        }
+        guard collapsedAny else { return text }
+        result += text[position...]
+        return result
+    }
+
     private static func endsSentence(_ token: Token, in text: String) -> Bool {
         let trailing = text[token.core.upperBound..<token.range.upperBound]
         // An ellipsis is a pause inside the sentence, which is where stutters happen.
@@ -588,7 +634,7 @@ struct TranscriptPostProcessor {
     }
 
     static func normalize(_ text: String, capitalizeFirstLetterLike original: String) -> String {
-        var result = collapseStutters(text)
+        var result = collapseRepeatedPhrases(collapseStutters(text))
         // Remove orphaned punctuation left behind by filler removal (", , ok" -> ", ok").
         result = result.replacingOccurrences(of: "[ \\t]+([,.])", with: "$1", options: .regularExpression)
         result = result.replacingOccurrences(of: ",{2,}", with: ",", options: .regularExpression)

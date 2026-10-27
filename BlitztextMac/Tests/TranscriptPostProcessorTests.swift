@@ -289,6 +289,29 @@ final class TranscriptPostProcessorTests: XCTestCase {
         XCTAssertEqual(TranscriptPostProcessor.collapseStutters("das das ist gut"), "das das ist gut")
     }
 
+    // MARK: Repeated phrases
+
+    func testRepeatedPhrasesKeepFirstCopyAndLastPunctuation() {
+        XCTAssertEqual(processor().process("Wir müssen wir müssen das klären."), "Wir müssen das klären.")
+        XCTAssertEqual(processor().process("Ich gehe morgen, ich gehe morgen ins Büro."), "Ich gehe morgen ins Büro.")
+    }
+
+    func testRepeatedPhrasesCollapseThreeCopies() {
+        XCTAssertEqual(
+            TranscriptPostProcessor.collapseRepeatedPhrases("wir müssen wir müssen wir müssen los"),
+            "wir müssen los"
+        )
+    }
+
+    func testRepeatedPhrasesKeepDeliberateRepetition() {
+        XCTAssertEqual(
+            TranscriptPostProcessor.collapseRepeatedPhrases("Es geht los. Es geht los. Danach folgt mehr."),
+            "Es geht los. Es geht los. Danach folgt mehr."
+        )
+        XCTAssertEqual(TranscriptPostProcessor.collapseRepeatedPhrases("Die Zahl ist 1 2 1 2."), "Die Zahl ist 1 2 1 2.")
+        XCTAssertEqual(TranscriptPostProcessor.collapseRepeatedPhrases("das das ist gut"), "das das ist gut")
+    }
+
     // MARK: Building blocks
 
     func testColognePhoneticsReferenceExamples() {

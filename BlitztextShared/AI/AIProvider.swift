@@ -83,6 +83,22 @@ struct AIProviderConfig: Codable, Equatable {
         self.model = model ?? provider.defaultModel
         self.baseURL = baseURL ?? provider.defaultBaseURL
     }
+
+    private var host: String? { provider == .custom ? URL(string: baseURL)?.host?.lowercased() : nil }
+
+    /// True when the address is a server on this Mac itself (Ollama, LM Studio on localhost):
+    /// the text does not leave the Mac. Meetings may use only this.
+    var isOnThisMac: Bool {
+        guard let host else { return false }
+        return host == "localhost" || host == "127.0.0.1" || host == "::1"
+    }
+
+    /// True when the address is a server on this Mac or in the local network: the text does
+    /// not leave the home network.
+    var isLocalServer: Bool {
+        guard let host else { return false }
+        return isOnThisMac || host.hasSuffix(".local")
+    }
 }
 
 enum AIProviderStore {

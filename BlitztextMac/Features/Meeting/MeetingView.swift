@@ -113,7 +113,7 @@ struct MeetingView: View {
                     }
                     Text(LiveNotesController.isAvailable
                          ? "Alle zweieinhalb Minuten schreibt Blitztext mit, was besprochen und entschieden wurde. Bleibt auf diesem Mac."
-                         : "Brauchen Apple Intelligence oder ein lokales Sprachmodell (Einstellungen, Modelle).")
+                         : "Brauchen Apple Intelligence, ein lokales Sprachmodell (Einstellungen, Modelle) oder ein Modell auf diesem Mac, etwa Ollama.")
                         .font(.ui(11))
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)

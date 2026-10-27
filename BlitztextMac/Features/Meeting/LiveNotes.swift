@@ -45,7 +45,13 @@ final class LiveNotesController {
     /// What was said, stretch by stretch, for "Was habe ich verpasst?".
     @ObservationIgnored private var stretches: [(at: Date, text: String)] = []
 
-    init(microphoneURL: URL, systemBuffer: LiveAudioBuffer?, language: String, postProcessor: TranscriptPostProcessor, ownName: String?) {
+    @ObservationIgnored private let prefersServerOnThisMac: Bool
+
+    init(
+        microphoneURL: URL, systemBuffer: LiveAudioBuffer?, language: String, postProcessor: TranscriptPostProcessor,
+        ownName: String?, prefersServerOnThisMac: Bool = false
+    ) {
+        self.prefersServerOnThisMac = prefersServerOnThisMac
         microphone = MicrophoneFileTail(url: microphoneURL)
         self.systemBuffer = systemBuffer
         self.language = language
@@ -53,9 +59,11 @@ final class LiveNotesController {
         self.ownName = ownName
     }
 
-    /// Notes need a model on this Mac: a downloaded one or Apple Intelligence.
+    /// Notes need a model on this Mac: a downloaded one, Apple Intelligence or a model server
+    /// on this Mac itself (Ollama).
     static var isAvailable: Bool {
         LocalModelStore.shared.preferredInstalled != nil || TextRewriter.isLocalAvailable
+            || TextRewriter.serverOnThisMac != nil
     }
 
     func start() {
@@ -199,7 +207,8 @@ final class LiveNotesController {
     #endif
 
     private func loadedBackend() async throws -> LiveNotesBackend {
-        let load = backendLoad ?? Task { try await LiveNotesBackend.make() }
+        let prefersServer = prefersServerOnThisMac
+        let load = backendLoad ?? Task { try await LiveNotesBackend.make(prefersServerOnThisMac: prefersServer) }
         backendLoad = load
         do {
             let backend = try await load.value
@@ -308,8 +317,9 @@ enum LiveNotesFailure: LocalizedError {
 }
 
 /// The model behind the live notes: the downloaded local model if there is one and it
-/// loads, otherwise Apple Intelligence. Never a cloud provider, whatever the engine setting.
-/// The local model stays loaded for the whole meeting.
+/// loads, otherwise Apple Intelligence, otherwise a model server on this Mac (Ollama); with
+/// "Immer Modell-Anbieter" that server comes first. Never a server elsewhere or a cloud
+/// provider, whatever the engine setting. The local model stays loaded for the whole meeting.
 struct LiveNotesBackend {
     let name: String
     /// Characters per request, earlier notes and new transcript together.
@@ -318,8 +328,9 @@ struct LiveNotesBackend {
     let close: () async -> Void
 
     @MainActor
-    static func make() async throws -> LiveNotesBackend {
+    static func make(prefersServerOnThisMac: Bool = false) async throws -> LiveNotesBackend {
         var localFailure: Error?
+        if prefersServerOnThisMac, let server = serverBackend() { return server }
         #if arch(arm64)
         if let variant = LocalModelStore.shared.preferredInstalled {
             let model = LocalLanguageModel(folder: LocalModelStore.folder(for: variant))
@@ -345,6 +356,7 @@ struct LiveNotesBackend {
         }
         #endif
         guard TextRewriter.isLocalAvailable else {
+            if let server = serverBackend() { return server }
             throw localFailure ?? TextRewriter.RewriteError.noModel
         }
         return LiveNotesBackend(
@@ -352,6 +364,21 @@ struct LiveNotesBackend {
             characterLimit: MeetingSummarizer.localCharacterLimit,
             complete: { instruction, text in
                 try await TextRewriter.rewriteOnDevice(text, instruction: instruction, deterministic: true)
+            },
+            close: {}
+        )
+    }
+}
+
+extension LiveNotesBackend {
+    /// The model server on this Mac, nil when none is set up. It keeps its model loaded itself.
+    fileprivate static func serverBackend() -> LiveNotesBackend? {
+        guard let config = TextRewriter.serverOnThisMac else { return nil }
+        return LiveNotesBackend(
+            name: "\(config.model) (Ollama)",
+            characterLimit: MeetingController.localServerCharacterLimit,
+            complete: { instruction, text in
+                try await TextRewriter.rewriteOnServerOnThisMac(text, instruction: instruction)
             },
             close: {}
         )

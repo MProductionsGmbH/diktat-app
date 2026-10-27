@@ -23,18 +23,21 @@ final class TranscriptionWorkflow: Workflow {
     private let language: String
     private let localModelName: String
     private let postProcessor: TranscriptPostProcessor
+    private let cleanup: SpeechCleanup.Configuration
     private var transcriptionTask: Task<Void, Never>?
 
     init(
         type: WorkflowType = .tapTalk,
         language: String = "de",
         localModelName: String = LocalTranscriptionService.recommendedFastModelName,
-        postProcessor: TranscriptPostProcessor = TranscriptPostProcessor(correctCustomTerms: false, removeFillerWords: false)
+        postProcessor: TranscriptPostProcessor = TranscriptPostProcessor(correctCustomTerms: false, removeFillerWords: false),
+        cleanup: SpeechCleanup.Configuration = SpeechCleanup.Configuration()
     ) {
         self.type = type
         self.language = language
         self.localModelName = localModelName
         self.postProcessor = postProcessor
+        self.cleanup = cleanup
     }
 
     func start() {
@@ -108,7 +111,12 @@ final class TranscriptionWorkflow: Workflow {
                     return
                 }
 
-                let processed = postProcessor.process(cleaned)
+                var processed = postProcessor.process(cleaned)
+                if cleanup.level.usesLanguageModel, !processed.isEmpty {
+                    phase = .running("Text wird geglättet ...")
+                    processed = await SpeechCleanup.polish(processed, configuration: cleanup)
+                    try Task.checkCancellation()
+                }
                 guard !processed.isEmpty else {
                     phase = .error("Keine Aufnahme erkannt.")
                     return

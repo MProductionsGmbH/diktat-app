@@ -5,8 +5,10 @@ import Observation
 /// Records a meeting through the Mac's microphone and turns it into a transcript by person,
 /// optionally with a summary and to-dos. For an online meeting it also records what the Mac
 /// plays: the microphone becomes "Ich", the system sound is split into the other people.
-/// Transcription, speaker detection and the summary run on this Mac; meetings never go to
-/// a model provider, whatever the setting for the writing modes.
+/// Transcription, speaker detection and the summary run on this Mac: with the downloaded
+/// model, Apple Intelligence or a model server on this Mac itself (Ollama on localhost).
+/// Meetings never go to a server elsewhere or to a model provider on the internet,
+/// whatever the setting for the writing modes.
 @Observable
 @MainActor
 final class MeetingController {
@@ -22,6 +24,9 @@ final class MeetingController {
         let language: String
         let postProcessor: TranscriptPostProcessor
         let summarizes: Bool
+        /// "Immer Modell-Anbieter" with a server on this Mac (Ollama): it comes before the
+        /// downloaded model and Apple Intelligence.
+        var prefersServerOnThisMac = false
     }
 
     private(set) var phase: Phase = .idle {
@@ -153,7 +158,8 @@ final class MeetingController {
                     systemBuffer: isRecordingSystemAudio ? liveBuffer : nil,
                     language: settings.language,
                     postProcessor: settings.postProcessor,
-                    ownName: Self.ownName
+                    ownName: Self.ownName,
+                    prefersServerOnThisMac: settings.prefersServerOnThisMac
                 )
                 live.start()
                 liveNotes = live
@@ -465,9 +471,10 @@ final class MeetingController {
         store.setSummary(record.summary, note: record.summaryNote, for: meetingID)
     }
 
-    /// On this Mac only: the downloaded local model, which summarizes more exactly, otherwise
-    /// Apple Intelligence. The start page and the question for the chat promise that, so
-    /// there is no fallback to a model provider.
+    /// On this Mac only. Order: a model server on this Mac when "Immer Modell-Anbieter" is set,
+    /// the downloaded local model, Apple Intelligence, and without Apple Intelligence the model
+    /// server on this Mac. The start page and the question for the chat promise that, so there is no
+    /// fallback to a server elsewhere or to a model provider on the internet.
     private func summarize(_ record: inout MeetingRecord) async {
         // The live notes may still hold the local model; only one copy fits comfortably.
         await liveNotesShutdown?.value
@@ -475,6 +482,14 @@ final class MeetingController {
         let transcript = record.transcriptText(ownName: Self.ownName)
         // Why the local model did not summarize, when it was tried.
         var localFailure: String?
+        let prefersServer = settingsProvider().prefersServerOnThisMac
+        if prefersServer, TextRewriter.serverOnThisMac != nil {
+            if let failure = await summarizeOnServer(&record, transcript: transcript) {
+                localFailure = failure
+            } else {
+                return
+            }
+        }
         #if arch(arm64)
         if let variant = LocalModelStore.shared.preferredInstalled {
             let model = LocalLanguageModel(folder: LocalModelStore.folder(for: variant))
@@ -494,12 +509,18 @@ final class MeetingController {
         }
         #endif
         guard TextRewriter.isLocalAvailable else {
+            if !prefersServer, TextRewriter.serverOnThisMac != nil {
+                if let failure = await summarizeOnServer(&record, transcript: transcript) {
+                    record.summaryNote = [localFailure, failure].compactMap { $0 }.joined(separator: " ")
+                }
+                return
+            }
             if let localFailure {
                 // An earlier summary stays.
                 record.summaryNote = localFailure
             } else {
                 record.summary = nil
-                record.summaryNote = "F\u{00FC}r die Zusammenfassung braucht Blitztext Apple Intelligence oder ein lokales Sprachmodell (Einstellungen, Modelle). Meetings gehen nie an einen Modell-Anbieter."
+                record.summaryNote = "F\u{00FC}r die Zusammenfassung braucht Blitztext Apple Intelligence, ein lokales Sprachmodell (Einstellungen, Modelle) oder ein Modell auf diesem Mac, etwa Ollama. Meetings gehen nie an einen Modell-Anbieter im Internet."
             }
             return
         }
@@ -515,6 +536,22 @@ final class MeetingController {
         }
     }
 
+    /// Summarizes with the model server on this Mac (Ollama). Returns why it failed, nil when the
+    /// summary is in `record`. A failure keeps an earlier summary.
+    private func summarizeOnServer(_ record: inout MeetingRecord, transcript: String) async -> String? {
+        guard let config = TextRewriter.serverOnThisMac else { return nil }
+        do {
+            let backend = MeetingSummarizer.Backend(characterLimit: Self.localServerCharacterLimit) { instruction, text in
+                try await TextRewriter.rewriteOnServerOnThisMac(text, instruction: instruction)
+            }
+            record.summary = try await MeetingSummarizer.summarize(transcript, engine: .provider, backend: backend)
+            record.summaryNote = nil
+            return nil
+        } catch {
+            return "\(config.model) auf diesem Mac konnte nicht zusammenfassen (\(error.localizedDescription)). Läuft Ollama?"
+        }
+    }
+
     /// The first name of the macOS account, e.g. "Paul", so a summary can assign the tasks
     /// the person at this Mac took on. Nil without a name.
     static var ownName: String? {
@@ -524,6 +561,9 @@ final class MeetingController {
     /// Characters per request for a local model: about 11,000 tokens of German, which keeps
     /// the memory for the context small while a two-hour meeting needs only a few parts.
     static let localModelCharacterLimit = 40_000
+    /// Characters per request to a model server on this Mac. Ollama's own context length decides
+    /// what the model reads (OLLAMA_CONTEXT_LENGTH); 20,000 characters need about 16K tokens.
+    static let localServerCharacterLimit = 20_000
 
     // MARK: - Results
 

@@ -976,9 +976,46 @@ struct CustomizeSettingsView: View {
                     .toggleStyle(.trailingSwitch)
                     .font(.ui(11.5))
             }
+
+            SettingsSection(title: "Versprecher glätten") {
+                Picker("", selection: $appState.appSettings.speechCleanupLevel) {
+                    ForEach(SpeechCleanupLevel.allCases) { level in
+                        Text(level.displayName).tag(level)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+
+                Text(appState.appSettings.speechCleanupLevel.detail)
+                    .font(.ui(12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if appState.appSettings.speechCleanupLevel.usesLanguageModel {
+                    Text(speechCleanupEngineNote)
+                        .font(.ui(12))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
             }
 
         }
+    }
+
+    /// Where the model step of the cleanup runs, so the privacy promise stays visible.
+    private var speechCleanupEngineNote: String {
+        let engine = appState.appSettings.rewriteEngine
+        if TextRewriter.runsLocally(engine: engine) {
+            return "Läuft mit Apple Intelligence auf deinem Mac. Der Text verlässt das Gerät nicht."
+        }
+        if TextRewriter.canRewrite(engine: engine) {
+            if let config = AIProviderStore.config, config.isLocalServer {
+                return "Läuft über dein lokales Modell \(config.model) (\(config.baseURL)). Der Text verlässt dein Netz nicht, das Modell muss dafür laufen."
+            }
+            return "Das Transkript geht dafür an deinen Modell-Anbieter. Ohne Anbieter bleibt es bei \u{201E}Leicht\u{201C}."
+        }
+        return "Braucht Apple Intelligence oder einen Modell-Anbieter. Bis dahin gilt \u{201E}Leicht\u{201C}."
     }
 
     private var dampfPromptIsCustom: Bool {
