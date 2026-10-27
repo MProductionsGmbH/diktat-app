@@ -559,6 +559,13 @@ struct CustomizeSettingsView: View {
             // MARK: Tastenkuerzel
             SettingsSection(title: "Tastenk\u{00FC}rzel") {
 
+                Toggle("fn-Taste (\u{1F310}) allein zum Diktieren", isOn: $appState.appSettings.fnAloneStartsDictation)
+                    .toggleStyle(.trailingSwitch)
+                Text("Die Taste mit der Weltkugel startet Diktat, ohne zweite Taste. Diktat wartet daf\u{00FC}r einen Moment (0,15\u{202F}s), um fn allein von fn + Shift usw. zu unterscheiden. In macOS unter Systemeinstellungen > Tastatur \u{201E}\u{1F310}-Taste dr\u{00FC}cken f\u{00FC}r\u{201C} auf \u{201E}Nichts tun\u{201C} stellen, sonst \u{00F6}ffnet sich der Emoji-Picker.")
+                    .font(.ui(12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 VStack(spacing: 6) {
                     ForEach(WorkflowType.mainMenuCases) { type in
                         HStack(spacing: 6) {

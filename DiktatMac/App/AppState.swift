@@ -68,6 +68,10 @@ final class AppState {
             if oldValue.customHotkeys != appSettings.customHotkeys {
                 hotkeyService.updateCustomHotkeys(appSettings.resolvedCustomHotkeys)
             }
+            if oldValue.fnAloneStartsDictation != appSettings.fnAloneStartsDictation
+                || oldValue.hotkeyMode != appSettings.hotkeyMode {
+                applyFnAloneSetting()
+            }
             if oldValue.historyRetention != appSettings.historyRetention {
                 history.updateRetention(appSettings.historyRetention)
             }
@@ -190,6 +194,7 @@ final class AppState {
             }
         }
         hotkeyService.updateCustomHotkeys(appSettings.resolvedCustomHotkeys)
+        applyFnAloneSetting()
         refreshAccessibilityPermission()
         migrateToSetupAssistant()
         KeychainService.removeLegacyServerCredentials()
@@ -236,6 +241,13 @@ final class AppState {
     /// Badge label: the custom shortcut when set, otherwise the built-in fn shortcut.
     func hotkeyLabel(for type: WorkflowType) -> String {
         appSettings.customHotkey(for: type)?.displayLabel ?? type.hotkeyLabel
+    }
+
+    private func applyFnAloneSetting() {
+        hotkeyService.setFnAlone(
+            appSettings.fnAloneStartsDictation ? .tapTalk : nil,
+            tapStarts: appSettings.hotkeyMode == .toggle
+        )
     }
 
     func setCustomHotkey(_ combo: KeyCombo?, for type: WorkflowType) {

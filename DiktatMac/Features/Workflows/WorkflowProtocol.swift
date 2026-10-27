@@ -137,6 +137,9 @@ struct AppSettings: Codable {
     var hasMigratedToSetupAssistant: Bool = false
     /// Optional shortcuts per workflow (keyed by `WorkflowType.rawValue`) for non-Apple keyboards.
     var customHotkeys: [String: KeyCombo] = [:]
+    /// The fn (globe) key alone starts Diktat. Off by default: it needs a pause before it starts, and
+    /// macOS opens the emoji picker on fn unless "Press 🌐 key to" is set to "Do nothing".
+    var fnAloneStartsDictation: Bool = false
     var restoreClipboardAfterPaste: Bool = true
     var correctCustomTermsEnabled: Bool = true
     var removeFillerWordsEnabled: Bool = true
@@ -184,6 +187,7 @@ struct AppSettings: Codable {
         case hasCheckedParakeetDefault
         case hasMigratedToSetupAssistant
         case customHotkeys
+        case fnAloneStartsDictation
         case restoreClipboardAfterPaste
         case correctCustomTermsEnabled
         case removeFillerWordsEnabled
@@ -219,6 +223,7 @@ struct AppSettings: Codable {
         restoreClipboardAfterPaste = try container.decodeIfPresent(Bool.self, forKey: .restoreClipboardAfterPaste) ?? true
         correctCustomTermsEnabled = try container.decodeIfPresent(Bool.self, forKey: .correctCustomTermsEnabled) ?? true
         removeFillerWordsEnabled = try container.decodeIfPresent(Bool.self, forKey: .removeFillerWordsEnabled) ?? true
+        fnAloneStartsDictation = (try? container.decodeIfPresent(Bool.self, forKey: .fnAloneStartsDictation)) ?? false
         speechCleanupLevel = (try? container.decodeIfPresent(SpeechCleanupLevel.self, forKey: .speechCleanupLevel)) ?? .light
         historyRetention = (try? container.decodeIfPresent(HistoryRetention.self, forKey: .historyRetention)) ?? .day
         lastSeenWhatsNewVersion = try container.decodeIfPresent(String.self, forKey: .lastSeenWhatsNewVersion)

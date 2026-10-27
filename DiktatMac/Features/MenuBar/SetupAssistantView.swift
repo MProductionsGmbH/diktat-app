@@ -245,6 +245,17 @@ struct SetupAssistantView: View {
             }
         } else {
             VStack(alignment: .leading, spacing: 4) {
+                Picker("", selection: Binding(
+                    get: { appState.selectedLocalModelName },
+                    set: { appState.appSettings.selectedLocalTranscriptionModelName = $0 }
+                )) {
+                    ForEach(LocalTranscriptionService.modelOptions(selected: appState.selectedLocalModelName)) { model in
+                        Text(model.pickerLabel).tag(model.id)
+                    }
+                }
+                .labelsHidden()
+                .controlSize(.small)
+                .frame(maxWidth: 260)
                 Button("\(modelName) laden") { appState.installSelectedLocalModel() }
                     .buttonStyle(actionStyle(for: 3))
                 if let error = appState.localModelDownloadErrorText {

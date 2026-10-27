@@ -40,6 +40,14 @@ final class HotkeyService {
     private let carbonRegistrar = CarbonHotkeyRegistrar()
     private var customHotkeys: [WorkflowType: KeyCombo] = [:]
     private var customHotkeysSuspended = false
+    /// The mode the fn (globe) key starts on its own, if the user turned that on.
+    private var fnAloneType: WorkflowType?
+    /// Whether a short tap of fn starts the mode ("Drücken"). In "Halten" a tap is too short to dictate.
+    private var fnAloneTapStarts = false
+    private var fnAlonePending: Task<Void, Never>?
+    /// fn alone is only taken as such after this pause: fn + Shift and the other combos press
+    /// fn first, and must not start the fn-alone mode on the way.
+    private static let fnAloneDelay: Duration = .milliseconds(150)
 
     var onHotkeyEvent: ((HotkeyEvent) -> Void)?
     /// Whether a dictation is recording or being processed. Only then does Escape get taken
@@ -110,6 +118,18 @@ final class HotkeyService {
         registerCustomHotkeys()
     }
 
+    /// Lets the fn (globe) key alone start `type`, or turns that off with nil.
+    func setFnAlone(_ type: WorkflowType?, tapStarts: Bool) {
+        fnAloneType = type
+        fnAloneTapStarts = tapStarts
+        if type == nil { cancelPendingFnAlone() }
+    }
+
+    private func cancelPendingFnAlone() {
+        fnAlonePending?.cancel()
+        fnAlonePending = nil
+    }
+
     /// Temporarily disables all shortcuts (own and fn), e.g. while the user records a new one.
     func setCustomHotkeysSuspended(_ suspended: Bool) {
         guard customHotkeysSuspended != suspended else { return }
@@ -172,6 +192,29 @@ final class HotkeyService {
         if ignoresHeldKeys {
             guard !flags.contains(.function) else { return }
             ignoresHeldKeys = false
+        }
+
+        if flags == [.function], let type = fnAloneType, activeCombo == nil, !customHotkeysSuspended {
+            cancelPendingFnAlone()
+            fnAlonePending = Task { [weak self] in
+                try? await Task.sleep(for: Self.fnAloneDelay)
+                guard !Task.isCancelled, let self else { return }
+                self.fnAlonePending = nil
+                guard self.activeCombo == nil,
+                      ShortcutModifiers.normalized(NSEvent.modifierFlags) == [.function] else { return }
+                self.activeCombo = type
+                self.onHotkeyEvent?(.down(type))
+            }
+            return
+        }
+
+        let tappedFnAlone = fnAlonePending != nil && flags.isEmpty
+        cancelPendingFnAlone()
+        if tappedFnAlone, fnAloneTapStarts, let type = fnAloneType, activeCombo == nil, !customHotkeysSuspended {
+            // A quick tap in "Drücken": start (or stop) like a press and release.
+            onHotkeyEvent?(.down(type))
+            onHotkeyEvent?(.up(type))
+            return
         }
 
         if let match = Self.fnCombos.first(where: { $0.flags == flags }) {
