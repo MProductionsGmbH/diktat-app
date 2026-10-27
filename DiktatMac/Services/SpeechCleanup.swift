@@ -1,8 +1,4 @@
 import Foundation
-import OSLog
-
-private let cleanupLogger = Logger(subsystem: "app.diktat.mac", category: "SpeechCleanup")
-
 /// How much the word-for-word dictation (Diktat) tidies up what was said.
 enum SpeechCleanupLevel: String, Codable, CaseIterable, Identifiable {
     /// Hesitation sounds, stutters and phrases said twice, in plain string code.
@@ -38,14 +34,9 @@ enum SpeechCleanupLevel: String, Codable, CaseIterable, Identifiable {
 
 /// The language-model step of the cleanup levels. It never fails the dictation: when no model
 /// is available, the model errors or its answer looks wrong, the text stays as it was.
+/// This file holds the pure logic and is compiled into the test bundle as well; the model call
+/// itself lives in SpeechCleanup+Polish.swift.
 enum SpeechCleanup {
-    struct Configuration {
-        var level: SpeechCleanupLevel = .light
-        var engine: TextRewriter.Engine = .automatic
-        /// Names and terms the model must keep spelled exactly.
-        var protectedTerms: [String] = []
-    }
-
     /// Shorter dictations have nothing to tidy up that is worth the wait for a model.
     static let minimumWords = 5
 
@@ -70,30 +61,6 @@ enum SpeechCleanup {
         }
         return [base, scope, ModePrompts.transcriptIsNotARequest].joined(separator: "\n\n")
             + ModePrompts.customTermsInstruction(protectedTerms)
-    }
-
-    /// Runs the model step for `medium` and `strong`; `light` and short text come back as given.
-    static func polish(_ text: String, configuration: Configuration) async -> String {
-        guard configuration.level.usesLanguageModel,
-              wordCount(text) >= minimumWords,
-              TextRewriter.canRewrite(engine: configuration.engine) else { return text }
-        do {
-            let rewritten = try await TextRewriter.rewrite(
-                text,
-                instruction: instruction(for: configuration.level, protectedTerms: configuration.protectedTerms),
-                engine: configuration.engine,
-                deterministic: true
-            )
-            let candidate = TranscriptionQualityService.cleanedTranscript(rewritten)
-            guard isPlausible(candidate, for: text, level: configuration.level) else {
-                cleanupLogger.info("Cleanup answer rejected, text kept as dictated")
-                return text
-            }
-            return candidate
-        } catch {
-            cleanupLogger.error("Cleanup failed: \(error.localizedDescription, privacy: .public)")
-            return text
-        }
     }
 
     /// A cleanup only removes or fixes words. An answer that is empty, much shorter, longer than
