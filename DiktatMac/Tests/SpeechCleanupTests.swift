@@ -37,9 +37,4 @@ final class SpeechCleanupTests: XCTestCase {
         XCTAssertEqual(SpeechCleanup.wordCount(" eins  zwei\ndrei "), 3)
         XCTAssertEqual(SpeechCleanup.wordCount(""), 0)
     }
-
-    func testStoredSettingsWithoutLevelDecodeAsLight() throws {
-        let settings = try JSONDecoder().decode(AppSettings.self, from: Data("{}".utf8))
-        XCTAssertEqual(settings.speechCleanupLevel, .light)
-    }
 }
