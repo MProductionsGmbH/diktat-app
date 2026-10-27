@@ -52,11 +52,11 @@ jobs:
         run: ./build.sh --debug
 
       - name: Unit tests
-        working-directory: BlitztextMac
+        working-directory: DiktatMac
         run: |
           xcodebuild \
-            -project BlitztextMac.xcodeproj \
-            -scheme BlitztextMac \
+            -project DiktatMac.xcodeproj \
+            -scheme DiktatMac \
             -destination 'platform=macOS,arch=arm64' \
             ARCHS=arm64 \
             ONLY_ACTIVE_ARCH=YES \

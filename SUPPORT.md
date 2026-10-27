@@ -1,6 +1,6 @@
 # Support
 
-Blitztext is free and open source, maintained by Blackboat alongside our client work. There is no service-level agreement, paid support channel, or guarantee that issues will be fixed.
+Diktat is free and open source, maintained by MProductions GmbH. There is no service-level agreement, paid support channel, or guarantee that issues will be fixed.
 
 ## Before Asking For Help
 

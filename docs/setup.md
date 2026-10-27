@@ -2,23 +2,23 @@
 
 ## 1. Install
 
-Either download the signed app from the [releases page](https://github.com/cmagnussen/blitztext-app/releases/latest), or build it:
+Either download the signed app from the [releases page](https://github.com/MProductionsGmbH/diktat-app/releases/latest), or build it:
 
 ```bash
 brew install xcodegen
-git clone https://github.com/cmagnussen/blitztext-app.git
-cd blitztext-app
+git clone https://github.com/MProductionsGmbH/diktat-app.git
+cd diktat-app
 ./build.sh --install --run
 ```
 
-The app is installed to `/Applications/Blitztext.app` and appears in the menu bar.
+The app is installed to `/Applications/Diktat.app` and appears in the menu bar.
 
 ## 2. Permissions
 
 - **Microphone:** to record.
 - **Accessibility:** to paste into the app you are using. Without it, results stay on the clipboard.
 
-If paste stops working after an update or rebuild, open **System Settings > Privacy & Security > Accessibility**, remove old Blitztext entries, add the current app and restart Blitztext.
+If paste stops working after an update or rebuild, open **System Settings > Privacy & Security > Accessibility**, remove old Diktat entries, add the current app and restart Diktat.
 
 ## 3. Local Speech Model
 
@@ -27,11 +27,11 @@ Open **Settings > Modelle > Spracherkennung**, pick a model and load it once:
 - **Parakeet Ultra** (recommended on Apple silicon): fast, 25 European languages, about 630 MB.
 - **Whisper Large v3 Turbo / Small:** about 100 languages, slower.
 
-After a macOS update the first dictation can take a few minutes while macOS prepares the model for the Neural Engine. Blitztext shows a hint; keep it running.
+After a macOS update the first dictation can take a few minutes while macOS prepares the model for the Neural Engine. Diktat shows a hint; keep it running.
 
 ## 4. Writing Modes
 
-Blitztext+, $%&! and :) need a language model:
+Diktat+, $%&! and :) need a language model:
 
 - **Apple Intelligence** (macOS 26, turned on in System Settings): runs on your Mac. Nothing to configure.
 - **Your own model provider** (optional): **Settings > Modelle > Modell-Anbieter**, choose a provider, paste your API key, test the connection. Local servers such as Ollama or LM Studio work via "Eigene Adresse".

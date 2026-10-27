@@ -1,5 +1,9 @@
 # Third-Party Notices
 
+## Blitztext
+
+Diktat is based on Blitztext (https://github.com/cmagnussen/blitztext-app), Copyright (c) 2026 Blitztext contributors, licensed under the MIT License (see LICENSE). Blitztext and Blackboat are names of their owners and are not used for this project.
+
 ## FluidAudio
 
 Local Parakeet transcription uses FluidAudio (https://github.com/FluidInference/FluidAudio), licensed under the Apache License 2.0.
@@ -22,7 +26,7 @@ The local language model runs with MLX Swift (https://github.com/ml-explore/mlx-
 
 ## Octicons
 
-The GitHub mark in the macOS settings (`BlitztextMac/Resources/Assets.xcassets/GitHubMark.imageset`) is `mark-github-24.svg` from Octicons (https://github.com/primer/octicons). It links to the Blitztext repository. GitHub and the GitHub logo are trademarks of GitHub, Inc.
+The GitHub mark in the macOS settings (`DiktatMac/Resources/Assets.xcassets/GitHubMark.imageset`) is `mark-github-24.svg` from Octicons (https://github.com/primer/octicons). It links to the Diktat repository. GitHub and the GitHub logo are trademarks of GitHub, Inc.
 
 ```text
 MIT License
@@ -50,7 +54,7 @@ SOFTWARE.
 
 ## Public Sans
 
-Headlines use Public Sans (https://github.com/uswds/public-sans), bundled from the Blackboat design system as TrueType files. Public Sans is licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). The fonts were converted from WOFF2 to TTF without changing the glyphs.
+Headlines use Public Sans (https://github.com/uswds/public-sans), bundled from the Public Sans project as TrueType files. Public Sans is licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). The fonts were converted from WOFF2 to TTF without changing the glyphs.
 
 ## WhisperKit and Whisper
 

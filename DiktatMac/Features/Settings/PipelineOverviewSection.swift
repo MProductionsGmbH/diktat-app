@@ -1,0 +1,76 @@
+import SwiftUI
+
+/// "So arbeitet Diktat": which model does what, as it is set up right now.
+struct PipelineOverviewSection: View {
+    @Bindable var appState: AppState
+
+    var body: some View {
+        SettingsSection(title: "So arbeitet Diktat") {
+            row(
+                step: "1",
+                title: "Spracherkennung",
+                model: appState.selectedLocalModelDisplayName,
+                detail: appState.selectedLocalModelIsInstalled
+                    ? "Immer lokal auf diesem Mac. Die Sprache verl\u{00E4}sst ihn nie."
+                    : "Noch nicht installiert. Unter Modelle, Spracherkennung laden.",
+                ready: appState.selectedLocalModelIsInstalled
+            )
+            row(
+                step: "2",
+                title: "KI-Modi (Diktat+, $%&!, :))",
+                model: aiModel,
+                detail: aiDetail,
+                ready: appState.canRewrite
+            )
+        }
+    }
+
+    private var runsLocally: Bool {
+        TextRewriter.runsLocally(engine: appState.appSettings.rewriteEngine)
+    }
+
+    private var aiModel: String {
+        if runsLocally { return "Apple Intelligence" }
+        if let provider = appState.providerInUse { return provider }
+        return "Nicht eingerichtet"
+    }
+
+    private var aiDetail: String {
+        if runsLocally {
+            return "Lokal auf diesem Mac, ohne Internet."
+        }
+        if appState.providerInUse != nil {
+            // Must match the setting: with cursor context on, that text goes along too.
+            return appState.appSettings.aiSeesFieldContext
+                ? "\u{00DC}ber deinen API-Key. Der erkannte Text und der Text am Cursor gehen an den Anbieter, nie die Sprache."
+                : "\u{00DC}ber deinen API-Key. Nur der erkannte Text geht an den Anbieter, nie die Sprache."
+        }
+        return "Apple Intelligence einschalten oder unter Modelle einen Modell-Anbieter mit API-Key hinterlegen. Wortgenaues Diktieren geht auch ohne."
+    }
+
+    private func row(step: String, title: String, model: String, detail: String, ready: Bool) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Text(step)
+                .font(.ui(10.5, .bold))
+                .foregroundStyle(DiktatTheme.accent)
+                .frame(width: 20, height: 20)
+                .background(Circle().fill(DiktatTheme.accent.opacity(0.12)))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.ui(12))
+                    .foregroundStyle(.secondary)
+                HStack(spacing: 5) {
+                    Image(systemName: ready ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+                        .font(.ui(12))
+                        .foregroundStyle(ready ? DiktatTheme.ready : DiktatTheme.danger)
+                    Text(model)
+                        .font(.ui(12.5, .semibold))
+                }
+                Text(detail)
+                    .font(.ui(12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+}

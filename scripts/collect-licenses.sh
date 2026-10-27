@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-# Builds BlitztextShared/Licenses/Licenses.txt: our notices plus the full license
+# Builds DiktatShared/Licenses/Licenses.txt: our notices plus the full license
 # (and NOTICE) text of every Swift package the apps link. Shipped inside the apps,
 # as MIT, Apache 2.0, OFL and CC BY require for binary distribution.
 #
@@ -10,11 +10,11 @@ set -euo pipefail
 
 CHECKOUTS="${1:?Pfad zu SourcePackages/checkouts angeben}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="$ROOT/BlitztextShared/Licenses/Licenses.txt"
+OUT="$ROOT/DiktatShared/Licenses/Licenses.txt"
 mkdir -p "$(dirname "$OUT")"
 
 {
-    echo "Blitztext: Lizenzen und Hinweise / Licenses and notices"
+    echo "Diktat: Lizenzen und Hinweise / Licenses and notices"
     echo "========================================================"
     echo
     cat "$ROOT/THIRD_PARTY_NOTICES.md"

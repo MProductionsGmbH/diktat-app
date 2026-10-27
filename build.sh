@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# Blitztext macOS App - Build & Run
+# Diktat macOS App - Build & Run
 # Voraussetzungen: Xcode Command Line Tools, xcodegen
 
 RUN_AFTER=false
@@ -64,13 +64,13 @@ verify_universal_app() {
 }
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="$SCRIPT_DIR/BlitztextMac"
-PROJECT_FILE="$PROJECT_DIR/BlitztextMac.xcodeproj"
+PROJECT_DIR="$SCRIPT_DIR/DiktatMac"
+PROJECT_FILE="$PROJECT_DIR/DiktatMac.xcodeproj"
 # Keep DerivedData outside iCloud-synced folders (Desktop/Documents): the file
 # provider adds com.apple.FinderInfo xattrs to bundles, which breaks codesign with
 # "resource fork, Finder information, or similar detritus not allowed".
-# (cmagnussen/blitztext-app PR #5)
-DERIVED_DATA_PATH="$HOME/Library/Caches/blitztext-build/derivedData"
+# (the upstream Blitztext project PR #5)
+DERIVED_DATA_PATH="$HOME/Library/Caches/diktat-build/derivedData"
 cd "$PROJECT_DIR"
 
 if command -v xcodegen &> /dev/null; then
@@ -90,10 +90,10 @@ else
 fi
 
 # Bauen
-echo "🔨 Baue Blitztext ..."
+echo "🔨 Baue Diktat ..."
 xcodebuild \
-    -project BlitztextMac.xcodeproj \
-    -scheme BlitztextMac \
+    -project DiktatMac.xcodeproj \
+    -scheme DiktatMac \
     -destination 'platform=macOS' \
     -configuration "$BUILD_CONFIGURATION" \
     -derivedDataPath "$DERIVED_DATA_PATH" \
@@ -102,7 +102,7 @@ xcodebuild \
     clean build
 
 # App finden
-APP_PATH="$DERIVED_DATA_PATH/Build/Products/$BUILD_CONFIGURATION/Blitztext.app"
+APP_PATH="$DERIVED_DATA_PATH/Build/Products/$BUILD_CONFIGURATION/Diktat.app"
 
 if [ ! -d "$APP_PATH" ]; then
     echo "❌ Build fehlgeschlagen – keine App gefunden."
@@ -120,17 +120,17 @@ cp -f "$PROJECT_DIR/Resources/menubar_icon.png" "$RESOURCES_DIR/" 2>/dev/null ||
 cp -f "$PROJECT_DIR/Resources/menubar_icon@2x.png" "$RESOURCES_DIR/" 2>/dev/null || true
 
 # Ziel vorab bestimmen: nur einmal kopieren, signieren und pruefen, ohne zweite Kopie
-# im Projektordner (cmagnussen/blitztext-app PR #16).
+# im Projektordner (the upstream Blitztext project PR #16).
 if [ "$INSTALL_APP" = true ]; then
     APPS_DIR="/Applications"
-    DEST="$APPS_DIR/Blitztext.app"
+    DEST="$APPS_DIR/Diktat.app"
     if [ ! -w "$APPS_DIR" ]; then
         echo "❌ /Applications ist nicht beschreibbar."
         echo "   Fuehre den Befehl mit passenden Rechten erneut aus oder ziehe die App manuell nach /Applications."
         exit 1
     fi
 else
-    DEST="$SCRIPT_DIR/Blitztext.app"
+    DEST="$SCRIPT_DIR/Diktat.app"
 fi
 
 rm -rf "$DEST"
@@ -155,11 +155,11 @@ echo "1. App starten"
 echo "2. Mikrofon erlauben"
 echo "3. Fuer direktes Einfuegen zusaetzlich Bedienungshilfen erlauben"
 echo "4. Lokales Sprachmodell laden, optional einen Modell-Anbieter mit API-Key eintragen"
-echo "5. Fertige, signierte Version: https://github.com/cmagnussen/blitztext-app/releases"
+echo "5. Fertige, signierte Version: https://github.com/MProductionsGmbH/diktat-app/releases"
 echo ""
 
 # Optional: direkt starten
 if [ "$RUN_AFTER" = true ]; then
-    echo "🚀 Starte Blitztext ..."
+    echo "🚀 Starte Diktat ..."
     open "$RUN_TARGET"
 fi

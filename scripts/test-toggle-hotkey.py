@@ -6,12 +6,12 @@ import sys
 import tempfile
 
 root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
-source = (root / 'BlitztextMac/App/BlitztextMacApp.swift').read_text()
+source = (root / 'DiktatMac/App/DiktatMacApp.swift').read_text()
 start = source.index('    private func handleHotkeyDown(')
 end = source.index('    private func handleHotkeyUp(', start)
 up_end = source.index('    @objc private func togglePopover(', end)
 handler = source[start:up_end].replace('private func', 'func')
-protocol = (root / 'BlitztextMac/Features/Workflows/WorkflowProtocol.swift').read_text()
+protocol = (root / 'DiktatMac/Features/Workflows/WorkflowProtocol.swift').read_text()
 phase_start = protocol.index('enum WorkflowPhase:')
 phase_end = protocol.index('enum WorkflowLaunchSource:', phase_start)
 phase = protocol[phase_start:phase_end]
@@ -145,7 +145,7 @@ check(pending.stops == 1 && repeated.appState.starts == 0, "Preserve processing 
 
 print("PASS: \(checks) hotkey checks, including done/error for both shortcuts")
 '''
-with tempfile.TemporaryDirectory(prefix='blitztext-pr-hotkey-') as directory:
+with tempfile.TemporaryDirectory(prefix='diktat-pr-hotkey-') as directory:
     tmp = Path(directory)
     swift = tmp / 'main.swift'
     swift.write_text(fixture.replace('__HANDLER__', handler).replace('__PHASE__', phase))
