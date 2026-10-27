@@ -123,6 +123,8 @@ targets:
       - path: Features/Meeting/TextParts.swift
       - path: Services/FocusedFieldReader.swift
       - path: ../DiktatShared/Meeting/ListDisplay.swift
+      - path: Services/SpeechCleanup.swift
+      - path: ../DiktatShared/AI/ModePrompts.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.diktat.mac.tests
