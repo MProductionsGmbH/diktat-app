@@ -19,6 +19,12 @@ final class LocalProviderTests: XCTestCase {
         XCTAssertEqual(AIClient.strippingReasoning("<think>nur Gedanken</think>"), "")
     }
 
+    func testThinkingIsSwitchedOffOnlyForQwen3OnALocalServer() {
+        XCTAssertTrue(AIClient.switchesOffThinking(AIProviderConfig(provider: .custom, model: "qwen3.5:9b")))
+        XCTAssertFalse(AIClient.switchesOffThinking(AIProviderConfig(provider: .custom, model: "llama3.2")))
+        XCTAssertFalse(AIClient.switchesOffThinking(AIProviderConfig(provider: .openAI, model: "qwen3:8b")))
+    }
+
     func testNoThinkSwitchOnlyForQwen3OnALocalServer() {
         let qwen = AIProviderConfig(provider: .custom, model: "qwen3:8b")
         XCTAssertTrue(AIClient.systemMessage("Anweisung", for: qwen).hasSuffix("/no_think"))

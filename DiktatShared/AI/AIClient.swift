@@ -66,13 +66,17 @@ enum AIClient {
             request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
         }
         // No temperature: several current models only accept their default.
-        request.httpBody = try JSONSerialization.data(withJSONObject: [
+        var body: [String: Any] = [
             "model": config.model,
             "messages": [
                 ["role": "system", "content": systemMessage(instruction, for: config)],
                 ["role": "user", "content": text],
             ],
-        ])
+        ]
+        if switchesOffThinking(config) {
+            body["reasoning_effort"] = "none"
+        }
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
         let json = try await send(request)
         guard
@@ -88,10 +92,17 @@ enum AIClient {
         return answer
     }
 
-    /// Qwen3 thinks before it answers, which takes long and is not wanted for a rewrite;
-    /// its "/no_think" switch in the instruction turns that off. Other models never see it.
+    /// Qwen3 thinks before it answers, which takes long and is not wanted for a rewrite. Local
+    /// servers get `reasoning_effort: "none"` (Ollama: 0.3 s instead of 5 s and more with
+    /// Qwen3.5); other models never see it.
+    static func switchesOffThinking(_ config: AIProviderConfig) -> Bool {
+        config.isLocalServer && config.model.lowercased().contains("qwen3")
+    }
+
+    /// Qwen3.0 and 3.8 also take "/no_think" in the instruction; Qwen3.5 ignores it, which is
+    /// why `reasoning_effort` is sent as well.
     static func systemMessage(_ instruction: String, for config: AIProviderConfig) -> String {
-        guard config.isLocalServer, config.model.lowercased().contains("qwen3") else { return instruction }
+        guard switchesOffThinking(config) else { return instruction }
         return instruction + "\n\n/no_think"
     }
 
