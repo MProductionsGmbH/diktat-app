@@ -113,6 +113,8 @@ targets:
       - path: ../DiktatShared/Transcription/SpokenEmailAddress.swift
       - path: Services/ShortcutModifiers.swift
       - path: ../DiktatShared/AI/InventedDeadlineFilter.swift
+      - path: ../DiktatShared/AI/AIClient.swift
+      - path: ../DiktatShared/AI/AIProvider.swift
       - path: ../DiktatShared/Meeting/SpeakerAlignment.swift
       - path: ../DiktatShared/Meeting/EchoFilter.swift
       - path: Services/LocalLanguageModel/LocalModelCatalog.swift
