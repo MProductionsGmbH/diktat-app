@@ -20,12 +20,12 @@ extension SpeechCleanup {
               TextRewriter.canRewrite(engine: configuration.engine) else { return text }
         do {
             let rewritten = try await TextRewriter.rewrite(
-                text,
+                framedTranscript(text),
                 instruction: instruction(for: configuration.level, protectedTerms: configuration.protectedTerms),
                 engine: configuration.engine,
                 deterministic: true
             )
-            let candidate = TranscriptionQualityService.cleanedTranscript(rewritten)
+            let candidate = TranscriptionQualityService.cleanedTranscript(unframed(rewritten))
             guard isPlausible(candidate, for: text, level: configuration.level) else {
                 cleanupLogger.info("Cleanup answer rejected, text kept as dictated")
                 return text

@@ -64,14 +64,44 @@ enum SpeechCleanup {
     }
 
     /// A cleanup only removes or fixes words. An answer that is empty, much shorter, longer than
-    /// the dictation or the "nothing recognized" marker is not a cleanup of this text.
+    /// the dictation or the "nothing recognized" marker, or an answer with few of the spoken words is not a cleanup of this text.
     static func isPlausible(_ candidate: String, for original: String, level: SpeechCleanupLevel) -> Bool {
         let trimmed = candidate.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty, !trimmed.contains(ModePrompts.nothingRecognizedMarker) else { return false }
         let before = Double(wordCount(original))
         let after = Double(wordCount(trimmed))
         let growth = level == .strong ? 1.2 : 1.1
-        return after >= before * 0.5 && after <= before * growth + 2
+        guard after >= before * 0.5 && after <= before * growth + 2 else { return false }
+        return sharedWordRatio(trimmed, with: original) >= 0.6
+    }
+
+    /// The dictation as the model gets it. Handed over bare, a question in the text ("Hattest du
+    /// heute einen lustigen Tag") is answered instead of tidied up; in this frame it stays text.
+    static func framedTranscript(_ text: String) -> String {
+        "Bereinige dieses Transkript. Gib nur den bereinigten Text zurück, ohne die Markierungen.\n<transkript>\n\(text)\n</transkript>"
+    }
+
+    /// Takes the frame off again when the model repeats it.
+    static func unframed(_ answer: String) -> String {
+        answer
+            .replacingOccurrences(of: "<transkript>", with: "")
+            .replacingOccurrences(of: "</transkript>", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// The share of the answer's words that were in the dictation. A tidy-up keeps most of them;
+    /// an answer to a question in the text shares almost none.
+    static func sharedWordRatio(_ candidate: String, with original: String) -> Double {
+        let answerWords = words(candidate)
+        guard !answerWords.isEmpty else { return 0 }
+        let known = Set(words(original))
+        return Double(answerWords.filter { known.contains($0) }.count) / Double(answerWords.count)
+    }
+
+    private static func words(_ text: String) -> [String] {
+        text.lowercased()
+            .components(separatedBy: CharacterSet.alphanumerics.inverted)
+            .filter { !$0.isEmpty }
     }
 
     static func wordCount(_ text: String) -> Int {
