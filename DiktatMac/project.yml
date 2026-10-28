@@ -115,6 +115,7 @@ targets:
       - path: ../DiktatShared/AI/InventedDeadlineFilter.swift
       - path: ../DiktatShared/AI/AIClient.swift
       - path: ../DiktatShared/AI/AIProvider.swift
+      - path: ../DiktatShared/AI/LocalServerDiscovery.swift
       - path: ../DiktatShared/Meeting/SpeakerAlignment.swift
       - path: ../DiktatShared/Meeting/EchoFilter.swift
       - path: Services/LocalLanguageModel/LocalModelCatalog.swift
