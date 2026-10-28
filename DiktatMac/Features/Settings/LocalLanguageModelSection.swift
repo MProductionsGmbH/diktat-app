@@ -1,17 +1,21 @@
 import SwiftUI
 
-/// "Lokales Sprachmodell für Meetings": which Gemma variants this Mac can run, how large
-/// they are, and download, cancel or remove.
+/// "Lokales Sprachmodell für Meetings": a model server on this Mac (Ollama, LM Studio) and
+/// the Gemma variants this Mac can run, how large they are, and download, cancel or remove.
 struct LocalLanguageModelSection: View {
+    @Bindable var appState: AppState
     private var store: LocalModelStore { .shared }
     private let memoryGB = LocalModelVariant.installedMemoryGB
 
     var body: some View {
         SettingsSection(title: "Lokales Sprachmodell f\u{00FC}r Meetings", isBeta: true) {
-            Text("Optional. Fasst Meetings auf diesem Mac genauer zusammen als Apple Intelligence, vor allem lange. Der Text verl\u{00E4}sst den Mac nicht. Das Modell wird einmal heruntergeladen und belegt nur w\u{00E4}hrend der Zusammenfassung Arbeitsspeicher.")
+            Text("Optional. Meetings k\u{00F6}nnen auf diesem Mac genauer zusammengefasst werden als mit Apple Intelligence, vor allem lange. Der Text verl\u{00E4}sst den Mac nicht. W\u{00E4}hle ein Modell, das schon auf deinem Mac l\u{00E4}uft (Ollama, LM Studio), oder lade Gemma, ohne Zusatzprogramm.")
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+
+            serverRow
+            Divider().opacity(0.5)
 
             ForEach(LocalModelVariant.all) { variant in
                 row(variant)
@@ -31,7 +35,56 @@ struct LocalLanguageModelSection: View {
         let mac = LocalModelVariant.isAppleSilicon
             ? "Dieser Mac hat \(memoryGB) GB Arbeitsspeicher."
             : "Dieser Mac hat keinen Apple-Chip."
-        return mac + " Ist ein Modell geladen, nutzen Meetings es automatisch. Gemma 4 von Google, Lizenz Apache 2.0."
+        return mac + " Ist Gemma geladen, nutzen Meetings es, wenn kein eigener Server gew\u{00E4}hlt ist. Gemma 4 von Google, Lizenz Apache 2.0."
+    }
+
+    // MARK: - Model server on this Mac
+
+    private var localServer: AIProviderConfig? {
+        guard let config = appState.aiProvider, config.isLocalServer else { return nil }
+        return config
+    }
+
+    private var usesServer: Bool {
+        localServer != nil && appState.appSettings.rewriteEngine == .provider
+    }
+
+    private var serverRow: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text("Ollama oder LM Studio")
+                    .font(.ui(12.5, .semibold))
+                if usesServer { badge("Wird genutzt") }
+                Spacer(minLength: 8)
+                serverAction
+            }
+            Text(serverDetails)
+                .font(.ui(11.5))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var serverDetails: String {
+        guard let config = localServer else {
+            return "Ein Modell, das auf diesem Mac schon l\u{00E4}uft, zum Beispiel Qwen \u{00FC}ber Ollama. Kein zus\u{00E4}tzlicher Download. Adresse und Modellname tr\u{00E4}gst du unten unter Modell-Anbieter ein."
+        }
+        let model = config.model.isEmpty ? config.provider.defaultModel : config.model
+        if usesServer {
+            return "\(model) auf \(config.baseURL). Meetings, Gl\u{00E4}ttung und KI-Modi nutzen es. Der Text verl\u{00E4}sst den Mac nicht."
+        }
+        return "\(model) auf \(config.baseURL) ist eingerichtet. Meetings nutzen es erst, wenn bei KI-Modi \u{201E}Immer Modell-Anbieter\u{201C} steht."
+    }
+
+    @ViewBuilder
+    private var serverAction: some View {
+        if localServer == nil {
+            Button("Einrichten") { appState.aiProvider = AIProviderConfig(provider: .custom) }
+                .controlSize(.small)
+        } else if !usesServer {
+            Button("Jetzt nutzen") { appState.appSettings.rewriteEngine = .provider }
+                .controlSize(.small)
+        }
     }
 
     private func row(_ variant: LocalModelVariant) -> some View {

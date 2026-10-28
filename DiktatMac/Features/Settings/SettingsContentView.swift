@@ -770,7 +770,7 @@ struct CustomizeSettingsView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            LocalLanguageModelSection()
+            LocalLanguageModelSection(appState: appState)
 
             MacAIProviderSection(appState: appState)
             }
