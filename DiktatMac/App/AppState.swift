@@ -290,6 +290,11 @@ final class AppState {
         )
     }
 
+    /// The context of the app the cursor was in before the menu opened.
+    var styleContextOfLastTarget: StyleContext {
+        StyleContext.context(bundleID: lastPopoverPasteTarget?.bundleIdentifier, host: nil)
+    }
+
     /// Where the dictation goes: by the frontmost app, or by the website when it is a browser.
     func styleContextForFrontmostApp() -> StyleContext {
         guard let app = NSWorkspace.shared.frontmostApplication else { return .other }

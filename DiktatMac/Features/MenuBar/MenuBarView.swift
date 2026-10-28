@@ -37,6 +37,7 @@ struct MenuBarView: View {
     // MARK: - Main Page
 
     @State private var copiedLast = false
+    @State private var toneContext: StyleContext = .other
 
     private var mainPage: some View {
         VStack(spacing: 0) {
@@ -137,6 +138,8 @@ struct MenuBarView: View {
 
                 dictationCard
 
+                styleCard
+
                 VStack(alignment: .leading, spacing: 8) {
                     SectionHeader(title: "Modi")
 
@@ -226,6 +229,53 @@ struct MenuBarView: View {
         .glassPanel()
     }
 
+    /// The style in short form: how much is tidied up, and the tone for one place the text goes to.
+    /// The details are in the settings under "Stil".
+    private var styleCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            SectionHeader(title: "Stil")
+
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Gl\u{00E4}ttung")
+                        .font(.ui(12))
+                        .foregroundStyle(.secondary)
+                    SegmentedToggle(
+                        options: SpeechCleanupLevel.allCases,
+                        selection: $appState.appSettings.speechCleanupLevel,
+                        label: { $0.displayName }
+                    )
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 6) {
+                        Text("Ton in")
+                            .font(.ui(12))
+                            .foregroundStyle(.secondary)
+                        Picker("", selection: $toneContext) {
+                            ForEach(StyleContext.allCases) { Text($0.displayName).tag($0) }
+                        }
+                        .labelsHidden()
+                        .controlSize(.small)
+                        .fixedSize()
+                    }
+                    SegmentedToggle(
+                        options: StyleTone.allCases,
+                        selection: Binding(
+                            get: { appState.appSettings.styleSettings.tone(for: toneContext) },
+                            set: { appState.appSettings.styleSettings.setTone($0, for: toneContext) }
+                        ),
+                        label: { $0.displayName }
+                    )
+                }
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .glassPanel()
+            .onAppear { toneContext = appState.styleContextOfLastTarget }
+        }
+    }
+
     /// The speech bubble of the iOS app, the shortcut to use, the model and where the
     /// text is processed.
     private var dictationCard: some View {
@@ -281,21 +331,6 @@ struct MenuBarView: View {
                 .frame(maxWidth: .infinity)
                 .controlSize(.small)
                 .disabled(appState.isDownloadingLocalModel)
-            }
-
-            HStack(spacing: 8) {
-                Text("Gl\u{00E4}ttung")
-                    .font(.ui(12))
-                    .foregroundStyle(.secondary)
-
-                Picker("", selection: $appState.appSettings.speechCleanupLevel) {
-                    ForEach(SpeechCleanupLevel.allCases) { level in
-                        Text(level.displayName).tag(level)
-                    }
-                }
-                .labelsHidden()
-                .frame(maxWidth: .infinity)
-                .controlSize(.small)
             }
 
             if let progress = appState.localModelDownloadProgress {
