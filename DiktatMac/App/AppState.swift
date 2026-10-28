@@ -277,13 +277,27 @@ final class AppState {
         )
     }
 
-    var speechCleanup: SpeechCleanup.Configuration {
-        SpeechCleanup.Configuration(
+    /// The cleanup for a dictation in the given tone. The tone also steers the wording of the
+    /// written-style level.
+    func speechCleanup(tone: StyleTone) -> SpeechCleanup.Configuration {
+        var style = textImprovementSettings
+        style.tone = tone.rewriteTone
+        return SpeechCleanup.Configuration(
             level: appSettings.speechCleanupLevel,
             engine: appSettings.rewriteEngine,
             protectedTerms: textImprovementSettings.protectedTerms,
-            styleSettings: textImprovementSettings
+            styleSettings: style
         )
+    }
+
+    /// Where the dictation goes: by the frontmost app, or by the website when it is a browser.
+    func styleContextForFrontmostApp() -> StyleContext {
+        guard let app = NSWorkspace.shared.frontmostApplication else { return .other }
+        let bundleID = app.bundleIdentifier
+        let host = FocusedFieldReader.isBrowser(bundleID)
+            ? FocusedFieldReader.webHost(pid: app.processIdentifier, bundleID: bundleID)
+            : nil
+        return StyleContext.context(bundleID: bundleID, host: host)
     }
 
     var resolvedLocalModelName: String {
@@ -335,13 +349,16 @@ final class AppState {
         lastInsertion = nil
         readActiveField()
 
+        let tone = appSettings.styleSettings.tone(for: styleContextForFrontmostApp())
+
         switch type {
         case .tapTalk:
             let workflow = TranscriptionWorkflow(
                 language: transcriptionSettings.language,
                 localModelName: selectedLocalModelName,
                 postProcessor: postProcessor,
-                cleanup: speechCleanup
+                cleanup: speechCleanup(tone: tone),
+                tone: tone
             )
             configureWorkflowHandlers(workflow)
             activeWorkflow = workflow
@@ -353,7 +370,8 @@ final class AppState {
                 language: transcriptionSettings.language,
                 localModelName: selectedLocalModelName,
                 postProcessor: postProcessor,
-                cleanup: speechCleanup
+                cleanup: speechCleanup(tone: tone),
+                tone: tone
             )
             configureWorkflowHandlers(workflow)
             activeWorkflow = workflow

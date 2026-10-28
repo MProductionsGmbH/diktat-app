@@ -30,7 +30,7 @@ enum SpeechCleanupLevel: String, Codable, CaseIterable, Identifiable {
         case .strong:
             return "Zus\u{00E4}tzlich: Grammatik, Satzstellung und Zeichensetzung werden korrigiert. Deine Wortwahl bleibt."
         case .style:
-            return "Ein Sprachmodell schreibt den Text neu: Rechtschreibung, Grammatik, Formulierung und Lesefluss, in der Tonalit\u{00E4}t, die du unter Schreibstil einstellst. Die Bedeutung bleibt. Das war Diktat+."
+            return "Ein Sprachmodell schreibt den Text neu: Rechtschreibung, Grammatik, Formulierung und Lesefluss, im Ton, den du unten unter Stil je Kontext w\u{00E4}hlst. Die Bedeutung bleibt."
         }
     }
 

@@ -146,6 +146,8 @@ struct AppSettings: Codable {
     var removeFillerWordsEnabled: Bool = true
     /// How much word-for-word dictation (Diktat) tidies up: stutters, restarts, grammar.
     var speechCleanupLevel: SpeechCleanupLevel = .light
+    /// The tone per place the text goes to (personal, work, email, other).
+    var styleSettings = StyleSettings()
     var historyRetention: HistoryRetention = .day
     /// `WhatsNew.version` the user already confirmed; nil before the first note.
     var lastSeenWhatsNewVersion: String?
@@ -193,6 +195,7 @@ struct AppSettings: Codable {
         case correctCustomTermsEnabled
         case removeFillerWordsEnabled
         case speechCleanupLevel
+        case styleSettings
         case historyRetention
         case lastSeenWhatsNewVersion
         case appModeRules
@@ -225,6 +228,7 @@ struct AppSettings: Codable {
         correctCustomTermsEnabled = try container.decodeIfPresent(Bool.self, forKey: .correctCustomTermsEnabled) ?? true
         removeFillerWordsEnabled = try container.decodeIfPresent(Bool.self, forKey: .removeFillerWordsEnabled) ?? true
         fnAloneStartsDictation = (try? container.decodeIfPresent(Bool.self, forKey: .fnAloneStartsDictation)) ?? true
+        styleSettings = (try? container.decodeIfPresent(StyleSettings.self, forKey: .styleSettings)) ?? StyleSettings()
         speechCleanupLevel = (try? container.decodeIfPresent(SpeechCleanupLevel.self, forKey: .speechCleanupLevel)) ?? .light
         historyRetention = (try? container.decodeIfPresent(HistoryRetention.self, forKey: .historyRetention)) ?? .day
         lastSeenWhatsNewVersion = try container.decodeIfPresent(String.self, forKey: .lastSeenWhatsNewVersion)

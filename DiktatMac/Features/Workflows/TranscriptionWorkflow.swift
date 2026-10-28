@@ -24,6 +24,7 @@ final class TranscriptionWorkflow: Workflow {
     private let localModelName: String
     private let postProcessor: TranscriptPostProcessor
     private let cleanup: SpeechCleanup.Configuration
+    private let tone: StyleTone
     private var transcriptionTask: Task<Void, Never>?
 
     init(
@@ -31,13 +32,15 @@ final class TranscriptionWorkflow: Workflow {
         language: String = "de",
         localModelName: String = LocalTranscriptionService.recommendedFastModelName,
         postProcessor: TranscriptPostProcessor = TranscriptPostProcessor(correctCustomTerms: false, removeFillerWords: false),
-        cleanup: SpeechCleanup.Configuration = SpeechCleanup.Configuration()
+        cleanup: SpeechCleanup.Configuration = SpeechCleanup.Configuration(),
+        tone: StyleTone = .neutral
     ) {
         self.type = type
         self.language = language
         self.localModelName = localModelName
         self.postProcessor = postProcessor
         self.cleanup = cleanup
+        self.tone = tone
     }
 
     func start() {
@@ -117,6 +120,7 @@ final class TranscriptionWorkflow: Workflow {
                     processed = await SpeechCleanup.polish(processed, configuration: cleanup)
                     try Task.checkCancellation()
                 }
+                processed = tone.apply(to: processed)
                 guard !processed.isEmpty else {
                     phase = .error("Keine Aufnahme erkannt.")
                     return

@@ -56,7 +56,7 @@ enum SettingsPane: Int, CaseIterable, Identifiable {
         switch self {
         case .general: return "Allgemein"
         case .models: return "Modelle"
-        case .workflows: return "Modi"
+        case .workflows: return "Stil"
         case .dictionary: return "W\u{00F6}rterbuch"
         }
     }
@@ -776,24 +776,16 @@ struct CustomizeSettingsView: View {
             }
 
             if pane == .workflows {
+            CleanupLevelSection(appState: appState, engineNote: speechCleanupEngineNote)
+
+            StyleContextSection(appState: appState)
+
             // MARK: Schreibstil
             SettingsSection(title: "Schreibstil") {
-                Text("Gilt, wenn die Gl\u{00E4}ttung auf \u{201E}Schreibstil\u{201C} steht, und f\u{00FC}r Diktat Schreibstil in den Regeln pro App.")
+                Text("Gilt, wenn die Gl\u{00E4}ttung auf \u{201E}Schreibstil\u{201C} steht, und f\u{00FC}r Diktat Schreibstil in den Regeln pro App. Den Ton stellst du oben je Kontext ein.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Tonalit\u{00E4}t")
-                        .font(.ui(12))
-                        .foregroundStyle(.secondary)
-
-                    SegmentedToggle(
-                        options: TextImprovementSettings.TextTone.allCases,
-                        selection: $appState.textImprovementSettings.tone,
-                        label: { $0.displayName }
-                    )
-                }
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Kontext")
@@ -989,27 +981,6 @@ struct CustomizeSettingsView: View {
                     .font(.ui(11.5))
             }
 
-            SettingsSection(title: "Versprecher glätten") {
-                Picker("", selection: $appState.appSettings.speechCleanupLevel) {
-                    ForEach(SpeechCleanupLevel.allCases) { level in
-                        Text(level.displayName).tag(level)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-
-                Text(appState.appSettings.speechCleanupLevel.detail)
-                    .font(.ui(12))
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                if appState.appSettings.speechCleanupLevel.usesLanguageModel {
-                    Text(speechCleanupEngineNote)
-                        .font(.ui(12))
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
             }
 
         }
