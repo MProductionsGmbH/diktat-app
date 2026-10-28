@@ -18,6 +18,8 @@ final class MenuBarStatusController {
     private var animationTimer: Timer?
     private var animationFrame = 0
     private var currentStatus: MenuBarStatus = .idle
+    /// The input level while recording, so the symbol follows the voice.
+    var levelProvider: (() -> Float)?
     /// Small dot on the idle icon while a release note is unread.
     var showsNewBadge = false {
         didSet {
@@ -45,7 +47,7 @@ final class MenuBarStatusController {
 
         switch currentStatus {
         case .recording:
-            startAnimation(interval: 0.12)
+            startAnimation(interval: 0.08)
         case .processing:
             startAnimation(interval: 0.18)
         default:
@@ -74,7 +76,7 @@ final class MenuBarStatusController {
 
     private func renderCurrentStatus() {
         guard let button else { return }
-        var image = MenuBarStatusIconRenderer.makeImage(for: currentStatus, frame: animationFrame)
+        var image = MenuBarStatusIconRenderer.makeImage(for: currentStatus, frame: animationFrame, level: levelProvider?() ?? 0)
         if showsNewBadge, case .idle = currentStatus {
             image = MenuBarStatusIconRenderer.withNewDot(image)
         }
@@ -129,14 +131,14 @@ private enum MenuBarStatusIconRenderer {
         }
     }
 
-    static func makeImage(for status: MenuBarStatus, frame: Int) -> NSImage {
+    static func makeImage(for status: MenuBarStatus, frame: Int, level: Float) -> NSImage {
         if case .idle = status, let baseImage = baseTemplateImage() {
             return baseImage
         }
 
         let size = NSSize(width: 18, height: 18)
         let image = NSImage(size: size, flipped: false) { bounds in
-            drawBaseIcon(in: bounds, status: status, frame: frame)
+            drawMarkBars(in: bounds, status: status, frame: frame, level: level)
 
             switch status {
             case .recording(let type):
@@ -179,21 +181,31 @@ private enum MenuBarStatusIconRenderer {
         case processing
     }
 
-    private static func drawBaseIcon(in bounds: CGRect, status: MenuBarStatus, frame: Int) {
-        let stripeWidths: [CGFloat] = [12, 10, 8, 6]
-        let stripeHeight: CGFloat = 2
-        let stripeSpacing: CGFloat = 1.6
-        let totalHeight = (CGFloat(stripeWidths.count) * stripeHeight) + (CGFloat(stripeWidths.count - 1) * stripeSpacing)
-        let originY = bounds.midY - (totalHeight / 2)
-        let baseAlpha = baseAlphaValues(for: status, frame: frame)
-
-        for (index, width) in stripeWidths.enumerated() {
-            let x = bounds.midX - (width / 2)
-            let y = originY + CGFloat(index) * (stripeHeight + stripeSpacing)
-            let rect = CGRect(x: x, y: y, width: width, height: stripeHeight)
-            let path = NSBezierPath(roundedRect: rect, xRadius: 1, yRadius: 1)
-            NSColor.black.withAlphaComponent(baseAlpha[index]).setFill()
-            path.fill()
+    /// The Diktat mark, as in the idle icon. While recording the bars follow the voice, while
+    /// writing they run in a wave; the frame counts up to four.
+    private static func drawMarkBars(in bounds: CGRect, status: MenuBarStatus, frame: Int, level: Float) {
+        let heights: [CGFloat] = [0.34, 0.62, 0.92, 0.62, 0.34]
+        let side: CGFloat = 15
+        let barWidth = side * 0.15
+        let gap = (side - 5 * barWidth) / 4
+        let originX = bounds.midX - side / 2
+        let phase = CGFloat(frame) * .pi / 2
+        for (index, height) in heights.enumerated() {
+            let scale: CGFloat
+            switch status {
+            case .recording:
+                let wobble = 0.5 + 0.5 * sin(phase + CGFloat(index) * 1.3)
+                let voice = min(1, CGFloat(level) * 1.6)
+                scale = min(1, 0.5 + 0.5 * (0.2 * wobble + voice * (0.55 + 0.45 * wobble)))
+            case .processing:
+                scale = 0.45 + 0.55 * (0.5 + 0.5 * sin(phase - CGFloat(index) * 0.9))
+            default:
+                scale = 1
+            }
+            let barHeight = max(2, side * height * scale)
+            let rect = CGRect(x: originX + CGFloat(index) * (barWidth + gap), y: bounds.midY - barHeight / 2, width: barWidth, height: barHeight)
+            NSColor.black.setFill()
+            NSBezierPath(roundedRect: rect, xRadius: barWidth / 2, yRadius: barWidth / 2).fill()
         }
     }
 
@@ -303,95 +315,6 @@ private enum MenuBarStatusIconRenderer {
         let dotPath = NSBezierPath(ovalIn: dotRect)
         NSColor.black.withAlphaComponent(0.92).setFill()
         dotPath.fill()
-    }
-
-    private static func baseAlphaValues(for status: MenuBarStatus, frame: Int) -> [CGFloat] {
-        switch status {
-        case .idle, .meeting:
-            return [1.0, 0.82, 0.64, 0.46]
-        case .recording(let type):
-            return recordingAlphaValues(for: type, frame: frame)
-        case .processing(let type):
-            return processingAlphaValues(for: type, frame: frame)
-        case .success, .copied:
-            return [1.0, 0.9, 0.78, 0.62]
-        case .error:
-            return [1.0, 0.7, 0.52, 0.36]
-        }
-    }
-
-    private static func recordingAlphaValues(for type: WorkflowType, frame: Int) -> [CGFloat] {
-        switch type {
-        case .tapTalk, .localTapTalk:
-            let patterns: [[CGFloat]] = [
-                [1.0, 0.42, 0.28, 0.18],
-                [0.82, 1.0, 0.4, 0.24],
-                [0.58, 0.86, 1.0, 0.36],
-                [0.4, 0.62, 0.88, 1.0],
-            ]
-            return patterns[frame % patterns.count]
-        case .textImprover:
-            let patterns: [[CGFloat]] = [
-                [1.0, 0.88, 0.52, 0.3],
-                [0.86, 1.0, 0.84, 0.44],
-                [0.64, 0.9, 1.0, 0.68],
-                [0.48, 0.68, 0.9, 1.0],
-            ]
-            return patterns[frame % patterns.count]
-        case .dampfAblassen:
-            let patterns: [[CGFloat]] = [
-                [1.0, 0.44, 0.78, 1.0],
-                [0.86, 0.34, 0.96, 0.9],
-                [0.72, 0.3, 1.0, 0.78],
-                [0.94, 0.4, 0.74, 1.0],
-            ]
-            return patterns[frame % patterns.count]
-        case .emojiText:
-            let patterns: [[CGFloat]] = [
-                [1.0, 0.7, 0.46, 0.28],
-                [0.78, 1.0, 0.72, 0.42],
-                [0.52, 0.82, 1.0, 0.66],
-                [0.36, 0.58, 0.84, 1.0],
-            ]
-            return patterns[frame % patterns.count]
-        }
-    }
-
-    private static func processingAlphaValues(for type: WorkflowType, frame: Int) -> [CGFloat] {
-        switch type {
-        case .tapTalk, .localTapTalk:
-            let patterns: [[CGFloat]] = [
-                [1.0, 0.84, 0.68, 0.52],
-                [0.92, 0.8, 0.64, 0.5],
-                [0.84, 0.74, 0.6, 0.48],
-                [0.92, 0.8, 0.64, 0.5],
-            ]
-            return patterns[frame % patterns.count]
-        case .textImprover:
-            let patterns: [[CGFloat]] = [
-                [1.0, 0.76, 0.52, 0.34],
-                [0.86, 1.0, 0.74, 0.48],
-                [0.7, 0.88, 1.0, 0.72],
-                [0.56, 0.74, 0.9, 1.0],
-            ]
-            return patterns[frame % patterns.count]
-        case .dampfAblassen:
-            let patterns: [[CGFloat]] = [
-                [0.9, 0.5, 0.72, 1.0],
-                [0.78, 0.44, 0.9, 1.0],
-                [0.66, 0.38, 1.0, 0.88],
-                [0.84, 0.48, 0.78, 1.0],
-            ]
-            return patterns[frame % patterns.count]
-        case .emojiText:
-            let patterns: [[CGFloat]] = [
-                [1.0, 0.8, 0.58, 0.4],
-                [0.88, 1.0, 0.78, 0.54],
-                [0.74, 0.9, 1.0, 0.7],
-                [0.6, 0.76, 0.92, 1.0],
-            ]
-            return patterns[frame % patterns.count]
-        }
     }
 
     private static func badgeSymbol(for type: WorkflowType) -> String {

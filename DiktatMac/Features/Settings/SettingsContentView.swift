@@ -611,6 +611,9 @@ struct CustomizeSettingsView: View {
                 Toggle("Aufnahme unten am Bildschirm zeigen", isOn: $appState.appSettings.showsRecordingIndicator)
                     .toggleStyle(.trailingSwitch)
 
+                Toggle("Kurzer Ton beim Start der Aufnahme", isOn: $appState.appSettings.playsStartSound)
+                    .toggleStyle(.trailingSwitch)
+
                 Text("Eine kleine lila Anzeige bewegt sich mit deiner Stimme, solange Diktat aufnimmt und schreibt. Ein Klick darauf stoppt die Aufnahme.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)

@@ -423,8 +423,17 @@ final class AppState {
         }
 
         // An online meeting records the Mac's sound; muting it would cut the call out.
+        if activeWorkflow?.isRecording == true, appSettings.playsStartSound {
+            RecordingSound.playStart()
+        }
         if appSettings.muteOutputWhileRecording, activeWorkflow?.isRecording == true, !meeting.isRecordingSystemAudio {
-            audioMuter.mute()
+            // After the plop: a muted Mac would not play it.
+            let delay: Duration = appSettings.playsStartSound ? .milliseconds(180) : .zero
+            Task { [weak self] in
+                try? await Task.sleep(for: delay)
+                guard let self, self.activeWorkflow?.isRecording == true else { return }
+                self.audioMuter.mute()
+            }
         }
         page = source.presentsWorkflowPage ? .workflow : .main
     }

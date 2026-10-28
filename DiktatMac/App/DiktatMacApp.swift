@@ -135,6 +135,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         appState.onWhatsNewChange = { [weak self] unseen in
             self?.menuBarStatusController.showsNewBadge = unseen
         }
+        menuBarStatusController.levelProvider = { [appState] in appState.activeWorkflow?.audioLevel ?? 0 }
         menuBarStatusController.showsNewBadge = appState.hasUnseenWhatsNew
         appState.hotkeyService.start()
         appState.appUpdateService.startIfConfigured()

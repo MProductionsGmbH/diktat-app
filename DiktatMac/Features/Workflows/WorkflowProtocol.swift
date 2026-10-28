@@ -165,6 +165,8 @@ struct AppSettings: Codable {
     var automaticParagraphs: Bool = false
     /// A small lilac pill at the bottom of the screen while recording and processing.
     var showsRecordingIndicator: Bool = true
+    /// A short sound when the recording starts.
+    var playsStartSound: Bool = true
     /// Write the summary right after a meeting. Off: transcript by person only, faster;
     /// the summary can still be created later.
     var summarizesMeetings: Bool = true
@@ -205,6 +207,7 @@ struct AppSettings: Codable {
         case muteOutputWhileRecording
         case automaticParagraphs
         case showsRecordingIndicator
+        case playsStartSound
         case summarizesMeetings
     }
 
@@ -239,6 +242,7 @@ struct AppSettings: Codable {
         muteOutputWhileRecording = try container.decodeIfPresent(Bool.self, forKey: .muteOutputWhileRecording) ?? true
         automaticParagraphs = try container.decodeIfPresent(Bool.self, forKey: .automaticParagraphs) ?? false
         showsRecordingIndicator = try container.decodeIfPresent(Bool.self, forKey: .showsRecordingIndicator) ?? true
+        playsStartSound = try container.decodeIfPresent(Bool.self, forKey: .playsStartSound) ?? true
         summarizesMeetings = try container.decodeIfPresent(Bool.self, forKey: .summarizesMeetings) ?? true
     }
 

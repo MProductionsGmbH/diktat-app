@@ -219,15 +219,14 @@ struct RecordingPill: View {
             Image(systemName: type.icon)
                 .font(.ui(12, .semibold))
                 .foregroundStyle(.white.opacity(0.85))
-            VoiceBars(level: appState.activeWorkflow?.audioLevel ?? 0, color: Self.lilac)
+            AnimatedMark(motion: .voice(appState.activeWorkflow?.audioLevel ?? 0), color: Self.lilac)
             Image(systemName: "stop.fill")
                 .font(.ui(7, .bold))
                 .foregroundStyle(.white.opacity(0.85))
                 .frame(width: 18, height: 18)
                 .background(Circle().fill(.white.opacity(0.14)))
         case .processing:
-            TypingIndicator(color: .clear, dotColor: Self.lilac, size: 34)
-                .frame(width: 30, height: 20)
+            AnimatedMark(motion: .thinking, color: Self.lilac)
             Text("Schreibt")
                 .font(.ui(12, .semibold))
                 .foregroundStyle(.white.opacity(0.85))
@@ -305,29 +304,46 @@ private struct MeetingPillContent: View {
     }
 }
 
-/// Seven bars that rise with the input level and keep a soft motion of their own, so
-/// the pill breathes even in a quiet moment.
-private struct VoiceBars: View {
-    let level: Float
+/// The Diktat mark, five bars in the proportions of the app icon. While recording the bars rise
+/// with the voice and keep a soft motion of their own, so the pill breathes even in a quiet
+/// moment; while writing they run in a wave.
+private struct AnimatedMark: View {
+    enum Motion {
+        case voice(Float)
+        case thinking
+    }
+
+    let motion: Motion
     let color: Color
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    private static let heights: [Double] = [0.34, 0.62, 0.92, 0.62, 0.34]
+    private static let side: Double = 26
+
     var body: some View {
         TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
             let time = context.date.timeIntervalSinceReferenceDate
-            HStack(spacing: 3) {
-                ForEach(0..<7, id: \.self) { index in
-                    let shape = 0.55 + 0.45 * sin(Double(index + 1) / 8 * .pi)
-                    let wobble = 0.5 + 0.5 * sin(time * 7 + Double(index) * 0.9)
-                    let voice = min(1, Double(level) * 1.6)
-                    let height = 4 + 16 * shape * (0.25 * wobble + voice * (0.6 + 0.4 * wobble))
+            HStack(spacing: 3.2) {
+                ForEach(0..<Self.heights.count, id: \.self) { index in
                     Capsule()
                         .fill(color)
-                        .frame(width: 3, height: height)
+                        .frame(width: 3.6, height: max(4, Self.side * Self.heights[index] * scale(of: index, at: time)))
                 }
             }
-            .frame(height: 22)
+            .frame(height: Self.side)
+        }
+    }
+
+    private func scale(of index: Int, at time: Double) -> Double {
+        if reduceMotion { return 0.75 }
+        switch motion {
+        case .voice(let level):
+            let wobble = 0.5 + 0.5 * sin(time * 7 + Double(index) * 1.1)
+            let voice = min(1, Double(level) * 1.6)
+            return min(1, 0.5 + 0.5 * (0.2 * wobble + voice * (0.55 + 0.45 * wobble)))
+        case .thinking:
+            return 0.45 + 0.55 * pow(0.5 + 0.5 * sin(time * 4.5 - Double(index) * 0.9), 1.6)
         }
     }
 }
