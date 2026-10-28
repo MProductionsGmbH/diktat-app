@@ -5,17 +5,18 @@ Diktat get it through the update check in the app once the update feed is switch
 
 ## Every release
 
-1. In `DiktatMac/project.yml` raise `MARKETING_VERSION` (for example `0.1.1`) and
+A release happens by itself once the version is raised.
+
+1. In `DiktatMac/project.yml` raise `MARKETING_VERSION` (for example `0.1.3`) and
    `CURRENT_PROJECT_VERSION` (a whole number that grows with every release).
-2. Commit and push to `main`, wait for the CI run to turn green.
-3. Tag and push:
+2. Commit and push to `main`.
+3. The **Release** workflow notices that there is no release for this version yet. It builds the
+   app, creates the tag (`v0.1.3`) and publishes `Diktat.dmg`, `Diktat.zip`, `SHA256SUMS.txt` and,
+   when the update key is stored, `appcast.xml`.
 
-   ```bash
-   git tag -a v0.1.1 -m "Diktat 0.1.1" && git push origin v0.1.1
-   ```
-
-4. The **Release** workflow builds the app and publishes `Diktat.dmg`, `Diktat.zip`,
-   `SHA256SUMS.txt` and, when the update key is stored, `appcast.xml`.
+A push that does not change the version starts nothing: the quick first step sees that the release
+exists and stops. If a build fails or is cancelled, re-run it in the Actions tab; it builds the same
+version again. Pushing a tag such as `v0.1.3` by hand works as well.
 
 ## Updates inside the app (Sparkle)
 

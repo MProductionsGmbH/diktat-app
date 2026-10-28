@@ -1,13 +1,19 @@
 name: Release
 
-# Push a tag such as v0.1.0 and this builds the app and publishes it as a GitHub release.
-# The version in DiktatMac/project.yml must match the tag; raise CURRENT_PROJECT_VERSION for every release.
+# A release happens by itself: raise MARKETING_VERSION and CURRENT_PROJECT_VERSION in
+# DiktatMac/project.yml and push to main. If there is no release for that version yet, this
+# builds the app, creates the tag vX.Y.Z and publishes the release. Pushing a tag by hand works too.
+# Re-running a failed run builds the same version again.
 # The files have fixed names (Diktat.dmg, Diktat.zip), so the link
 # https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.dmg
 # always gives the newest version.
 
 on:
   push:
+    branches:
+      - main
+    paths:
+      - DiktatMac/project.yml
     tags:
       - "v*"
 
@@ -15,10 +21,49 @@ permissions:
   contents: write
 
 jobs:
+  # A quick check on a small runner: which tag is meant, and is there a release for it already?
+  # Only when there is none does the slow Mac build start.
+  decide:
+    name: Is there a new version?
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.decide.outputs.tag }}
+      skip: ${{ steps.decide.outputs.skip }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Decide
+        id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            tag="$GITHUB_REF_NAME"
+          else
+            version="$(grep -m1 'MARKETING_VERSION' DiktatMac/project.yml | sed -E 's/.*"([^"]+)".*/\1/')"
+            tag="v$version"
+          fi
+          if gh release view "$tag" >/dev/null 2>&1; then
+            skip=true
+            echo "$tag is released already."
+          else
+            skip=false
+            echo "$tag is new."
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "skip=$skip" >> "$GITHUB_OUTPUT"
+
   release:
     name: Build and publish
+    needs: decide
+    if: needs.decide.outputs.skip != 'true'
     runs-on: macos-26
     timeout-minutes: 60
+    env:
+      TAG: ${{ needs.decide.outputs.tag }}
 
     steps:
       - name: Checkout
@@ -26,10 +71,10 @@ jobs:
 
       - name: Check the tag against the project version
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG#v}"
           project_version="$(grep -m1 'MARKETING_VERSION' DiktatMac/project.yml | sed -E 's/.*"([^"]+)".*/\1/')"
           if [ "$version" != "$project_version" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match MARKETING_VERSION $project_version in project.yml."
+            echo "Tag $TAG does not match MARKETING_VERSION $project_version in project.yml."
             exit 1
           fi
 
@@ -122,7 +167,7 @@ jobs:
           signature="$("$sign_update" --ed-key-file "$key_file" -p dist/Diktat.zip)"
           rm -f "$key_file"
           length="$(stat -f%z dist/Diktat.zip)"
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG#v}"
           build="$(grep -m1 'CURRENT_PROJECT_VERSION' DiktatMac/project.yml | sed -E 's/.*"([^"]+)".*/\1/')"
           date_rfc822="$(date -u '+%a, %d %b %Y %H:%M:%S +0000')"
           repo_url="https://github.com/${GITHUB_REPOSITORY}"
@@ -137,8 +182,8 @@ jobs:
                 <sparkle:version>${build}</sparkle:version>
                 <sparkle:shortVersionString>${version}</sparkle:shortVersionString>
                 <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-                <sparkle:fullReleaseNotesLink>${repo_url}/releases/tag/${GITHUB_REF_NAME}</sparkle:fullReleaseNotesLink>
-                <enclosure url="${repo_url}/releases/download/${GITHUB_REF_NAME}/Diktat.zip" sparkle:edSignature="${signature}" length="${length}" type="application/octet-stream"/>
+                <sparkle:fullReleaseNotesLink>${repo_url}/releases/tag/${TAG}</sparkle:fullReleaseNotesLink>
+                <enclosure url="${repo_url}/releases/download/${TAG}/Diktat.zip" sparkle:edSignature="${signature}" length="${length}" type="application/octet-stream"/>
               </item>
             </channel>
           </rss>
@@ -153,6 +198,8 @@ jobs:
             files+=(dist/appcast.xml)
           fi
           # A normal release, not a pre-release: only then does "releases/latest" point at it.
-          gh release create "$GITHUB_REF_NAME" "${files[@]}" \
-            --title "Diktat $GITHUB_REF_NAME" \
+          # For a push to main the tag does not exist yet; --target makes the release create it.
+          gh release create "$TAG" "${files[@]}" \
+            --target "$GITHUB_SHA" \
+            --title "Diktat $TAG" \
             --notes-file .github/release-notes.md
