@@ -27,14 +27,10 @@ Updates are signed, so nobody can slip in a fake one.
   Store it as the repository secret **`SPARKLE_PRIVATE_KEY`** (Settings > Secrets and variables >
   Actions) and keep a second copy in a password manager. Lose it, and installed apps can no longer
   be updated; they would need a fresh download.
-- **Feed:** the release carries `appcast.xml`. To switch updates on, set in `project.yml`:
-
-  ```yaml
-  SPARKLE_FEED_URL: "https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/appcast.xml"
-  ```
-
-  and publish a release with that build. Only after that do installed apps look for updates, so
-  the first version with the feed has to be installed by hand once.
+- **Feed:** every release carries `appcast.xml`, and `SPARKLE_FEED_URL` in `project.yml` points at
+  the one of the newest release. Installed apps look there; a newer version is offered in the app
+  (Settings > Nach Updates suchen, and automatically in the background). The first version with the
+  feed (0.1.2) has to be installed by hand once.
 
 `releases/latest` points at the newest release that is **not** marked as a pre-release.
 

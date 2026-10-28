@@ -11,11 +11,12 @@ settings:
     SWIFT_VERSION: "5.10"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
     ONLY_ACTIVE_ARCH: NO
-    MARKETING_VERSION: "0.1.1"
-    CURRENT_PROJECT_VERSION: "2"
-    # In-app updates (Sparkle) stay off while the feed and the key are empty. Set the appcast
-    # of your own releases and the public half of your own signing key to switch them on.
-    SPARKLE_FEED_URL: ""
+    MARKETING_VERSION: "0.1.2"
+    CURRENT_PROJECT_VERSION: "3"
+    # In-app updates (Sparkle) run when the feed and the key are set: the app reads the appcast of
+    # the newest release (each release carries one, see docs/releasing.md) and checks its
+    # signature against the public key. Forks use the appcast and key of their own releases.
+    SPARKLE_FEED_URL: "https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/appcast.xml"
     # Name in Finder and the Dock; a design preview builds as "Diktat Vorschau".
     APP_DISPLAY_NAME: Diktat
     SPARKLE_PUBLIC_ED_KEY: "3A2c4TYX0N3g2bae0R6e+8VglQdlDXaPafvtcnBpuMA="
