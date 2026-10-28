@@ -19,7 +19,7 @@ struct WebsiteModeRule: Codable, Hashable, Identifiable {
     var id: String { host }
 }
 
-/// Settings for "Modus je App": e.g. Mail or Gmail always become Diktat+.
+/// Settings for "Modus je App": e.g. Mail or Gmail always become Diktat Schreibstil.
 struct AppModeRulesSection: View {
     @Bindable var appState: AppState
 
@@ -41,7 +41,7 @@ struct AppModeRulesSection: View {
 
     var body: some View {
         SettingsSection(title: "Modus je App") {
-            Text("Das Diktat-K\u{00FC}rzel (\(appState.hotkeyLabel(for: .tapTalk))) kann je App oder Website automatisch einen anderen Modus nutzen, zum Beispiel Diktat+ in Gmail. \u{00DC}berall sonst bleibt es wortgenau, und die \u{00FC}brigen K\u{00FC}rzel bleiben wie sie sind.")
+            Text("Das Diktat-K\u{00FC}rzel (\(appState.hotkeyLabel(for: .tapTalk))) kann je App oder Website automatisch einen anderen Modus nutzen, zum Beispiel Diktat Schreibstil in Gmail. \u{00DC}berall sonst bleibt es wortgenau, und die \u{00FC}brigen K\u{00FC}rzel bleiben wie sie sind.")
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

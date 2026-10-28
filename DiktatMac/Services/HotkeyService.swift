@@ -178,7 +178,6 @@ final class HotkeyService {
     private static let fnCombos: [(flags: NSEvent.ModifierFlags, type: WorkflowType)] = [
         ([.function, .shift, .control], .localTapTalk),
         ([.function, .shift], .tapTalk),
-        ([.function, .control], .textImprover),
         ([.function, .option], .dampfAblassen),
         ([.function, .command], .emojiText),
     ]

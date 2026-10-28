@@ -11,6 +11,8 @@ extension SpeechCleanup {
         var engine: TextRewriter.Engine = .automatic
         /// Names and terms the model must keep spelled exactly.
         var protectedTerms: [String] = []
+        /// Tone, context and own instruction for the `style` level.
+        var styleSettings = TextImprovementSettings()
     }
 
     /// Runs the model step for `medium` and `strong`; `light` and short text come back as given.
@@ -21,7 +23,9 @@ extension SpeechCleanup {
         do {
             let rewritten = try await TextRewriter.rewrite(
                 framedTranscript(text),
-                instruction: instruction(for: configuration.level, protectedTerms: configuration.protectedTerms),
+                instruction: configuration.level == .style
+                    ? styleInstruction(configuration.styleSettings)
+                    : instruction(for: configuration.level, protectedTerms: configuration.protectedTerms),
                 engine: configuration.engine,
                 deterministic: true
             )

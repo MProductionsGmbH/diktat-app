@@ -7,6 +7,8 @@ enum SpeechCleanupLevel: String, Codable, CaseIterable, Identifiable {
     case medium
     /// Plus grammar, word order and punctuation, by the language model.
     case strong
+    /// Written style: the model rewrites the wording, in the tone the user chose (the former Diktat+).
+    case style
 
     var id: String { rawValue }
 
@@ -15,6 +17,7 @@ enum SpeechCleanupLevel: String, Codable, CaseIterable, Identifiable {
         case .light: return "Leicht"
         case .medium: return "Mittel"
         case .strong: return "Stark"
+        case .style: return "Schreibstil"
         }
     }
 
@@ -26,6 +29,8 @@ enum SpeechCleanupLevel: String, Codable, CaseIterable, Identifiable {
             return "Zus\u{00E4}tzlich: Wenn du dich verhaspelst, einen Satz neu ansetzt oder dich korrigierst, bleibt nur die richtige Fassung."
         case .strong:
             return "Zus\u{00E4}tzlich: Grammatik, Satzstellung und Zeichensetzung werden korrigiert. Deine Wortwahl bleibt."
+        case .style:
+            return "Ein Sprachmodell schreibt den Text neu: Rechtschreibung, Grammatik, Formulierung und Lesefluss, in der Tonalit\u{00E4}t, die du unter Schreibstil einstellst. Die Bedeutung bleibt. Das war Diktat+."
         }
     }
 
@@ -54,7 +59,7 @@ enum SpeechCleanup {
             scope = """
             Alles andere bleibt genau wie gesprochen: Wortwahl, Reihenfolge, Satzbau, Stil und Anrede. Korrigiere keine Grammatik und füge nichts hinzu.
             """
-        case .strong:
+        case .strong, .style:
             scope = """
             Korrigiere außerdem Grammatik, Fälle, Satzstellung und Zeichensetzung, damit jeder Satz richtig gebaut ist. Wortwahl, Stil, Bedeutung und Anrede bleiben unverändert. Füge keine neuen Inhalte hinzu.
             """
@@ -70,9 +75,23 @@ enum SpeechCleanup {
         guard !trimmed.isEmpty, !trimmed.contains(ModePrompts.nothingRecognizedMarker) else { return false }
         let before = Double(wordCount(original))
         let after = Double(wordCount(trimmed))
-        let growth = level == .strong ? 1.2 : 1.1
-        guard after >= before * 0.5 && after <= before * growth + 2 else { return false }
-        return sharedWordRatio(trimmed, with: original) >= 0.6
+        // A rewrite may reshape the sentences, so the style level gets more room.
+        let growth: Double
+        let shrink: Double
+        let sharedWords: Double
+        switch level {
+        case .style: (growth, shrink, sharedWords) = (1.5, 0.4, 0.35)
+        case .strong: (growth, shrink, sharedWords) = (1.2, 0.5, 0.6)
+        case .light, .medium: (growth, shrink, sharedWords) = (1.1, 0.5, 0.6)
+        }
+        guard after >= before * shrink && after <= before * growth + 2 else { return false }
+        return sharedWordRatio(trimmed, with: original) >= sharedWords
+    }
+
+    /// The style level rewrites the text; slips and self-corrections go first, as on the other levels.
+    static func styleInstruction(_ settings: TextImprovementSettings) -> String {
+        ModePrompts.textImprovement(settings)
+            + "\n\nEntferne außerdem Versprecher, Wiederholungen und die überholte Fassung, wenn sich der Sprecher korrigiert; es bleibt nur die korrigierte."
     }
 
     /// The dictation as the model gets it. Handed over bare, a question in the text ("Hattest du

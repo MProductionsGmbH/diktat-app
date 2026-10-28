@@ -764,7 +764,7 @@ struct CustomizeSettingsView: View {
                     .toggleStyle(.trailingSwitch)
                     .font(.ui(11.5))
 
-                Text("Diktat+, WTF und :-) bekommen den Text rund um den Cursor als Kontext, etwa die Mail, auf die du antwortest. Mit einem Modell-Anbieter geht dieser Text mit an den Anbieter.")
+                Text("Schreibstil, WTF und :-) bekommen den Text rund um den Cursor als Kontext, etwa die Mail, auf die du antwortest. Mit einem Modell-Anbieter geht dieser Text mit an den Anbieter.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -776,12 +776,15 @@ struct CustomizeSettingsView: View {
             }
 
             if pane == .workflows {
-            // MARK: Diktat+
-            SettingsSection(title: appState.displayName(for: .textImprover)) {
-                ModeSummary(appState: appState, type: .textImprover)
+            // MARK: Schreibstil
+            SettingsSection(title: "Schreibstil") {
+                Text("Gilt, wenn die Gl\u{00E4}ttung auf \u{201E}Schreibstil\u{201C} steht, und f\u{00FC}r Diktat Schreibstil in den Regeln pro App.")
+                    .font(.ui(12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Schreibstil")
+                    Text("Tonalit\u{00E4}t")
                         .font(.ui(12))
                         .foregroundStyle(.secondary)
 

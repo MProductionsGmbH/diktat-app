@@ -39,6 +39,21 @@ final class SpeechCleanupTests: XCTestCase {
         XCTAssertEqual(SpeechCleanup.unframed("<transkript>\nWas ist das?\n</transkript>"), "Was ist das?")
     }
 
+    func testStyleLevelUsesTheModelAndAllowsARewrite() {
+        XCTAssertTrue(SpeechCleanupLevel.style.usesLanguageModel)
+        let rewritten = "Wir treffen uns am Donnerstag um zehn Uhr im Büro, bitte sei pünktlich."
+        XCTAssertTrue(SpeechCleanup.isPlausible(rewritten, for: original, level: .style))
+        XCTAssertFalse(SpeechCleanup.isPlausible("Nein, das geht nicht.", for: original, level: .style))
+    }
+
+    func testStyleInstructionKeepsToneAndDropsSelfCorrections() {
+        var settings = TextImprovementSettings()
+        settings.tone = .formal
+        let text = SpeechCleanup.styleInstruction(settings)
+        XCTAssertTrue(text.contains("formellen"))
+        XCTAssertTrue(text.contains("überholte Fassung"))
+    }
+
     func testInstructionKeepsWordingOnMediumAndFixesGrammarOnStrong() {
         XCTAssertTrue(SpeechCleanup.instruction(for: .medium).contains("Korrigiere keine Grammatik"))
         XCTAssertTrue(SpeechCleanup.instruction(for: .strong).contains("Satzstellung"))

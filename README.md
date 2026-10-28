@@ -39,20 +39,19 @@ Hold a shortcut, speak, let go. Diktat turns your speech into text and pastes it
 
 | Mode | Shortcut | What happens |
 |---|---|---|
-| **Diktat** | `fn + Shift` | Speech to exact text |
-| **Diktat+** | `fn + Control` | Speech to clean written text |
+| **Diktat** | `fn` (globe key) | Speech to text; the cleanup level (light, medium, strong, written style) and the tone are set in the app |
 | **Diktat WTF** | `fn + Option` | Frustrated speech to a calm, effective message |
 | **Diktat :-)** | `fn + Cmd` | Text with fitting emojis |
 
-Keyboards without `fn`: set your own shortcut per mode in the settings.
+`fn + Shift` also starts Diktat. Keyboards without `fn`: set your own shortcut per mode in the settings.
 
 ## Features
 
 - **Local speech recognition:** Parakeet Ultra (fast, 25 European languages) or OpenAI Whisper via WhisperKit (about 100 languages). Both detect the spoken language.
-- **Local writing modes:** Diktat+, WTF and :-) run with Apple Intelligence on your Mac (macOS 26). Optionally bring your own model provider: OpenAI, Anthropic, Google Gemini, Mistral, OpenRouter, or a local server such as Ollama or LM Studio.
+- **Local writing modes:** the Schreibstil cleanup level, WTF and :-) run with Apple Intelligence on your Mac (macOS 26). Optionally bring your own model provider: OpenAI, Anthropic, Google Gemini, Mistral, OpenRouter, or a local server such as Ollama or LM Studio.
 - **Smooths what you stumble over:** three levels. *Leicht* removes "um", stutters and phrases said twice without any model. *Mittel* also drops restarts and self-corrections, *Stark* also fixes grammar, word order and punctuation. Both use Apple Intelligence or a local server such as Ollama (Qwen3 works), so it runs offline.
 - **Fits where you type:** spaces and capitals follow the text around your cursor, also mid-sentence. Password fields are never read.
-- **Mode per app or website:** Gmail always Diktat+, Slack with emojis, everything else word for word.
+- **Mode per app or website:** Gmail always in written style, Slack with emojis, everything else word for word.
 - **See that it listens:** a small lilac pill at the bottom of the screen moves with your voice while Diktat records. Click it to stop. It never takes the focus, so the text still lands where you type. You can turn it off in the settings.
 - **Last text at hand:** the menu bar window shows your last text as a message. One click copies it.
 - **Sound off while recording:** a podcast or music is muted while you speak and back right after.

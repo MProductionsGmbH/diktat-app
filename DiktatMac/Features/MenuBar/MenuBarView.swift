@@ -283,6 +283,21 @@ struct MenuBarView: View {
                 .disabled(appState.isDownloadingLocalModel)
             }
 
+            HStack(spacing: 8) {
+                Text("Gl\u{00E4}ttung")
+                    .font(.ui(12))
+                    .foregroundStyle(.secondary)
+
+                Picker("", selection: $appState.appSettings.speechCleanupLevel) {
+                    ForEach(SpeechCleanupLevel.allCases) { level in
+                        Text(level.displayName).tag(level)
+                    }
+                }
+                .labelsHidden()
+                .frame(maxWidth: .infinity)
+                .controlSize(.small)
+            }
+
             if let progress = appState.localModelDownloadProgress {
                 VStack(alignment: .leading, spacing: 4) {
                     ProgressView(value: progress)

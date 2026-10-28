@@ -31,7 +31,7 @@ After a macOS update the first dictation can take a few minutes while macOS prep
 
 ## 4. Writing Modes
 
-Diktat+, WTF and :-) need a language model:
+The Schreibstil level, WTF and :-) need a language model:
 
 - **Apple Intelligence** (macOS 26, turned on in System Settings): runs on your Mac. Nothing to configure.
 - **Your own model provider** (optional): **Settings > Modelle > Modell-Anbieter**, choose a provider, paste your API key, test the connection. Local servers such as Ollama or LM Studio work via "Eigene Adresse".

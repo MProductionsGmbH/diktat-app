@@ -135,7 +135,7 @@ final class AppState {
         return aiProvider?.provider.displayName
     }
 
-    /// Diktat+, WTF and :-) can run: on this Mac (Apple Intelligence) or via the provider.
+    /// Schreibstil, WTF and :-) can run: on this Mac (Apple Intelligence) or via the provider.
     var canRewrite: Bool {
         _ = aiKeyRevision
         _ = aiProvider
@@ -240,7 +240,10 @@ final class AppState {
 
     /// Badge label: the custom shortcut when set, otherwise the built-in fn shortcut.
     func hotkeyLabel(for type: WorkflowType) -> String {
-        appSettings.customHotkey(for: type)?.displayLabel ?? type.hotkeyLabel
+        if type == .tapTalk, appSettings.customHotkey(for: type) == nil, appSettings.fnAloneStartsDictation {
+            return "fn"
+        }
+        return appSettings.customHotkey(for: type)?.displayLabel ?? type.hotkeyLabel
     }
 
     private func applyFnAloneSetting() {
@@ -278,7 +281,8 @@ final class AppState {
         SpeechCleanup.Configuration(
             level: appSettings.speechCleanupLevel,
             engine: appSettings.rewriteEngine,
-            protectedTerms: textImprovementSettings.protectedTerms
+            protectedTerms: textImprovementSettings.protectedTerms,
+            styleSettings: textImprovementSettings
         )
     }
 
