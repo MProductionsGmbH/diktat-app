@@ -11,8 +11,8 @@ settings:
     SWIFT_VERSION: "5.10"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
     ONLY_ACTIVE_ARCH: NO
-    MARKETING_VERSION: "0.1.0"
-    CURRENT_PROJECT_VERSION: "1"
+    MARKETING_VERSION: "0.1.1"
+    CURRENT_PROJECT_VERSION: "2"
     # In-app updates (Sparkle) stay off while the feed and the key are empty. Set the appcast
     # of your own releases and the public half of your own signing key to switch them on.
     SPARKLE_FEED_URL: ""
