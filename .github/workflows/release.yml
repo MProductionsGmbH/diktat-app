@@ -42,8 +42,59 @@ jobs:
             brew install xcodegen
           fi
 
+      # With an Apple Developer ID the app is signed and notarized, and macOS opens it without a
+      # warning. Without the secrets below the release is signed ad hoc, as before.
+      # Needed: DEVELOPER_ID_CERT_P12 (the certificate as base64), DEVELOPER_ID_CERT_PASSWORD,
+      # APPLE_ID, APPLE_TEAM_ID and APPLE_APP_PASSWORD (an app-specific password). See docs/releasing.md.
+      - name: Import the signing certificate
+        env:
+          DEVELOPER_ID_CERT_P12: ${{ secrets.DEVELOPER_ID_CERT_P12 }}
+          DEVELOPER_ID_CERT_PASSWORD: ${{ secrets.DEVELOPER_ID_CERT_PASSWORD }}
+        run: |
+          if [ -z "$DEVELOPER_ID_CERT_P12" ]; then
+            echo "No signing certificate: the app is signed ad hoc."
+            exit 0
+          fi
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          keychain_password="$(uuidgen)"
+          security create-keychain -p "$keychain_password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$keychain_password" "$keychain"
+          printf '%s' "$DEVELOPER_ID_CERT_P12" | base64 --decode > "$RUNNER_TEMP/certificate.p12"
+          security import "$RUNNER_TEMP/certificate.p12" -P "$DEVELOPER_ID_CERT_PASSWORD" -A -t cert -f pkcs12 -k "$keychain"
+          rm -f "$RUNNER_TEMP/certificate.p12"
+          security set-key-partition-list -S apple-tool:,apple: -k "$keychain_password" "$keychain" >/dev/null
+          security list-keychains -d user -s "$keychain" login.keychain-db
+          identity="$(security find-identity -v -p codesigning "$keychain" | grep 'Developer ID Application' | head -1 | sed -E 's/.*"(.+)".*/\1/')"
+          if [ -z "$identity" ]; then
+            echo "No Developer ID Application identity in the certificate."
+            exit 1
+          fi
+          echo "DIKTAT_SIGN_IDENTITY=$identity" >> "$GITHUB_ENV"
+
       - name: Build
         run: ./build.sh --release
+
+      - name: Notarize
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: |
+          if [ -z "$DIKTAT_SIGN_IDENTITY" ] || [ -z "$APPLE_ID" ]; then
+            echo "Not signed with a Developer ID or no Apple ID: skipping notarization."
+            exit 0
+          fi
+          ditto -c -k --keepParent Diktat.app "$RUNNER_TEMP/notarize.zip"
+          result="$(xcrun notarytool submit "$RUNNER_TEMP/notarize.zip" \
+            --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_PASSWORD" --wait 2>&1)"
+          echo "$result"
+          if ! echo "$result" | grep -q "status: Accepted"; then
+            echo "Apple did not accept the app. Run 'xcrun notarytool log <id>' with the id above for the reasons."
+            exit 1
+          fi
+          xcrun stapler staple Diktat.app
+          spctl --assess --type execute --verbose Diktat.app
 
       - name: Package
         run: |

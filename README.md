@@ -28,7 +28,7 @@ Hold a shortcut, speak, let go. Diktat turns your speech into text and pastes it
 ## Install
 
 1. **[Download Diktat.dmg](https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.dmg)**, open it and drag Diktat onto the Applications folder.
-2. Open Diktat. macOS warns that it cannot check the app, because this version is not notarized yet. Open **System Settings > Privacy & Security** and press **Open Anyway** next to Diktat.
+2. Open Diktat. macOS warns that it cannot check the app, because this version is not notarized yet. Press **Done** (not "Move to Trash"), then open **System Settings > Privacy & Security** and press **Open Anyway** next to Diktat.
 3. Allow the microphone and Accessibility, then load a speech model.
 
 Or in the Terminal, without the macOS warning:

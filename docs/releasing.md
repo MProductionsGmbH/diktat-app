@@ -38,8 +38,32 @@ Updates are signed, so nobody can slip in a fake one.
 
 `releases/latest` points at the newest release that is **not** marked as a pre-release.
 
-## Signing and notarization
+## Signing and notarization (no warning when opening)
 
-Without an Apple Developer ID the app is signed ad hoc. macOS shows a warning on the first
-start, and after every update it asks for Accessibility again. With a Developer ID and
-notarization both disappear. That needs a paid Apple Developer account.
+Without an Apple Developer ID the app is signed ad hoc. When someone opens the downloaded app,
+macOS says it cannot check it for malicious software, and after every update it asks for
+Accessibility again. A Developer ID and notarization remove both. They need a paid
+**Apple Developer Program** membership; the Release workflow does the rest once these
+repository secrets are stored (Settings > Secrets and variables > Actions):
+
+| Secret | What it is |
+|---|---|
+| `DEVELOPER_ID_CERT_P12` | The certificate "Developer ID Application" with its private key, exported from Keychain Access as a `.p12` file and turned into text with `base64 -i certificate.p12 \| pbcopy`. |
+| `DEVELOPER_ID_CERT_PASSWORD` | The password chosen when exporting the `.p12`. |
+| `APPLE_ID` | The Apple ID of the developer account. |
+| `APPLE_TEAM_ID` | The ten-character team id, shown in the developer account under Membership. |
+| `APPLE_APP_PASSWORD` | An app-specific password made at appleid.apple.com (Sign-In and Security). |
+
+With the secrets the workflow signs the app with the hardened runtime (`build.sh` does it when
+`DIKTAT_SIGN_IDENTITY` is set), sends it to Apple, waits for the result and staples the ticket
+to the app before it makes the DMG. Without them it still publishes, signed ad hoc.
+
+This path has not been run against a real account yet. The first notarization often needs a
+round of fixes; `xcrun notarytool log <id>` names the files Apple objects to.
+
+## Until then: opening the app
+
+Tell people to open **System Settings > Privacy & Security**, scroll to the message about
+Diktat and press **Open Anyway** (in German: Systemeinstellungen > Datenschutz & Sicherheit >
+Trotzdem öffnen). Or install from the Terminal, which skips the check; the command is in the
+README.

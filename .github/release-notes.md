@@ -3,7 +3,7 @@
 ## Install
 
 1. Download **Diktat.dmg**, open it and drag Diktat onto the Applications folder.
-2. Open Diktat from Applications. macOS says it cannot check the app for malicious software, because this version is not notarized yet. Open **System Settings > Privacy & Security**, scroll down and press **Open Anyway** next to Diktat.
+2. Open Diktat from Applications. macOS says it cannot check the app for malicious software, because this version is not notarized yet. Press **Done**, then open **System Settings > Privacy & Security**, scroll down and press **Open Anyway** next to Diktat (German: Systemeinstellungen > Datenschutz & Sicherheit > Trotzdem öffnen). Do not press "Move to Trash".
 3. Allow the microphone and, to paste directly into other apps, **Accessibility**.
 4. Choose a speech model and load it. Whisper Large v3 Turbo is about 630 MB, once.
 

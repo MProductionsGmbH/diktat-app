@@ -63,6 +63,30 @@ verify_universal_app() {
     echo "✅ Universal Binary verifiziert: $archs"
 }
 
+# Signing: ad hoc by default. With DIKTAT_SIGN_IDENTITY set to a "Developer ID Application: ..."
+# certificate the app is signed for distribution (hardened runtime, secure timestamp), which
+# notarization needs. See docs/releasing.md.
+SIGN_IDENTITY="${DIKTAT_SIGN_IDENTITY:--}"
+
+sign_for_distribution() {
+    local app="$1"
+    local entitlements="$SCRIPT_DIR/DiktatMac/Resources/DiktatMac.entitlements"
+    local flags=(--force --options runtime --timestamp --sign "$SIGN_IDENTITY")
+
+    # Innermost first: Sparkle's helpers, then the frameworks and libraries, then the app itself.
+    # Everything is signed with the same identity, so the hardened runtime can load it all.
+    if [ -d "$app/Contents/Frameworks/Sparkle.framework" ]; then
+        while IFS= read -r item; do
+            codesign "${flags[@]}" "$item"
+        done < <(find "$app/Contents/Frameworks/Sparkle.framework" \( -name "*.xpc" -o -name "Updater.app" -o -name "Autoupdate" \) -not -type l)
+    fi
+    while IFS= read -r item; do
+        codesign "${flags[@]}" "$item"
+    done < <(find "$app/Contents/Frameworks" -maxdepth 1 \( -name "*.framework" -o -name "*.dylib" \) 2>/dev/null)
+    codesign "${flags[@]}" --entitlements "$entitlements" "$app"
+    codesign --verify --deep --strict --verbose=2 "$app"
+}
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/DiktatMac"
 PROJECT_FILE="$PROJECT_DIR/DiktatMac.xcodeproj"
@@ -137,7 +161,12 @@ rm -rf "$DEST"
 cp -R "$APP_PATH" "$DEST"
 # iCloud or the file provider may have added xattrs again; codesign refuses them.
 xattr -cr "$DEST" 2>/dev/null || true
-codesign --force --deep --sign - "$DEST" 2>&1
+if [ "$SIGN_IDENTITY" = "-" ]; then
+    codesign --force --deep --sign - "$DEST" 2>&1
+else
+    echo "🔏 Signiere fuer die Weitergabe: $SIGN_IDENTITY"
+    sign_for_distribution "$DEST"
+fi
 verify_universal_app "$DEST"
 
 RUN_TARGET="$DEST"
