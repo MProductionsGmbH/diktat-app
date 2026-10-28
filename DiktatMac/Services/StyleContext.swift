@@ -75,7 +75,7 @@ enum StyleContext: String, Codable, CaseIterable, Identifiable {
     }
 }
 
-/// How the text reads: the sentence marks it ends with and, when the written-style level
+/// How the text reads: the sentence marks it ends with and, when the AI written-style level
 /// rewrites it, the wording.
 enum StyleTone: String, Codable, CaseIterable, Identifiable {
     case formal
@@ -94,21 +94,35 @@ enum StyleTone: String, Codable, CaseIterable, Identifiable {
 
     var detail: String {
         switch self {
-        case .formal: return "Mit Schreibstil: sachlich und h\u{00F6}flich formuliert"
-        case .neutral: return "Mit Schreibstil: klar und neutral formuliert"
-        case .casual: return "Ohne Punkt am Ende, mit Schreibstil ungezwungen formuliert"
+        case .formal: return "Mit KI-Schreibstil: sachlich und h\u{00F6}flich formuliert"
+        case .neutral: return "Mit KI-Schreibstil: klar und neutral formuliert"
+        case .casual: return "Ohne Punkt am Ende, mit KI-Schreibstil ungezwungen formuliert"
         }
     }
 
-    /// One sentence that shows the tone, as in the settings.
-    var example: String {
+    /// The same dictated sentence for every tone, so the settings show what each tone changes.
+    static let exampleSpoken = "hey alex war echt sch\u{00F6}n heute mit dir zu reden ich melde mich n\u{00E4}chste woche wegen dem termin"
+
+    /// The sentence after the cleanup levels Leicht to Stark: punctuation set, and only the period
+    /// at the end follows the tone.
+    var exampleCleaned: String {
+        apply(to: "Hey Alex, war echt sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen dem Termin.")
+    }
+
+    /// What the model of KI-Schreibstil made of it in this tone (answers of Apple Intelligence; a
+    /// model words it a little differently each time).
+    var exampleRewritten: String {
         switch self {
-        case .formal, .neutral: return "Hallo Alex, es war sch\u{00F6}n, heute mit dir zu sprechen. Bis zum n\u{00E4}chsten Mal."
-        case .casual: return "Hallo Alex, es war sch\u{00F6}n, heute mit dir zu sprechen. Bis zum n\u{00E4}chsten Mal"
+        case .formal:
+            return apply(to: "Hallo Alex, es war wirklich sch\u{00F6}n, heute mit dir zu sprechen. Ich melde mich n\u{00E4}chste Woche bez\u{00FC}glich des Termins.")
+        case .neutral:
+            return apply(to: "Hey Alex, es war wirklich sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen des Termins.")
+        case .casual:
+            return apply(to: "Hey Alex, war echt sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen des Termins.")
         }
     }
 
-    /// The tone for the model of the written-style level.
+    /// The tone for the model of the AI written-style level.
     var rewriteTone: TextImprovementSettings.TextTone {
         switch self {
         case .formal: return .formal

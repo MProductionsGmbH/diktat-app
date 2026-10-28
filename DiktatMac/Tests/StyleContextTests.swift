@@ -36,6 +36,14 @@ final class StyleContextTests: XCTestCase {
         XCTAssertEqual(decoded.tone(for: .work), .casual)
     }
 
+    func testToneExamplesShowWhatEachToneChanges() {
+        XCTAssertTrue(StyleTone.formal.exampleCleaned.hasSuffix("Termin."))
+        XCTAssertTrue(StyleTone.casual.exampleCleaned.hasSuffix("Termin"))
+        XCTAssertNotEqual(StyleTone.formal.exampleRewritten, StyleTone.casual.exampleRewritten)
+        XCTAssertNotEqual(StyleTone.formal.exampleRewritten, StyleTone.neutral.exampleRewritten)
+        XCTAssertFalse(StyleTone.casual.exampleRewritten.hasSuffix("."))
+    }
+
     func testCasualToneDropsOnlyTheFinalPeriod() {
         XCTAssertEqual(StyleTone.casual.apply(to: "Bis morgen. Ich freue mich."), "Bis morgen. Ich freue mich")
         XCTAssertEqual(StyleTone.casual.apply(to: "Kommst du morgen?"), "Kommst du morgen?")

@@ -15,6 +15,6 @@ curl -fsSL -o /tmp/Diktat.zip https://github.com/MProductionsGmbH/diktat-app/rel
 
 ## Requirements
 
-macOS 14 or newer. Apple Intelligence (macOS 26) or a local model server such as Ollama is needed for the cleanup levels Medium, Strong and written style.
+macOS 14 or newer. Apple Intelligence (macOS 26) or a local model server such as Ollama is needed for the cleanup levels Medium, Strong and AI written style.
 
 The `SHA256SUMS.txt` file lets you check the download.

@@ -66,6 +66,23 @@ private struct BeforeAfter: View {
     }
 }
 
+/// One result line of a tone card, with its label.
+private struct ToneResult: View {
+    let label: String
+    let text: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(.ui(10.5, .semibold))
+                .foregroundStyle(.tertiary)
+            Text(text)
+                .font(.ui(11.5))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
+
 private extension SpeechCleanupLevel {
     /// Examples of the goal, not promised results: a model words things a little differently each time.
     var example: (before: String, after: String) {
@@ -149,6 +166,17 @@ struct StyleContextSection: View {
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Gesprochen")
+                    .font(.ui(10.5, .semibold))
+                    .foregroundStyle(.tertiary)
+                Text(StyleTone.exampleSpoken)
+                    .font(.ui(11.5))
+                    .italic()
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
             ForEach(StyleTone.allCases) { tone in
                 ChoiceCard(
                     title: tone.displayName,
@@ -157,16 +185,17 @@ struct StyleContextSection: View {
                 ) {
                     appState.appSettings.styleSettings.setTone(tone, for: context)
                 } example: {
-                    Text(tone.example)
-                        .font(.ui(11.5))
-                        .padding(8)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(DiktatTheme.accent.opacity(0.06)))
-                        .fixedSize(horizontal: false, vertical: true)
+                    VStack(alignment: .leading, spacing: 8) {
+                        ToneResult(label: "Mit Gl\u{00E4}ttung", text: tone.exampleCleaned)
+                        ToneResult(label: "Mit KI-Schreibstil", text: tone.exampleRewritten)
+                    }
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(DiktatTheme.accent.opacity(0.06)))
                 }
             }
 
-            Text("Bei der Gl\u{00E4}ttung \u{201E}Schreibstil\u{201C} formuliert das Sprachmodell auch im gew\u{00E4}hlten Ton. Sonst \u{00E4}ndert der Ton nur die Satzzeichen am Ende.")
+            Text("Die Beispiele zeigen dieselbe Aufnahme. Ohne KI-Schreibstil \u{00E4}ndert der Ton nur den Punkt am Ende. Mit KI-Schreibstil formuliert das Sprachmodell auch im gew\u{00E4}hlten Ton, jedes Mal ein wenig anders.")
                 .font(.ui(11))
                 .foregroundStyle(.tertiary)
                 .fixedSize(horizontal: false, vertical: true)

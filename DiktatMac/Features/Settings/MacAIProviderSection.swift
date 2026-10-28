@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Optional provider for Schreibstil, WTF and :-), connected with the user's own API key.
+/// Optional provider for KI-Schreibstil, WTF and :-), connected with the user's own API key.
 struct MacAIProviderSection: View {
     @Bindable var appState: AppState
 

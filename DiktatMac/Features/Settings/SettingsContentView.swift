@@ -767,7 +767,7 @@ struct CustomizeSettingsView: View {
                     .toggleStyle(.trailingSwitch)
                     .font(.ui(11.5))
 
-                Text("Schreibstil, WTF und :-) bekommen den Text rund um den Cursor als Kontext, etwa die Mail, auf die du antwortest. Mit einem Modell-Anbieter geht dieser Text mit an den Anbieter.")
+                Text("KI-Schreibstil, WTF und :-) bekommen den Text rund um den Cursor als Kontext, etwa die Mail, auf die du antwortest. Mit einem Modell-Anbieter geht dieser Text mit an den Anbieter.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -783,9 +783,9 @@ struct CustomizeSettingsView: View {
 
             StyleContextSection(appState: appState)
 
-            // MARK: Schreibstil
-            SettingsSection(title: "Schreibstil") {
-                Text("Gilt, wenn die Gl\u{00E4}ttung auf \u{201E}Schreibstil\u{201C} steht, und f\u{00FC}r Diktat Schreibstil in den Regeln pro App. Den Ton stellst du oben je Kontext ein.")
+            // MARK: KI-Schreibstil
+            SettingsSection(title: "KI-Schreibstil") {
+                Text("Gilt, wenn die Gl\u{00E4}ttung auf \u{201E}KI-Schreibstil\u{201C} steht, und f\u{00FC}r Diktat KI-Schreibstil in den Regeln pro App. Den Ton stellst du oben je Kontext ein.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

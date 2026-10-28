@@ -92,6 +92,7 @@ enum ModePrompts {
         - Korrigiere Rechtschreibung und Grammatik
         - Verbessere die Formulierung und den Lesefluss
         - Behalte die ursprüngliche Bedeutung bei
+        - Behalte die Anrede (du oder Sie) bei, wie der Sprecher sie benutzt
         - Gib NUR den verbesserten Text zurück, keine Erklärungen
         """
 

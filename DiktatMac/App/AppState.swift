@@ -135,7 +135,7 @@ final class AppState {
         return aiProvider?.provider.displayName
     }
 
-    /// Schreibstil, WTF and :-) can run: on this Mac (Apple Intelligence) or via the provider.
+    /// KI-Schreibstil, WTF and :-) can run: on this Mac (Apple Intelligence) or via the provider.
     var canRewrite: Bool {
         _ = aiKeyRevision
         _ = aiProvider
@@ -278,7 +278,7 @@ final class AppState {
     }
 
     /// The cleanup for a dictation in the given tone. The tone also steers the wording of the
-    /// written-style level.
+    /// AI written-style level.
     func speechCleanup(tone: StyleTone) -> SpeechCleanup.Configuration {
         var style = textImprovementSettings
         style.tone = tone.rewriteTone

@@ -12,7 +12,7 @@ enum WorkflowType: String, CaseIterable, Identifiable, Codable {
     var id: String { rawValue }
 
     static var mainMenuCases: [WorkflowType] {
-        // Diktat+ is the "Schreibstil" level of Diktat now; it only remains for per-app rules.
+        // Diktat+ is the "KI-Schreibstil" level of Diktat now; it only remains for per-app rules.
         allCases.filter { $0 != .localTapTalk && $0 != .textImprover }
     }
 
@@ -20,7 +20,7 @@ enum WorkflowType: String, CaseIterable, Identifiable, Codable {
         switch self {
         case .tapTalk: return "Diktat"
         case .localTapTalk: return "Diktat Lokal"
-        case .textImprover: return "Diktat Schreibstil"
+        case .textImprover: return "Diktat KI-Schreibstil"
         case .dampfAblassen: return "Diktat WTF"
         case .emojiText: return "Diktat :-)"
         }
@@ -128,7 +128,7 @@ extension Workflow {
 struct AppSettings: Codable {
     var hotkeyMode: HotkeyMode = .hold
     var hasSeenOnboarding: Bool = false
-    /// Where Schreibstil, WTF and :-) run their AI step. Transcription is always local.
+    /// Where KI-Schreibstil, WTF and :-) run their AI step. Transcription is always local.
     var rewriteEngine: TextRewriter.Engine = .automatic
     var selectedLocalTranscriptionModelName: String = LocalTranscriptionService.initialModelName
     var hasAutoSelectedFastLocalModel: Bool = false

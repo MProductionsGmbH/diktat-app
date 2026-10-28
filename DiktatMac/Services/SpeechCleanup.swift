@@ -17,7 +17,7 @@ enum SpeechCleanupLevel: String, Codable, CaseIterable, Identifiable {
         case .light: return "Leicht"
         case .medium: return "Mittel"
         case .strong: return "Stark"
-        case .style: return "Schreibstil"
+        case .style: return "KI-Schreibstil"
         }
     }
 

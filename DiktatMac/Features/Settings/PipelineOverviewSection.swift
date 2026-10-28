@@ -17,7 +17,7 @@ struct PipelineOverviewSection: View {
             )
             row(
                 step: "2",
-                title: "KI-Modi (Schreibstil, WTF, :-))",
+                title: "KI-Modi (KI-Schreibstil, WTF, :-))",
                 model: aiModel,
                 detail: aiDetail,
                 ready: appState.canRewrite
