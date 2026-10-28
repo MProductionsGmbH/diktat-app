@@ -18,7 +18,7 @@ settings:
     SPARKLE_FEED_URL: ""
     # Name in Finder and the Dock; a design preview builds as "Diktat Vorschau".
     APP_DISPLAY_NAME: Diktat
-    SPARKLE_PUBLIC_ED_KEY: ""
+    SPARKLE_PUBLIC_ED_KEY: "3A2c4TYX0N3g2bae0R6e+8VglQdlDXaPafvtcnBpuMA="
 
 packages:
   Sparkle:

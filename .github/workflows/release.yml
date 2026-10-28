@@ -1,6 +1,7 @@
 name: Release
 
 # Push a tag such as v0.1.0 and this builds the app and publishes it as a GitHub release.
+# The version in DiktatMac/project.yml must match the tag; raise CURRENT_PROJECT_VERSION for every release.
 # The files have fixed names (Diktat.dmg, Diktat.zip), so the link
 # https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.dmg
 # always gives the newest version.
@@ -53,12 +54,54 @@ jobs:
           ditto -c -k --keepParent Diktat.app dist/Diktat.zip
           shasum -a 256 dist/Diktat.dmg dist/Diktat.zip | tee dist/SHA256SUMS.txt
 
+      # Updates inside the app: the zip is signed with the private update key and listed in
+      # appcast.xml, which the release carries as well. Without the secret the release still goes
+      # out, only without an update entry. See docs/releasing.md.
+      - name: Sign the update and write the appcast
+        env:
+          SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
+        run: |
+          if [ -z "$SPARKLE_PRIVATE_KEY" ]; then
+            echo "No SPARKLE_PRIVATE_KEY secret: no update entry for this release."
+            exit 0
+          fi
+          sign_update="$HOME/Library/Caches/diktat-build/derivedData/SourcePackages/artifacts/sparkle/Sparkle/bin/sign_update"
+          key_file="$RUNNER_TEMP/sparkle-key"
+          printf '%s' "$SPARKLE_PRIVATE_KEY" > "$key_file"
+          signature="$("$sign_update" --ed-key-file "$key_file" -p dist/Diktat.zip)"
+          rm -f "$key_file"
+          length="$(stat -f%z dist/Diktat.zip)"
+          version="${GITHUB_REF_NAME#v}"
+          build="$(grep -m1 'CURRENT_PROJECT_VERSION' DiktatMac/project.yml | sed -E 's/.*"([^"]+)".*/\1/')"
+          date_rfc822="$(date -u '+%a, %d %b %Y %H:%M:%S +0000')"
+          repo_url="https://github.com/${GITHUB_REPOSITORY}"
+          cat > dist/appcast.xml <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschek.org/xmlns/update" xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <channel>
+              <title>Diktat</title>
+              <item>
+                <title>Version ${version}</title>
+                <pubDate>${date_rfc822}</pubDate>
+                <sparkle:version>${build}</sparkle:version>
+                <sparkle:shortVersionString>${version}</sparkle:shortVersionString>
+                <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+                <sparkle:fullReleaseNotesLink>${repo_url}/releases/tag/${GITHUB_REF_NAME}</sparkle:fullReleaseNotesLink>
+                <enclosure url="${repo_url}/releases/download/${GITHUB_REF_NAME}/Diktat.zip" sparkle:edSignature="${signature}" length="${length}" type="application/octet-stream"/>
+              </item>
+            </channel>
+          </rss>
+          EOF
+
       - name: Publish
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            dist/Diktat.dmg dist/Diktat.zip dist/SHA256SUMS.txt \
+          files=(dist/Diktat.dmg dist/Diktat.zip dist/SHA256SUMS.txt)
+          if [ -f dist/appcast.xml ]; then
+            files+=(dist/appcast.xml)
+          fi
+          # A normal release, not a pre-release: only then does "releases/latest" point at it.
+          gh release create "$GITHUB_REF_NAME" "${files[@]}" \
             --title "Diktat $GITHUB_REF_NAME" \
-            --notes-file .github/release-notes.md \
-            --prerelease
+            --notes-file .github/release-notes.md
