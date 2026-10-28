@@ -1,0 +1,64 @@
+name: Release
+
+# Push a tag such as v0.1.0 and this builds the app and publishes it as a GitHub release.
+# The files have fixed names (Diktat.dmg, Diktat.zip), so the link
+# https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.dmg
+# always gives the newest version.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish
+    runs-on: macos-26
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check the tag against the project version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          project_version="$(grep -m1 'MARKETING_VERSION' DiktatMac/project.yml | sed -E 's/.*"([^"]+)".*/\1/')"
+          if [ "$version" != "$project_version" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match MARKETING_VERSION $project_version in project.yml."
+            exit 1
+          fi
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Install XcodeGen
+        run: |
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen
+          fi
+
+      - name: Build
+        run: ./build.sh --release
+
+      - name: Package
+        run: |
+          mkdir -p dist/dmg
+          cp -R Diktat.app dist/dmg/Diktat.app
+          ln -s /Applications dist/dmg/Applications
+          hdiutil create -volname "Diktat" -srcfolder dist/dmg -ov -format UDZO dist/Diktat.dmg
+          ditto -c -k --keepParent Diktat.app dist/Diktat.zip
+          shasum -a 256 dist/Diktat.dmg dist/Diktat.zip | tee dist/SHA256SUMS.txt
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/Diktat.dmg dist/Diktat.zip dist/SHA256SUMS.txt \
+            --title "Diktat $GITHUB_REF_NAME" \
+            --notes-file .github/release-notes.md \
+            --prerelease

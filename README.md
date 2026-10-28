@@ -16,10 +16,26 @@
 </p>
 
 <p align="center">
-  <a href="#build-it-yourself"><b>Build it yourself</b></a>
+  <a href="https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.dmg"><b>Download Diktat for Mac</b></a>
+  &nbsp;·&nbsp;
+  <a href="#install"><b>Install</b></a>
+  &nbsp;·&nbsp;
+  <a href="#build-it-yourself">Build it yourself</a>
 </p>
 
 Hold a shortcut, speak, let go. Diktat turns your speech into text and pastes it where your cursor is. Speech recognition runs on your Mac, the writing modes use Apple Intelligence on your Mac. No account, no server, no audio leaving the device.
+
+## Install
+
+1. **[Download Diktat.dmg](https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.dmg)**, open it and drag Diktat onto the Applications folder.
+2. Open Diktat. macOS warns that it cannot check the app, because this version is not notarized yet. Open **System Settings > Privacy & Security** and press **Open Anyway** next to Diktat.
+3. Allow the microphone and Accessibility, then load a speech model.
+
+Or in the Terminal, without the macOS warning:
+
+```bash
+curl -fsSL -o /tmp/Diktat.zip https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.zip && ditto -x -k /tmp/Diktat.zip /Applications && open /Applications/Diktat.app
+```
 
 ## Why Diktat?
 
