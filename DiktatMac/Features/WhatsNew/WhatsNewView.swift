@@ -83,7 +83,7 @@ struct WhatsNewView: View {
                     NoticeRow(
                         icon: "key",
                         title: "KI-Modi einrichten",
-                        detail: "Ohne Apple Intelligence brauchen Diktat+, $%&! und :) einen eigenen API-Key."
+                        detail: "Ohne Apple Intelligence brauchen Diktat+, WTF und :-) einen eigenen API-Key."
                     )
                 }
             }

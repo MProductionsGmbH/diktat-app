@@ -20,8 +20,8 @@ enum WorkflowType: String, CaseIterable, Identifiable, Codable {
         case .tapTalk: return "Diktat"
         case .localTapTalk: return "Diktat Lokal"
         case .textImprover: return "Diktat+"
-        case .dampfAblassen: return "Diktat $%&!"
-        case .emojiText: return "Diktat :)"
+        case .dampfAblassen: return "Diktat WTF"
+        case .emojiText: return "Diktat :-)"
         }
     }
 
@@ -127,7 +127,7 @@ extension Workflow {
 struct AppSettings: Codable {
     var hotkeyMode: HotkeyMode = .hold
     var hasSeenOnboarding: Bool = false
-    /// Where Diktat+, $%&! and :) run their AI step. Transcription is always local.
+    /// Where Diktat+, WTF and :-) run their AI step. Transcription is always local.
     var rewriteEngine: TextRewriter.Engine = .automatic
     var selectedLocalTranscriptionModelName: String = LocalTranscriptionService.initialModelName
     var hasAutoSelectedFastLocalModel: Bool = false

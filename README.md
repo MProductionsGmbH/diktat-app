@@ -41,15 +41,15 @@ Hold a shortcut, speak, let go. Diktat turns your speech into text and pastes it
 |---|---|---|
 | **Diktat** | `fn + Shift` | Speech to exact text |
 | **Diktat+** | `fn + Control` | Speech to clean written text |
-| **Diktat $%&!** | `fn + Option` | Frustrated speech to a calm, effective message |
-| **Diktat :)** | `fn + Cmd` | Text with fitting emojis |
+| **Diktat WTF** | `fn + Option` | Frustrated speech to a calm, effective message |
+| **Diktat :-)** | `fn + Cmd` | Text with fitting emojis |
 
 Keyboards without `fn`: set your own shortcut per mode in the settings.
 
 ## Features
 
 - **Local speech recognition:** Parakeet Ultra (fast, 25 European languages) or OpenAI Whisper via WhisperKit (about 100 languages). Both detect the spoken language.
-- **Local writing modes:** Diktat+, $%&! and :) run with Apple Intelligence on your Mac (macOS 26). Optionally bring your own model provider: OpenAI, Anthropic, Google Gemini, Mistral, OpenRouter, or a local server such as Ollama or LM Studio.
+- **Local writing modes:** Diktat+, WTF and :-) run with Apple Intelligence on your Mac (macOS 26). Optionally bring your own model provider: OpenAI, Anthropic, Google Gemini, Mistral, OpenRouter, or a local server such as Ollama or LM Studio.
 - **Smooths what you stumble over:** three levels. *Leicht* removes "um", stutters and phrases said twice without any model. *Mittel* also drops restarts and self-corrections, *Stark* also fixes grammar, word order and punctuation. Both use Apple Intelligence or a local server such as Ollama (Qwen3 works), so it runs offline.
 - **Fits where you type:** spaces and capitals follow the text around your cursor, also mid-sentence. Password fields are never read.
 - **Mode per app or website:** Gmail always Diktat+, Slack with emojis, everything else word for word.

@@ -135,7 +135,7 @@ final class AppState {
         return aiProvider?.provider.displayName
     }
 
-    /// Diktat+, $%&! and :) can run: on this Mac (Apple Intelligence) or via the provider.
+    /// Diktat+, WTF and :-) can run: on this Mac (Apple Intelligence) or via the provider.
     var canRewrite: Bool {
         _ = aiKeyRevision
         _ = aiProvider

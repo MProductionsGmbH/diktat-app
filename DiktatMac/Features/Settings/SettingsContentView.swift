@@ -764,7 +764,7 @@ struct CustomizeSettingsView: View {
                     .toggleStyle(.trailingSwitch)
                     .font(.ui(11.5))
 
-                Text("Diktat+, $%&! und :) bekommen den Text rund um den Cursor als Kontext, etwa die Mail, auf die du antwortest. Mit einem Modell-Anbieter geht dieser Text mit an den Anbieter.")
+                Text("Diktat+, WTF und :-) bekommen den Text rund um den Cursor als Kontext, etwa die Mail, auf die du antwortest. Mit einem Modell-Anbieter geht dieser Text mit an den Anbieter.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -816,7 +816,7 @@ struct CustomizeSettingsView: View {
                 }
             }
 
-            // MARK: Diktat $%&!
+            // MARK: Diktat WTF
             SettingsSection(title: appState.displayName(for: .dampfAblassen)) {
                 ModeSummary(appState: appState, type: .dampfAblassen)
 
@@ -842,7 +842,7 @@ struct CustomizeSettingsView: View {
                 }
             }
 
-            // MARK: Diktat :)
+            // MARK: Diktat :-)
             SettingsSection(title: appState.displayName(for: .emojiText)) {
                 ModeSummary(appState: appState, type: .emojiText)
 

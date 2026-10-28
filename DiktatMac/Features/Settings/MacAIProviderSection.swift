@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Optional provider for Diktat+, $%&! and :), connected with the user's own API key.
+/// Optional provider for Diktat+, WTF and :-), connected with the user's own API key.
 struct MacAIProviderSection: View {
     @Bindable var appState: AppState
 
