@@ -10,9 +10,9 @@ enum HistoryRetention: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .off: return "Aus"
-        case .day: return "24 Std."
-        case .week: return "7 Tage"
+        case .off: return String(localized: "Aus")
+        case .day: return String(localized: "24 Std.")
+        case .week: return String(localized: "7 Tage")
         }
     }
 

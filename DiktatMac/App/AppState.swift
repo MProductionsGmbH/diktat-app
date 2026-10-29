@@ -233,11 +233,11 @@ final class AppState {
         case .tapTalk, .localTapTalk:
             let modelName = selectedLocalModelName
             return LocalTranscriptionService.isModelInstalled(modelName)
-                ? "Lokal: \(LocalTranscriptionModel.displayName(for: modelName))."
-                : "Lokales Sprachmodell fehlt."
+                ? String(localized: "Lokal: \(LocalTranscriptionModel.displayName(for: modelName)).")
+                : String(localized: "Lokales Sprachmodell fehlt.")
         case .textImprover, .dampfAblassen, .emojiText:
             guard canRewrite else {
-                return "Braucht Apple Intelligence oder einen API-Key."
+                return String(localized: "Braucht Apple Intelligence oder einen API-Key.")
             }
             return type.subtitle
         }
@@ -335,8 +335,8 @@ final class AppState {
 
     var localModelDownloadButtonTitle: String {
         selectedLocalModelIsInstalled
-            ? "\(LocalTranscriptionModel.displayName(for: selectedLocalModelName)) ist installiert"
-            : "\(LocalTranscriptionModel.displayName(for: selectedLocalModelName)) installieren"
+            ? String(localized: "\(LocalTranscriptionModel.displayName(for: selectedLocalModelName)) ist installiert")
+            : String(localized: "\(LocalTranscriptionModel.displayName(for: selectedLocalModelName)) installieren")
     }
 
     // MARK: - Workflow Management
@@ -519,7 +519,7 @@ final class AppState {
 
         let modelName = selectedLocalModelName
         localModelDownloadProgress = 0
-        localModelDownloadStatusText = "Download startet..."
+        localModelDownloadStatusText = String(localized: "Download startet...")
         localModelDownloadErrorText = nil
 
         Task {
@@ -531,13 +531,13 @@ final class AppState {
                         guard let self else { return }
                         let clampedProgress = min(max(progress, 0), 1)
                         self.localModelDownloadProgress = clampedProgress
-                        self.localModelDownloadStatusText = "Download \(Int(clampedProgress * 100)) %"
+                        self.localModelDownloadStatusText = String(localized: "Download \(Int(clampedProgress * 100)) %")
                     }
                 }
 
                 appSettings.selectedLocalTranscriptionModelName = LocalTranscriptionService.normalizedModelName(modelName)
                 localModelDownloadProgress = nil
-                localModelDownloadStatusText = "\(LocalTranscriptionModel.displayName(for: modelName)) ist installiert."
+                localModelDownloadStatusText = String(localized: "\(LocalTranscriptionModel.displayName(for: modelName)) ist installiert.")
                 localModelDownloadErrorText = nil
 
                 try? await LocalTranscriptionService.shared.prepare(modelName: modelName)
@@ -867,7 +867,7 @@ final class AppState {
         lastInsertion = nil
         guard let pid = last.target?.processIdentifier else {
             copyToClipboard(last.transcript)
-            lastInsertionNotice = "Ersetzen ging hier nicht. Der wortgenaue Text liegt in der Zwischenablage."
+            lastInsertionNotice = String(localized: "Ersetzen ging hier nicht. Der wortgenaue Text liegt in der Zwischenablage.")
             return
         }
         Task { [weak self] in
@@ -880,7 +880,7 @@ final class AppState {
                 self.lastInsertionNotice = nil
             } else {
                 self.copyToClipboard(last.transcript)
-                self.lastInsertionNotice = "Ersetzen ging in dieser App nicht. Der wortgenaue Text liegt in der Zwischenablage."
+                self.lastInsertionNotice = String(localized: "Ersetzen ging in dieser App nicht. Der wortgenaue Text liegt in der Zwischenablage.")
             }
         }
     }

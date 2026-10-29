@@ -12,20 +12,20 @@ enum StyleContext: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .personal: return "Pers\u{00F6}nlich"
-        case .work: return "Arbeit"
-        case .email: return "E-Mail"
-        case .other: return "Andere"
+        case .personal: return String(localized: "Pers\u{00F6}nlich")
+        case .work: return String(localized: "Arbeit")
+        case .email: return String(localized: "E-Mail")
+        case .other: return String(localized: "Andere")
         }
     }
 
     /// Shown under the tabs, so it is clear where the style applies.
     var appsNote: String {
         switch self {
-        case .personal: return "Gilt in WhatsApp, Telegram, Signal, Discord und Nachrichten."
-        case .work: return "Gilt in Slack und Teams, auch im Browser."
-        case .email: return "Gilt in Mail, Outlook, Spark und anderen Mail-Programmen, auch Gmail im Browser."
-        case .other: return "Gilt in allen anderen Programmen."
+        case .personal: return String(localized: "Gilt in WhatsApp, Telegram, Signal, Discord und Nachrichten.")
+        case .work: return String(localized: "Gilt in Slack und Teams, auch im Browser.")
+        case .email: return String(localized: "Gilt in Mail, Outlook, Spark und anderen Mail-Programmen, auch Gmail im Browser.")
+        case .other: return String(localized: "Gilt in allen anderen Programmen.")
         }
     }
 
@@ -86,27 +86,27 @@ enum StyleTone: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .formal: return "Formell"
-        case .neutral: return "Normal"
-        case .casual: return "Locker"
+        case .formal: return String(localized: "Formell")
+        case .neutral: return String(localized: "Normal")
+        case .casual: return String(localized: "Locker")
         }
     }
 
     var detail: String {
         switch self {
-        case .formal: return "Mit KI-Schreibstil: sachlich und h\u{00F6}flich formuliert"
-        case .neutral: return "Mit KI-Schreibstil: klar und neutral formuliert"
-        case .casual: return "Ohne Punkt am Ende, mit KI-Schreibstil ungezwungen formuliert"
+        case .formal: return String(localized: "Mit KI-Schreibstil: sachlich und h\u{00F6}flich formuliert")
+        case .neutral: return String(localized: "Mit KI-Schreibstil: klar und neutral formuliert")
+        case .casual: return String(localized: "Ohne Punkt am Ende, mit KI-Schreibstil ungezwungen formuliert")
         }
     }
 
     /// The same dictated sentence for every tone, so the settings show what each tone changes.
-    static let exampleSpoken = "hey alex war echt sch\u{00F6}n heute mit dir zu reden ich melde mich n\u{00E4}chste woche wegen dem termin"
+    static let exampleSpoken = String(localized: "hey alex war echt sch\u{00F6}n heute mit dir zu reden ich melde mich n\u{00E4}chste woche wegen dem termin")
 
     /// The sentence after the cleanup levels Leicht to Stark: punctuation set, and only the period
     /// at the end follows the tone.
     var exampleCleaned: String {
-        apply(to: "Hey Alex, war echt sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen dem Termin.")
+        apply(to: String(localized: "Hey Alex, war echt sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen dem Termin."))
     }
 
     /// What the model of KI-Schreibstil made of it in this tone (answers of Apple Intelligence; a
@@ -114,11 +114,11 @@ enum StyleTone: String, Codable, CaseIterable, Identifiable {
     var exampleRewritten: String {
         switch self {
         case .formal:
-            return apply(to: "Hallo Alex, es war wirklich sch\u{00F6}n, heute mit dir zu sprechen. Ich melde mich n\u{00E4}chste Woche bez\u{00FC}glich des Termins.")
+            return apply(to: String(localized: "Hallo Alex, es war wirklich sch\u{00F6}n, heute mit dir zu sprechen. Ich melde mich n\u{00E4}chste Woche bez\u{00FC}glich des Termins."))
         case .neutral:
-            return apply(to: "Hey Alex, es war wirklich sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen des Termins.")
+            return apply(to: String(localized: "Hey Alex, es war wirklich sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen des Termins."))
         case .casual:
-            return apply(to: "Hey Alex, war echt sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen des Termins.")
+            return apply(to: String(localized: "Hey Alex, war echt sch\u{00F6}n, heute mit dir zu reden. Ich melde mich n\u{00E4}chste Woche wegen des Termins."))
         }
     }
 

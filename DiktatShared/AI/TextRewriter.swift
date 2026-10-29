@@ -17,8 +17,8 @@ enum TextRewriter {
 
         var displayName: String {
             switch self {
-            case .automatic: return "Gerät zuerst"
-            case .provider: return "Immer Modell-Anbieter"
+            case .automatic: return String(localized: "Gerät zuerst")
+            case .provider: return String(localized: "Immer Modell-Anbieter")
             }
         }
 
@@ -42,7 +42,7 @@ enum TextRewriter {
         var errorDescription: String? {
             switch self {
             case .noModel:
-                return "Für diesen Modus braucht Diktat Apple Intelligence oder einen API-Key in den Einstellungen."
+                return String(localized: "Für diesen Modus braucht Diktat Apple Intelligence oder einen API-Key in den Einstellungen.")
             case .onDevice(let message):
                 return message
             }
@@ -56,17 +56,17 @@ enum TextRewriter {
             case .available:
                 return .available
             case .unavailable(.deviceNotEligible):
-                return .unavailable("Dieses Gerät unterstützt Apple Intelligence nicht.")
+                return .unavailable(String(localized: "Dieses Gerät unterstützt Apple Intelligence nicht."))
             case .unavailable(.appleIntelligenceNotEnabled):
-                return .unavailable("Apple Intelligence ist in den Systemeinstellungen ausgeschaltet.")
+                return .unavailable(String(localized: "Apple Intelligence ist in den Systemeinstellungen ausgeschaltet."))
             case .unavailable(.modelNotReady):
-                return .unavailable("Apple Intelligence lädt das Modell noch.")
+                return .unavailable(String(localized: "Apple Intelligence lädt das Modell noch."))
             case .unavailable:
-                return .unavailable("Apple Intelligence ist gerade nicht verfügbar.")
+                return .unavailable(String(localized: "Apple Intelligence ist gerade nicht verfügbar."))
             }
         }
         #endif
-        return .unavailable("Braucht iOS 26 oder macOS 26 mit Apple Intelligence.")
+        return .unavailable(String(localized: "Braucht iOS 26 oder macOS 26 mit Apple Intelligence."))
     }
 
     static var isLocalAvailable: Bool { localAvailability == .available }
@@ -151,17 +151,17 @@ enum TextRewriter {
         let reason: String
         switch error {
         case .exceededContextWindowSize:
-            reason = "Der Text ist zu lang für Apple Intelligence auf dem Gerät."
+            reason = String(localized: "Der Text ist zu lang für Apple Intelligence auf dem Gerät.")
         case .guardrailViolation:
-            reason = "Apple Intelligence hat den Text abgelehnt."
+            reason = String(localized: "Apple Intelligence hat den Text abgelehnt.")
         case .unsupportedLanguageOrLocale:
-            reason = "Apple Intelligence kann diese Sprache auf dem Gerät nicht bearbeiten."
+            reason = String(localized: "Apple Intelligence kann diese Sprache auf dem Gerät nicht bearbeiten.")
         default:
-            reason = "Apple Intelligence konnte den Text nicht bearbeiten."
+            reason = String(localized: "Apple Intelligence konnte den Text nicht bearbeiten.")
         }
         let way = AIProviderStore.isConfigured
-            ? "Mit „\(Engine.provider.displayName)“ in den Einstellungen übernimmt dein Modell-Anbieter."
-            : "Mit einem eigenen API-Key in den Einstellungen geht es über einen Modell-Anbieter."
+            ? String(localized: "Mit „\(Engine.provider.displayName)“ in den Einstellungen übernimmt dein Modell-Anbieter.")
+            : String(localized: "Mit einem eigenen API-Key in den Einstellungen geht es über einen Modell-Anbieter.")
         return reason + " " + way
     }
     #endif

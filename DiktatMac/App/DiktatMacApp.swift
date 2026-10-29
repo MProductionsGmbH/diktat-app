@@ -205,9 +205,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         NSApp.activate(ignoringOtherApps: true)
 
         let panel = NSOpenPanel()
-        panel.title = "Audiodatei transkribieren"
-        panel.message = "Sprachmemo, WhatsApp-Sprachnachricht oder andere Audiodatei w\u{00E4}hlen"
-        panel.prompt = "Transkribieren"
+        panel.title = String(localized: "Audiodatei transkribieren")
+        panel.message = String(localized: "Sprachmemo, WhatsApp-Sprachnachricht oder andere Audiodatei w\u{00E4}hlen")
+        panel.prompt = String(localized: "Transkribieren")
         panel.allowedContentTypes = [.audio]
         panel.allowsMultipleSelection = false
         panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first

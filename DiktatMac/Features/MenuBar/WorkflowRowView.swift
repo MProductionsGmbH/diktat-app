@@ -45,7 +45,7 @@ struct WorkflowRowView: View {
         }
         .buttonStyle(.plain)
         .disabled(!enabled)
-        .help("Startet \(customName ?? type.displayName)")
+        .help(String(localized: "Startet \(customName ?? type.displayName)"))
         .onHover { hovering in
             withAnimation(.easeOut(duration: 0.12)) {
                 isHovered = hovering

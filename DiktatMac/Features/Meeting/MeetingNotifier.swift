@@ -11,18 +11,18 @@ enum MeetingNotifier {
     }
 
     static func finished(_ record: MeetingRecord) {
-        let people = record.speakers.count == 1 ? "1 Person" : "\(record.speakers.count) Personen"
-        post(title: "Meeting ausgewertet", body: "\(duration(record.duration)), \(people). Im Diktat-Men\u{00FC} unter Meeting.")
+        let people = record.speakers.count == 1 ? String(localized: "1 Person") : String(localized: "\(record.speakers.count) Personen")
+        post(title: String(localized: "Meeting ausgewertet"), body: String(localized: "\(duration(record.duration)), \(people). Im Diktat-Men\u{00FC} unter Meeting."))
     }
 
     static func failed(_ message: String) {
-        post(title: "Meeting-Auswertung fehlgeschlagen", body: message)
+        post(title: String(localized: "Meeting-Auswertung fehlgeschlagen"), body: message)
     }
 
     /// "2 Std. 3 Min." or "45 Min."
     static func duration(_ seconds: TimeInterval) -> String {
         let minutes = max(1, Int((seconds / 60).rounded()))
-        return minutes >= 60 ? "\(minutes / 60) Std. \(minutes % 60) Min." : "\(minutes) Min."
+        return minutes >= 60 ? String(localized: "\(minutes / 60) Std. \(minutes % 60) Min.") : String(localized: "\(minutes) Min.")
     }
 
     private static func post(title: String, body: String) {

@@ -253,11 +253,11 @@ struct RecordingPill: View {
 
     private var accessibilityText: String {
         switch model.status {
-        case .recording: return "Aufnahme l\u{00E4}uft. Klicken stoppt sie."
-        case .processing: return "Diktat schreibt"
-        case .success: return "Fertig"
-        case .copied: return "Nicht eingef\u{00FC}gt, der Text liegt in der Zwischenablage"
-        case .meeting: return "Meeting wird aufgenommen. Klicken \u{00F6}ffnet die Meeting-Seite."
+        case .recording: return String(localized: "Aufnahme l\u{00E4}uft. Klicken stoppt sie.")
+        case .processing: return String(localized: "Diktat schreibt")
+        case .success: return String(localized: "Fertig")
+        case .copied: return String(localized: "Nicht eingef\u{00FC}gt, der Text liegt in der Zwischenablage")
+        case .meeting: return String(localized: "Meeting wird aufgenommen. Klicken \u{00F6}ffnet die Meeting-Seite.")
         case .idle, .error: return ""
         }
     }

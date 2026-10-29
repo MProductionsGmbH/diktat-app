@@ -23,11 +23,11 @@ final class LocalModelStore {
         var errorDescription: String? {
             switch self {
             case .notEnoughSpace(let needed, let free):
-                return "Zu wenig Speicherplatz: Das Modell braucht \(LocalModelStore.gigabytes(needed)), frei sind \(LocalModelStore.gigabytes(free))."
+                return String(localized: "Zu wenig Speicherplatz: Das Modell braucht \(LocalModelStore.gigabytes(needed)), frei sind \(LocalModelStore.gigabytes(free)).")
             case .checksum(let file):
-                return "\(file) kam besch\u{00E4}digt an. Bitte noch einmal laden."
+                return String(localized: "\(file) kam besch\u{00E4}digt an. Bitte noch einmal laden.")
             case .http(let status):
-                return "Der Download wurde abgelehnt (HTTP \(status)). Bitte sp\u{00E4}ter noch einmal versuchen."
+                return String(localized: "Der Download wurde abgelehnt (HTTP \(status)). Bitte sp\u{00E4}ter noch einmal versuchen.")
             }
         }
     }
@@ -167,7 +167,7 @@ final class LocalModelStore {
 
     /// "5,2 GB"
     nonisolated static func gigabytes(_ bytes: Int64) -> String {
-        String(format: "%.1f GB", Double(bytes) / 1_000_000_000).replacingOccurrences(of: ".", with: ",")
+        String(format: "%.1f GB", locale: AppLocale.current, Double(bytes) / 1_000_000_000)
     }
 }
 

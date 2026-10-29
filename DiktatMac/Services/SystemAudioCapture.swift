@@ -19,7 +19,7 @@ final class SystemAudioCapture {
     struct Failure: LocalizedError {
         let step: String
         let status: OSStatus
-        var errorDescription: String? { "Systemton: \(step) fehlgeschlagen (\(status))." }
+        var errorDescription: String? { String(localized: "Systemton: \(step) fehlgeschlagen (\(status)).") }
     }
 
     /// No sound for this long means the clocking device stopped.
@@ -341,7 +341,7 @@ enum CoreAudioProperty {
         let status = read(AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyDefaultOutputDevice, into: &device)
         guard status == noErr, let uid = string(device, kAudioDevicePropertyDeviceUID) else {
             throw NSError(domain: NSOSStatusErrorDomain, code: Int(status), userInfo: [
-                NSLocalizedDescriptionKey: "Kein Ausgabegerät gefunden.",
+                NSLocalizedDescriptionKey: String(localized: "Kein Ausgabegerät gefunden."),
             ])
         }
         return uid

@@ -8,7 +8,7 @@ struct AudioFileView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            PageHeader(title: "Audiodatei", onBack: {
+            PageHeader(title: String(localized: "Audiodatei"), onBack: {
                 controller.close()
                 appState.page = .main
             })
@@ -90,7 +90,7 @@ struct AudioFileView: View {
 
     private var durationText: String {
         let seconds = Int(controller.duration.rounded())
-        return "\(seconds / 60):\(String(format: "%02d", seconds % 60)) min"
+        return String(localized: "\(seconds / 60):\(String(format: "%02d", seconds % 60)) min")
     }
 
     private var result: some View {

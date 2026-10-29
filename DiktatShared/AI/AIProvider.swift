@@ -25,7 +25,7 @@ enum AIProvider: String, Codable, CaseIterable, Identifiable {
         case .gemini: return "Google Gemini"
         case .mistral: return "Mistral"
         case .openRouter: return "OpenRouter"
-        case .custom: return "Eigene Adresse"
+        case .custom: return String(localized: "Eigene Adresse")
         }
     }
 

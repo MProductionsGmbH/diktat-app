@@ -88,17 +88,17 @@ private extension SpeechCleanupLevel {
     var example: (before: String, after: String) {
         switch self {
         case .light:
-            return ("Ich \u{00E4}hm wollte wollte noch sagen, dass das Meeting morgen morgen beginnt.",
-                    "Ich wollte noch sagen, dass das Meeting morgen beginnt.")
+            return (String(localized: "Ich \u{00E4}hm wollte wollte noch sagen, dass das Meeting morgen morgen beginnt."),
+                    String(localized: "Ich wollte noch sagen, dass das Meeting morgen beginnt."))
         case .medium:
-            return ("Wir treffen uns am Mittwoch, nein, Donnerstag um zehn.",
-                    "Wir treffen uns am Donnerstag um zehn.")
+            return (String(localized: "Wir treffen uns am Mittwoch, nein, Donnerstag um zehn."),
+                    String(localized: "Wir treffen uns am Donnerstag um zehn."))
         case .strong:
-            return ("wir hat gestern ein Treffen gehabt und die Kunde sind zufrieden",
-                    "Wir hatten gestern ein Treffen, und die Kunden sind zufrieden.")
+            return (String(localized: "wir hat gestern ein Treffen gehabt und die Kunde sind zufrieden"),
+                    String(localized: "Wir hatten gestern ein Treffen, und die Kunden sind zufrieden."))
         case .style:
-            return ("ich wollte fragen ob wir den Termin am Donnerstag \u{00E4}h ich meine Freitag verschieben k\u{00F6}nnen",
-                    "Ich m\u{00F6}chte fragen, ob wir den Termin auf Freitag verschieben k\u{00F6}nnen.")
+            return (String(localized: "ich wollte fragen ob wir den Termin am Donnerstag \u{00E4}h ich meine Freitag verschieben k\u{00F6}nnen"),
+                    String(localized: "Ich m\u{00F6}chte fragen, ob wir den Termin auf Freitag verschieben k\u{00F6}nnen."))
         }
     }
 }
@@ -110,7 +110,7 @@ struct CleanupLevelSection: View {
     let engineNote: String
 
     var body: some View {
-        SettingsSection(title: "Gl\u{00E4}ttung") {
+        SettingsSection(title: String(localized: "Gl\u{00E4}ttung")) {
             Text("Wie stark Diktat deinen Text aufr\u{00E4}umt. Antwortet das Sprachmodell nicht oder unplausibel, bleibt der Text, wie du ihn gesprochen hast.")
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
@@ -149,7 +149,7 @@ struct StyleContextSection: View {
     @State private var context: StyleContext = .personal
 
     var body: some View {
-        SettingsSection(title: "Stil je Kontext") {
+        SettingsSection(title: String(localized: "Stil je Kontext")) {
             Text("Diktat erkennt, wohin dein Text geht, und schreibt ihn im passenden Ton.")
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
@@ -186,8 +186,8 @@ struct StyleContextSection: View {
                     appState.appSettings.styleSettings.setTone(tone, for: context)
                 } example: {
                     VStack(alignment: .leading, spacing: 8) {
-                        ToneResult(label: "Mit Gl\u{00E4}ttung", text: tone.exampleCleaned)
-                        ToneResult(label: "Mit KI-Schreibstil", text: tone.exampleRewritten)
+                        ToneResult(label: String(localized: "Mit Gl\u{00E4}ttung"), text: tone.exampleCleaned)
+                        ToneResult(label: String(localized: "Mit KI-Schreibstil"), text: tone.exampleRewritten)
                     }
                     .padding(8)
                     .frame(maxWidth: .infinity, alignment: .leading)

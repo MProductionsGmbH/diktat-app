@@ -28,7 +28,7 @@ struct AppModeRulesSection: View {
 
     private static let websitePresets: [(name: String, host: String)] = [
         ("Gmail", "mail.google.com"),
-        ("Outlook im Web", "outlook.office.com"),
+        (String(localized: "Outlook im Web"), "outlook.office.com"),
         ("Google Docs", "docs.google.com"),
         ("Notion", "notion.so"),
         ("Slack", "app.slack.com"),
@@ -40,8 +40,8 @@ struct AppModeRulesSection: View {
     private static let selectableModes: [WorkflowType] = [.tapTalk, .textImprover, .dampfAblassen, .emojiText]
 
     var body: some View {
-        SettingsSection(title: "Modus je App") {
-            Text("Das Diktat-K\u{00FC}rzel (\(appState.hotkeyLabel(for: .tapTalk))) kann je App oder Website automatisch einen anderen Modus nutzen, zum Beispiel Diktat KI-Schreibstil in Gmail. \u{00DC}berall sonst bleibt es wortgenau, und die \u{00FC}brigen K\u{00FC}rzel bleiben wie sie sind.")
+        SettingsSection(title: String(localized: "Modus je App")) {
+            Text(String(localized: "Das Diktat-K\u{00FC}rzel (\(appState.hotkeyLabel(for: .tapTalk))) kann je App oder Website automatisch einen anderen Modus nutzen, zum Beispiel Diktat KI-Schreibstil in Gmail. \u{00DC}berall sonst bleibt es wortgenau, und die \u{00FC}brigen K\u{00FC}rzel bleiben wie sie sind."))
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -187,13 +187,13 @@ struct AppModeRulesSection: View {
 
     private func enterWebsite() {
         let alert = NSAlert()
-        alert.messageText = "Website hinzuf\u{00FC}gen"
-        alert.informativeText = "Adresse der Website, zum Beispiel mail.google.com. Die Regel gilt auch f\u{00FC}r Unteradressen."
+        alert.messageText = String(localized: "Website hinzuf\u{00FC}gen")
+        alert.informativeText = String(localized: "Adresse der Website, zum Beispiel mail.google.com. Die Regel gilt auch f\u{00FC}r Unteradressen.")
         let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 260, height: 24))
         field.placeholderString = "mail.google.com"
         alert.accessoryView = field
-        alert.addButton(withTitle: "Hinzuf\u{00FC}gen")
-        alert.addButton(withTitle: "Abbrechen")
+        alert.addButton(withTitle: String(localized: "Hinzuf\u{00FC}gen"))
+        alert.addButton(withTitle: String(localized: "Abbrechen"))
         alert.window.initialFirstResponder = field
         guard alert.runModal() == .alertFirstButtonReturn,
               let host = WebsiteHost.normalized(field.stringValue) else { return }
@@ -221,8 +221,8 @@ struct AppModeRulesSection: View {
 
     private func chooseApp() {
         let panel = NSOpenPanel()
-        panel.title = "App w\u{00E4}hlen"
-        panel.prompt = "Hinzuf\u{00FC}gen"
+        panel.title = String(localized: "App w\u{00E4}hlen")
+        panel.prompt = String(localized: "Hinzuf\u{00FC}gen")
         panel.allowedContentTypes = [.application]
         panel.directoryURL = URL(fileURLWithPath: "/Applications")
         panel.allowsMultipleSelection = false

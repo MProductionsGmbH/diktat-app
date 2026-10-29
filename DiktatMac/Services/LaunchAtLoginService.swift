@@ -6,7 +6,7 @@ import ServiceManagement
 @MainActor
 final class LaunchAtLoginService {
     var isEnabled = false
-    var helperText = "Diktat startet nicht automatisch."
+    var helperText = String(localized: "Diktat startet nicht automatisch.")
     var errorText: String?
 
     init() {
@@ -19,19 +19,19 @@ final class LaunchAtLoginService {
         switch status {
         case .enabled:
             isEnabled = true
-            helperText = "Diktat startet beim Anmelden automatisch."
+            helperText = String(localized: "Diktat startet beim Anmelden automatisch.")
         case .notFound:
             isEnabled = false
-            helperText = "Diktat muss in /Applications liegen, damit der Anmeldestart verf\u{00FC}gbar ist."
+            helperText = String(localized: "Diktat muss in /Applications liegen, damit der Anmeldestart verf\u{00FC}gbar ist.")
         case .requiresApproval:
             isEnabled = true
-            helperText = "Noch in den Systemeinstellungen freigeben."
+            helperText = String(localized: "Noch in den Systemeinstellungen freigeben.")
         case .notRegistered:
             isEnabled = false
-            helperText = "Diktat startet nicht automatisch."
+            helperText = String(localized: "Diktat startet nicht automatisch.")
         @unknown default:
             isEnabled = false
-            helperText = "Auf diesem Mac nicht verfügbar."
+            helperText = String(localized: "Auf diesem Mac nicht verfügbar.")
         }
     }
 
@@ -48,8 +48,8 @@ final class LaunchAtLoginService {
         } catch {
             refresh()
             errorText = enabled
-                ? "Anmeldestart konnte nicht aktiviert werden. Lege Diktat in /Applications und versuche es erneut."
-                : "Anmeldestart konnte nicht deaktiviert werden. Bitte versuche es erneut."
+                ? String(localized: "Anmeldestart konnte nicht aktiviert werden. Lege Diktat in /Applications und versuche es erneut.")
+                : String(localized: "Anmeldestart konnte nicht deaktiviert werden. Bitte versuche es erneut.")
         }
     }
 }

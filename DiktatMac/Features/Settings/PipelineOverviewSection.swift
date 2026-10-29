@@ -5,19 +5,19 @@ struct PipelineOverviewSection: View {
     @Bindable var appState: AppState
 
     var body: some View {
-        SettingsSection(title: "So arbeitet Diktat") {
+        SettingsSection(title: String(localized: "So arbeitet Diktat")) {
             row(
                 step: "1",
-                title: "Spracherkennung",
+                title: String(localized: "Spracherkennung"),
                 model: appState.selectedLocalModelDisplayName,
                 detail: appState.selectedLocalModelIsInstalled
-                    ? "Immer lokal auf diesem Mac. Die Sprache verl\u{00E4}sst ihn nie."
-                    : "Noch nicht installiert. Unter Modelle, Spracherkennung laden.",
+                    ? String(localized: "Immer lokal auf diesem Mac. Die Sprache verl\u{00E4}sst ihn nie.")
+                    : String(localized: "Noch nicht installiert. Unter Modelle, Spracherkennung laden."),
                 ready: appState.selectedLocalModelIsInstalled
             )
             row(
                 step: "2",
-                title: "KI-Modi (KI-Schreibstil, WTF, :-))",
+                title: String(localized: "KI-Modi (KI-Schreibstil, WTF, :-))"),
                 model: aiModel,
                 detail: aiDetail,
                 ready: appState.canRewrite
@@ -32,20 +32,20 @@ struct PipelineOverviewSection: View {
     private var aiModel: String {
         if runsLocally { return "Apple Intelligence" }
         if let provider = appState.providerInUse { return provider }
-        return "Nicht eingerichtet"
+        return String(localized: "Nicht eingerichtet")
     }
 
     private var aiDetail: String {
         if runsLocally {
-            return "Lokal auf diesem Mac, ohne Internet."
+            return String(localized: "Lokal auf diesem Mac, ohne Internet.")
         }
         if appState.providerInUse != nil {
             // Must match the setting: with cursor context on, that text goes along too.
             return appState.appSettings.aiSeesFieldContext
-                ? "\u{00DC}ber deinen API-Key. Der erkannte Text und der Text am Cursor gehen an den Anbieter, nie die Sprache."
-                : "\u{00DC}ber deinen API-Key. Nur der erkannte Text geht an den Anbieter, nie die Sprache."
+                ? String(localized: "\u{00DC}ber deinen API-Key. Der erkannte Text und der Text am Cursor gehen an den Anbieter, nie die Sprache.")
+                : String(localized: "\u{00DC}ber deinen API-Key. Nur der erkannte Text geht an den Anbieter, nie die Sprache.")
         }
-        return "Apple Intelligence einschalten oder unter Modelle einen Modell-Anbieter mit API-Key hinterlegen. Wortgenaues Diktieren geht auch ohne."
+        return String(localized: "Apple Intelligence einschalten oder unter Modelle einen Modell-Anbieter mit API-Key hinterlegen. Wortgenaues Diktieren geht auch ohne.")
     }
 
     private func row(step: String, title: String, model: String, detail: String, ready: Bool) -> some View {

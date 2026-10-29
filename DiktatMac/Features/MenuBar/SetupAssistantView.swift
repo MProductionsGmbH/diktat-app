@@ -70,18 +70,18 @@ struct SetupAssistantView: View {
                 if DiktatInstallLocationService.shouldOfferMoveToApplications {
                     NoticeRow(
                         icon: "arrow.down.app",
-                        title: "Lege Diktat zuerst in den Ordner Programme",
-                        detail: "So startet Diktat zuverl\u{00E4}ssig mit dem Mac, und die Freigaben bleiben erhalten."
+                        title: String(localized: "Lege Diktat zuerst in den Ordner Programme"),
+                        detail: String(localized: "So startet Diktat zuverl\u{00E4}ssig mit dem Mac, und die Freigaben bleiben erhalten.")
                     )
                 }
 
-                step(1, title: "Mikrofon erlauben", done: microphoneReady, detail: microphoneDetail) {
+                step(1, title: String(localized: "Mikrofon erlauben"), done: microphoneReady, detail: microphoneDetail) {
                     microphoneAction
                 }
-                step(2, title: "Einf\u{00FC}gen erlauben", done: accessibilityReady, detail: accessibilityDetail) {
+                step(2, title: String(localized: "Einf\u{00FC}gen erlauben"), done: accessibilityReady, detail: accessibilityDetail) {
                     accessibilityAction
                 }
-                step(3, title: "Sprachmodell laden", done: modelReady, detail: modelDetail) {
+                step(3, title: String(localized: "Sprachmodell laden"), done: modelReady, detail: modelDetail) {
                     modelAction
                 }
 
@@ -154,18 +154,18 @@ struct SetupAssistantView: View {
         if microphoneReady {
             switch microphoneIssue {
             case .noInput:
-                return "Erlaubt. Gerade ist aber kein Mikrofon da, bei zugeklapptem MacBook ein Headset anschlie\u{00DF}en."
+                return String(localized: "Erlaubt. Gerade ist aber kein Mikrofon da, bei zugeklapptem MacBook ein Headset anschlie\u{00DF}en.")
             case .quiet(let percent):
-                return "Erlaubt. Das Mikrofon ist aber sehr leise eingestellt (\(percent) %), in den Systemeinstellungen unter Ton, Eingang lauter stellen."
+                return String(localized: "Erlaubt. Das Mikrofon ist aber sehr leise eingestellt (\(percent) %), in den Systemeinstellungen unter Ton, Eingang lauter stellen.")
             case nil:
-                return "Diktat darf das Mikrofon nutzen."
+                return String(localized: "Diktat darf das Mikrofon nutzen.")
             }
         }
         switch microphone {
         case .denied, .restricted:
-            return "In den Systemeinstellungen ist das Mikrofon f\u{00FC}r Diktat aus. Dort unter Datenschutz & Sicherheit > Mikrofon einschalten."
+            return String(localized: "In den Systemeinstellungen ist das Mikrofon f\u{00FC}r Diktat aus. Dort unter Datenschutz & Sicherheit > Mikrofon einschalten.")
         default:
-            return "Damit Diktat h\u{00F6}rt, was du sagst. Die Aufnahme bleibt auf diesem Mac."
+            return String(localized: "Damit Diktat h\u{00F6}rt, was du sagst. Die Aufnahme bleibt auf diesem Mac.")
         }
     }
 
@@ -186,10 +186,10 @@ struct SetupAssistantView: View {
     }
 
     private var accessibilityDetail: String {
-        if accessibilityReady { return "Diktat darf den Text dort einf\u{00FC}gen, wo dein Cursor steht." }
+        if accessibilityReady { return String(localized: "Diktat darf den Text dort einf\u{00FC}gen, wo dein Cursor steht.") }
         return appState.hasRequestedAccessibility
-            ? "In den Systemeinstellungen bei Bedienungshilfen Diktat einschalten. Danach geht es hier von selbst weiter."
-            : "Damit der Text dort landet, wo dein Cursor steht. macOS fragt dazu nach den Bedienungshilfen."
+            ? String(localized: "In den Systemeinstellungen bei Bedienungshilfen Diktat einschalten. Danach geht es hier von selbst weiter.")
+            : String(localized: "Damit der Text dort landet, wo dein Cursor steht. macOS fragt dazu nach den Bedienungshilfen.")
     }
 
     private var accessibilityAction: some View {
@@ -227,10 +227,10 @@ struct SetupAssistantView: View {
     private var modelName: String { LocalTranscriptionModel.displayName(for: appState.selectedLocalModelName) }
 
     private var modelDetail: String {
-        if modelReady { return "\(modelName) ist installiert." }
+        if modelReady { return String(localized: "\(modelName) ist installiert.") }
         let size = LocalModelRating.rating(for: appState.selectedLocalModelName)?.sizeLabel
         let sizeText = size.map { ", \($0)" } ?? ""
-        return "\(modelName)\(sizeText), einmalig. Danach erkennt Diktat Sprache ohne Internet."
+        return String(localized: "\(modelName)\(sizeText), einmalig. Danach erkennt Diktat Sprache ohne Internet.")
     }
 
     @ViewBuilder
@@ -239,7 +239,7 @@ struct SetupAssistantView: View {
             VStack(alignment: .leading, spacing: 4) {
                 ProgressView(value: progress)
                     .frame(maxWidth: 220)
-                Text(appState.localModelDownloadStatusText ?? "L\u{00E4}dt ...")
+                Text(appState.localModelDownloadStatusText ?? String(localized: "L\u{00E4}dt ..."))
                     .font(.ui(11))
                     .foregroundStyle(.secondary)
             }
@@ -256,7 +256,7 @@ struct SetupAssistantView: View {
                 .labelsHidden()
                 .controlSize(.small)
                 .frame(maxWidth: 260)
-                Button("\(modelName) laden") { appState.installSelectedLocalModel() }
+                Button(String(localized: "\(modelName) laden")) { appState.installSelectedLocalModel() }
                     .buttonStyle(actionStyle(for: 3))
                 if let error = appState.localModelDownloadErrorText {
                     Text(error)
@@ -273,7 +273,7 @@ struct SetupAssistantView: View {
     private var finish: some View {
         VStack(alignment: .leading, spacing: 8) {
             if openSteps == 0 {
-                Text("\(shortcutHint): Der Text landet dort, wo dein Cursor steht. Ohne Apple-Tastatur legst du in den Einstellungen ein eigenes K\u{00FC}rzel fest.")
+                Text(String(localized: "\(shortcutHint): Der Text landet dort, wo dein Cursor steht. Ohne Apple-Tastatur legst du in den Einstellungen ein eigenes K\u{00FC}rzel fest."))
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -281,7 +281,7 @@ struct SetupAssistantView: View {
             Button {
                 appState.finishSetupAssistant()
             } label: {
-                Text(openSteps == 0 ? "Los geht's" : (openSteps == 1 ? "Noch 1 Schritt" : "Noch \(openSteps) Schritte"))
+                Text(openSteps == 0 ? String(localized: "Los geht's") : (openSteps == 1 ? String(localized: "Noch 1 Schritt") : String(localized: "Noch \(openSteps) Schritte")))
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.filledAction)
@@ -293,8 +293,8 @@ struct SetupAssistantView: View {
     private var shortcutHint: String {
         let hotkey = appState.hotkeyLabel(for: .tapTalk)
         return appState.appSettings.hotkeyMode == .hold
-            ? "\(hotkey) halten und sprechen"
-            : "\(hotkey) dr\u{00FC}cken, sprechen, nochmal dr\u{00FC}cken"
+            ? String(localized: "\(hotkey) halten und sprechen")
+            : String(localized: "\(hotkey) dr\u{00FC}cken, sprechen, nochmal dr\u{00FC}cken")
     }
 
     /// The current step's button is the filled one.

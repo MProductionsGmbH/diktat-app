@@ -35,15 +35,15 @@ enum DiktatInstallLocationService {
         var errorDescription: String? {
             switch self {
             case .sourceBundleMissing:
-                return "Die aktuelle App-Installation wurde nicht gefunden."
+                return String(localized: "Die aktuelle App-Installation wurde nicht gefunden.")
             case .destinationUnavailable:
-                return "Der Zielordner /Applications ist nicht verfügbar."
+                return String(localized: "Der Zielordner /Applications ist nicht verfügbar.")
             case .destinationExists:
-                return "Am Zielort liegt bereits eine Diktat-Installation."
+                return String(localized: "Am Zielort liegt bereits eine Diktat-Installation.")
             case .destinationNotWritable:
-                return "Der Zielordner /Applications ist auf diesem Mac nicht beschreibbar."
+                return String(localized: "Der Zielordner /Applications ist auf diesem Mac nicht beschreibbar.")
             case .copyFailed:
-                return "Diktat konnte nicht nach /Applications kopiert werden."
+                return String(localized: "Diktat konnte nicht nach /Applications kopiert werden.")
             }
         }
     }

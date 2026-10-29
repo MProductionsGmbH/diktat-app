@@ -9,15 +9,15 @@ enum HotkeyMode: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .hold: return "Halten"
-        case .toggle: return "Drücken"
+        case .hold: return String(localized: "Halten")
+        case .toggle: return String(localized: "Drücken")
         }
     }
 
     var description: String {
         switch self {
-        case .hold: return "Tasten halten zum Aufnehmen, loslassen zum Stoppen"
-        case .toggle: return "Einmal drücken zum Starten, nochmal oder Escape zum Stoppen"
+        case .hold: return String(localized: "Tasten halten zum Aufnehmen, loslassen zum Stoppen")
+        case .toggle: return String(localized: "Einmal drücken zum Starten, nochmal oder Escape zum Stoppen")
         }
     }
 }

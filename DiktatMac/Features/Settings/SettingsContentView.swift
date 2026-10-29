@@ -54,10 +54,10 @@ enum SettingsPane: Int, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .general: return "Allgemein"
-        case .models: return "Modelle"
-        case .workflows: return "Stil"
-        case .dictionary: return "W\u{00F6}rterbuch"
+        case .general: return String(localized: "Allgemein")
+        case .models: return String(localized: "Modelle")
+        case .workflows: return String(localized: "Stil")
+        case .dictionary: return String(localized: "W\u{00F6}rterbuch")
         }
     }
 }
@@ -82,7 +82,7 @@ struct PermissionWarningSection: View {
     @State private var resetErrorText: String?
 
     var body: some View {
-        SettingsSection(title: "Berechtigungen") {
+        SettingsSection(title: String(localized: "Berechtigungen")) {
             HStack(alignment: .top, spacing: 8) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.ui(12, .semibold))
@@ -146,7 +146,7 @@ struct PermissionWarningSection: View {
             resetErrorText = nil
             Task {
                 if !(await appState.resetAccessibilityPermission()) {
-                    resetErrorText = "Zur\u{00FC}cksetzen hat nicht geklappt. In Bedienungshilfen Diktat mit \u{201E}\u{2212}\u{201C} entfernen und neu hinzuf\u{00FC}gen."
+                    resetErrorText = String(localized: "Zur\u{00FC}cksetzen hat nicht geklappt. In Bedienungshilfen Diktat mit \u{201E}\u{2212}\u{201C} entfernen und neu hinzuf\u{00FC}gen.")
                 }
                 isResetting = false
             }
@@ -168,7 +168,7 @@ struct InstallationWarningSection: View {
     }
 
     var body: some View {
-        SettingsSection(title: "Installation") {
+        SettingsSection(title: String(localized: "Installation")) {
 
             Text(installationHeadline)
                 .font(.ui(11.5, .semibold))
@@ -225,13 +225,13 @@ struct InstallationWarningSection: View {
     private var installationHeadline: String {
         switch currentInstallLocation {
         case .applications:
-            return "Diktat liegt am richtigen Ort."
+            return String(localized: "Diktat liegt am richtigen Ort.")
         case .userApplications:
-            return "Diktat liegt noch in ~/Applications."
+            return String(localized: "Diktat liegt noch in ~/Applications.")
         case .outsideApplications:
-            return "Diktat liegt noch nicht in /Applications."
+            return String(localized: "Diktat liegt noch nicht in /Applications.")
         case .unknown:
-            return "Der Installationsort konnte nicht sicher erkannt werden."
+            return String(localized: "Der Installationsort konnte nicht sicher erkannt werden.")
         }
     }
 
@@ -239,15 +239,15 @@ struct InstallationWarningSection: View {
         switch currentInstallLocation {
         case .applications:
             if DiktatInstallLocationService.otherInstalledBundleURLs.isEmpty {
-                return "Für stabile Login-Items und Updates nur diese Kopie weiterverwenden."
+                return String(localized: "Für stabile Login-Items und Updates nur diese Kopie weiterverwenden.")
             }
-            return "Diese Kopie ist korrekt. Zusätzliche Kopien solltest du später entfernen."
+            return String(localized: "Diese Kopie ist korrekt. Zusätzliche Kopien solltest du später entfernen.")
         case .userApplications:
-            return "Für Team-Rollouts und saubere Updates sollte Diktat nur aus /Applications laufen."
+            return String(localized: "Für Team-Rollouts und saubere Updates sollte Diktat nur aus /Applications laufen.")
         case .outsideApplications:
-            return "Verschiebe Diktat einmal nach /Applications, damit Anmeldestart und spätere Updates sauber bleiben."
+            return String(localized: "Verschiebe Diktat einmal nach /Applications, damit Anmeldestart und spätere Updates sauber bleiben.")
         case .unknown:
-            return "Öffne Diktat möglichst direkt aus /Applications."
+            return String(localized: "Öffne Diktat möglichst direkt aus /Applications.")
         }
     }
 
@@ -276,7 +276,7 @@ struct LaunchAtLoginSection: View {
     @State private var launchAtLoginService = LaunchAtLoginService()
 
     var body: some View {
-        SettingsSection(title: "Beim Anmelden") {
+        SettingsSection(title: String(localized: "Beim Anmelden")) {
 
             Toggle("Diktat automatisch starten", isOn: Binding(
                 get: { launchAtLoginService.isEnabled },
@@ -309,10 +309,10 @@ struct AboutDiktatSection: View {
     static let repositoryURL = "https://github.com/MProductionsGmbH/diktat-app"
 
     var body: some View {
-        SettingsSection(title: "\u{00DC}ber Diktat") {
+        SettingsSection(title: String(localized: "\u{00DC}ber Diktat")) {
 
             HStack(spacing: 10) {
-                Text("Version \(appVersion)")
+                Text(String(localized: "Version \(appVersion)"))
                     .font(.ui(11.5, .semibold))
                 Spacer(minLength: 8)
                 Button {
@@ -336,10 +336,10 @@ struct AboutDiktatSection: View {
             if FeedbackMail.isAvailable {
                 Button("Feedback senden") { sendFeedback() }
                     .buttonStyle(SubtleButtonStyle())
-                    .help("\u{00D6}ffnet eine vorbereitete Mail an \(FeedbackMail.address). Du siehst alles, bevor sie rausgeht.")
+                    .help(String(localized: "\u{00D6}ffnet eine vorbereitete Mail an \(FeedbackMail.address). Du siehst alles, bevor sie rausgeht."))
             }
 
-            Button("Neuigkeiten in \(WhatsNew.version) anzeigen") {
+            Button(String(localized: "Neuigkeiten in \(WhatsNew.version) anzeigen")) {
                 appState.showWhatsNewAgain()
             }
             .buttonStyle(SubtleButtonStyle())
@@ -449,10 +449,10 @@ struct AboutDiktatSection: View {
     /// A prepared mail in the mail app; without one the address lands on the clipboard.
     private func sendFeedback() {
         let details = [
-            "Sprachmodell: \(LocalTranscriptionModel.displayName(for: appState.selectedLocalModelName))",
-            "K\u{00FC}rzel: \(appState.appSettings.hotkeyMode == .hold ? "Halten" : "Dr\u{00FC}cken")",
-            "KI-Modi: \(appState.appSettings.rewriteEngine.displayName)",
-            "Updates: \(appState.appUpdateService.isManagedByDeviceManagement ? "Ger\u{00E4}teverwaltung" : "in der App")",
+            String(localized: "Sprachmodell: \(LocalTranscriptionModel.displayName(for: appState.selectedLocalModelName))"),
+            String(localized: "K\u{00FC}rzel: \(appState.appSettings.hotkeyMode == .hold ? "Halten" : "Dr\u{00FC}cken")"),
+            String(localized: "KI-Modi: \(appState.appSettings.rewriteEngine.displayName)"),
+            String(localized: "Updates: \(appState.appUpdateService.isManagedByDeviceManagement ? "Ger\u{00E4}teverwaltung" : "in der App")"),
         ]
         guard let url = FeedbackMail.url(details: details), NSWorkspace.shared.open(url) else {
             appState.copyToClipboard(FeedbackMail.address)
@@ -483,8 +483,8 @@ struct AboutDiktatSection: View {
 
         if report.failedItems.isEmpty {
             cleanupStatusText = deleteLocalDataOnCleanup
-                ? "Anmeldestart und lokale Daten wurden bereinigt. Jetzt Diktat beenden und aus /Applications löschen."
-                : "Anmeldestart wurde deaktiviert. Jetzt Diktat beenden und aus /Applications löschen."
+                ? String(localized: "Anmeldestart und lokale Daten wurden bereinigt. Jetzt Diktat beenden und aus /Applications löschen.")
+                : String(localized: "Anmeldestart wurde deaktiviert. Jetzt Diktat beenden und aus /Applications löschen.")
             showCleanupOptions = false
 
             let urlsToReveal = report.knownInstallBundleURLs.isEmpty
@@ -497,7 +497,7 @@ struct AboutDiktatSection: View {
         let failureSummary = report.failedItems
             .map { "\($0.url.lastPathComponent): \($0.errorDescription)" }
             .joined(separator: "\n")
-        cleanupErrorText = "Nicht alles konnte bereinigt werden:\n\(failureSummary)"
+        cleanupErrorText = String(localized: "Nicht alles konnte bereinigt werden:\n\(failureSummary)")
     }
 
     private func revealInFinder(urls: [URL]) {
@@ -527,19 +527,19 @@ struct CustomizeSettingsView: View {
 
     private var installedModelsText: String {
         let count = installedLocalModels.count
-        return count == 1 ? "1 lokales Sprachmodell installiert." : "\(count) lokale Sprachmodelle installiert."
+        return count == 1 ? String(localized: "1 lokales Sprachmodell installiert.") : String(localized: "\(count) lokale Sprachmodelle installiert.")
     }
 
     private var aiEngineStatusText: String {
         switch TextRewriter.localAvailability {
         case .available:
             return appState.appSettings.rewriteEngine == .automatic
-                ? "Apple Intelligence ist bereit. Umformulieren läuft auf diesem Mac."
-                : "Umformulieren läuft über den Modell-Anbieter unten."
+                ? String(localized: "Apple Intelligence ist bereit. Umformulieren läuft auf diesem Mac.")
+                : String(localized: "Umformulieren läuft über den Modell-Anbieter unten.")
         case .unavailable(let reason):
             return appState.isAIProviderReady
-                ? "\(reason) Bis dahin übernimmt der Modell-Anbieter unten."
-                : "\(reason) Für die KI-Modi unten einen Modell-Anbieter mit API-Key hinterlegen."
+                ? String(localized: "\(reason) Bis dahin übernimmt der Modell-Anbieter unten.")
+                : String(localized: "\(reason) Für die KI-Modi unten einen Modell-Anbieter mit API-Key hinterlegen.")
         }
     }
 
@@ -557,7 +557,7 @@ struct CustomizeSettingsView: View {
             PipelineOverviewSection(appState: appState)
 
             // MARK: Tastenkuerzel
-            SettingsSection(title: "Tastenk\u{00FC}rzel") {
+            SettingsSection(title: String(localized: "Tastenk\u{00FC}rzel")) {
 
                 Toggle("fn-Taste (\u{1F310}) allein zum Diktieren", isOn: $appState.appSettings.fnAloneStartsDictation)
                     .toggleStyle(.trailingSwitch)
@@ -606,7 +606,7 @@ struct CustomizeSettingsView: View {
             }
 
             // MARK: Aufnahme & Einfuegen
-            SettingsSection(title: "Aufnahme & Einf\u{00FC}gen") {
+            SettingsSection(title: String(localized: "Aufnahme & Einf\u{00FC}gen")) {
 
                 MicrophonePickerRow(appState: appState)
 
@@ -687,7 +687,7 @@ struct CustomizeSettingsView: View {
 
             if pane == .models {
             // MARK: Spracherkennung
-            SettingsSection(title: "Spracherkennung") {
+            SettingsSection(title: String(localized: "Spracherkennung")) {
 
                 Text("Diktat transkribiert immer auf diesem Mac. Das Audio verlässt das Gerät nicht.")
                     .font(.ui(12))
@@ -698,7 +698,7 @@ struct CustomizeSettingsView: View {
                     Image(systemName: appState.selectedLocalModelIsInstalled ? "checkmark.circle.fill" : "arrow.down.circle.fill")
                         .font(.ui(11, .semibold))
                         .foregroundStyle(appState.selectedLocalModelIsInstalled ? DiktatTheme.accent : .secondary)
-                    Text(appState.selectedLocalModelIsInstalled ? installedModelsText : "Das ausgewählte Modell wird beim Installieren lokal gespeichert.")
+                    Text(appState.selectedLocalModelIsInstalled ? installedModelsText : String(localized: "Das ausgewählte Modell wird beim Installieren lokal gespeichert."))
                         .font(.ui(12))
                         .foregroundStyle(.secondary)
                     Spacer()
@@ -729,7 +729,7 @@ struct CustomizeSettingsView: View {
                 if let progress = appState.localModelDownloadProgress {
                     VStack(alignment: .leading, spacing: 4) {
                         ProgressView(value: progress)
-                        Text(appState.localModelDownloadStatusText ?? "Modell wird geladen...")
+                        Text(appState.localModelDownloadStatusText ?? String(localized: "Modell wird geladen..."))
                             .font(.ui(12))
                             .foregroundStyle(.secondary)
                     }
@@ -755,7 +755,7 @@ struct CustomizeSettingsView: View {
             }
 
             // MARK: KI-Modi
-            SettingsSection(title: "KI-Modi") {
+            SettingsSection(title: String(localized: "KI-Modi")) {
 
                 Picker("", selection: $appState.appSettings.rewriteEngine) {
                     ForEach(TextRewriter.Engine.allCases) { engine in
@@ -791,7 +791,7 @@ struct CustomizeSettingsView: View {
             StyleContextSection(appState: appState)
 
             // MARK: KI-Schreibstil
-            SettingsSection(title: "KI-Schreibstil") {
+            SettingsSection(title: String(localized: "KI-Schreibstil")) {
                 Text("Gilt, wenn die Gl\u{00E4}ttung auf \u{201E}KI-Schreibstil\u{201C} steht, und f\u{00FC}r Diktat KI-Schreibstil in den Regeln pro App. Den Ton stellst du oben je Kontext ein.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
@@ -810,7 +810,7 @@ struct CustomizeSettingsView: View {
                 DisclosureGroup(isExpanded: $showsImproverPrompt) {
                     PromptEditor(
                         text: $appState.textImprovementSettings.systemPrompt,
-                        placeholder: "z.B. \"Schreibe pr\u{00E4}gnant und ohne F\u{00FC}llw\u{00F6}rter.\"",
+                        placeholder: String(localized: "z.B. \"Schreibe pr\u{00E4}gnant und ohne F\u{00FC}llw\u{00F6}rter.\""),
                         height: 64
                     )
                     .padding(.top, 6)
@@ -829,7 +829,7 @@ struct CustomizeSettingsView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         PromptEditor(
                             text: $appState.dampfAblassenSettings.systemPrompt,
-                            placeholder: "z.B. \"Formuliere den Text sachlich und freundlich um.\"",
+                            placeholder: String(localized: "z.B. \"Formuliere den Text sachlich und freundlich um.\""),
                             height: 110
                         )
                         if dampfPromptIsCustom {
@@ -869,7 +869,7 @@ struct CustomizeSettingsView: View {
 
             if pane == .dictionary {
             // MARK: Eigennamen
-            SettingsSection(title: "Eigennamen") {
+            SettingsSection(title: String(localized: "Eigennamen")) {
 
                 Text("Namen und Fachbegriffe, die Diktat genau so schreiben soll. KI-Modi \u{00FC}bernehmen sie unver\u{00E4}ndert.")
                     .font(.ui(12))
@@ -933,7 +933,7 @@ struct CustomizeSettingsView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            SettingsSection(title: "Ersetzungen") {
+            SettingsSection(title: String(localized: "Ersetzungen")) {
                 Text("F\u{00FC}r Begriffe, die anders klingen, als sie geschrieben werden. Zum Beispiel wird aus \u{201E}n acht n\u{201C} immer \u{201E}n8n\u{201C}.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
@@ -985,7 +985,7 @@ struct CustomizeSettingsView: View {
                 }
             }
 
-            SettingsSection(title: "F\u{00FC}llw\u{00F6}rter") {
+            SettingsSection(title: String(localized: "F\u{00FC}llw\u{00F6}rter")) {
                 Toggle("\u{201E}\u{00C4}h\u{201C} und \u{201E}\u{00E4}hm\u{201C} entfernen", isOn: $appState.appSettings.removeFillerWordsEnabled)
                     .toggleStyle(.trailingSwitch)
                     .font(.ui(11.5))
@@ -1000,15 +1000,15 @@ struct CustomizeSettingsView: View {
     private var speechCleanupEngineNote: String {
         let engine = appState.appSettings.rewriteEngine
         if TextRewriter.runsLocally(engine: engine) {
-            return "Läuft mit Apple Intelligence auf deinem Mac. Der Text verlässt das Gerät nicht."
+            return String(localized: "Läuft mit Apple Intelligence auf deinem Mac. Der Text verlässt das Gerät nicht.")
         }
         if TextRewriter.canRewrite(engine: engine) {
             if let config = AIProviderStore.config, config.isLocalServer {
-                return "Läuft über dein lokales Modell \(config.model) (\(config.baseURL)). Der Text verlässt dein Netz nicht, das Modell muss dafür laufen."
+                return String(localized: "Läuft über dein lokales Modell \(config.model) (\(config.baseURL)). Der Text verlässt dein Netz nicht, das Modell muss dafür laufen.")
             }
-            return "Das Transkript geht dafür an deinen Modell-Anbieter. Ohne Anbieter bleibt es bei \u{201E}Leicht\u{201C}."
+            return String(localized: "Das Transkript geht dafür an deinen Modell-Anbieter. Ohne Anbieter bleibt es bei \u{201E}Leicht\u{201C}.")
         }
-        return "Braucht Apple Intelligence oder einen Modell-Anbieter. Bis dahin gilt \u{201E}Leicht\u{201C}."
+        return String(localized: "Braucht Apple Intelligence oder einen Modell-Anbieter. Bis dahin gilt \u{201E}Leicht\u{201C}.")
     }
 
     private var dampfPromptIsCustom: Bool {
@@ -1151,22 +1151,22 @@ struct HotkeyRecorderButton: View {
 
     private var buttonTitle: String {
         if isRecording {
-            if fnHint { return "fn geht nicht" }
-            return needsModifierHint ? "+ \u{2303}\u{2325}\u{2318}" : "Dr\u{00FC}cken ..."
+            if fnHint { return String(localized: "fn geht nicht") }
+            return needsModifierHint ? "+ \u{2303}\u{2325}\u{2318}" : String(localized: "Dr\u{00FC}cken ...")
         }
         if let combo {
             return combo.displayLabel.replacingOccurrences(of: " + ", with: "")
         }
-        return "Eigenes"
+        return String(localized: "Eigenes")
     }
 
     private var helpText: String {
         if registrationFailed {
-            return "Dieses K\u{00FC}rzel ist bereits von macOS oder einer anderen App belegt."
+            return String(localized: "Dieses K\u{00FC}rzel ist bereits von macOS oder einer anderen App belegt.")
         }
         return isRecording
-            ? "Tastenkombination mit \u{2303}, \u{2325} oder \u{2318} dr\u{00FC}cken (fn geht nicht), Escape bricht ab."
-            : "Eigenes Tastenk\u{00FC}rzel festlegen"
+            ? String(localized: "Tastenkombination mit \u{2303}, \u{2325} oder \u{2318} dr\u{00FC}cken (fn geht nicht), Escape bricht ab.")
+            : String(localized: "Eigenes Tastenk\u{00FC}rzel festlegen")
     }
 
     private func startRecording() {

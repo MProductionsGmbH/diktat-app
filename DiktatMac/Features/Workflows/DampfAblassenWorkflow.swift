@@ -47,7 +47,7 @@ final class DampfAblassenWorkflow: Workflow {
     // MARK: - Workflow Protocol
 
     func start() {
-        phase = .running("Aufnahme läuft ...")
+        phase = .running(String(localized: "Aufnahme läuft ..."))
         recorder.startRecording()
 
         if let error = recorder.errorMessage {
@@ -60,7 +60,7 @@ final class DampfAblassenWorkflow: Workflow {
             recorder.stopRecording()
             guard !TranscriptionQualityService.shouldRejectRecording(duration: recorder.lastRecordingDuration) else {
                 recorder.discardRecording()
-                phase = .error("Keine Aufnahme erkannt.")
+                phase = .error(String(localized: "Keine Aufnahme erkannt."))
                 return
             }
             processRecording()
@@ -83,11 +83,11 @@ final class DampfAblassenWorkflow: Workflow {
 
     private func processRecording() {
         guard let url = recorder.recordingURL else {
-            phase = .error("Keine Aufnahme vorhanden.")
+            phase = .error(String(localized: "Keine Aufnahme vorhanden."))
             return
         }
 
-        phase = .running("Wird transkribiert ...")
+        phase = .running(String(localized: "Wird transkribiert ..."))
         let recordingDuration = recorder.lastRecordingDuration
 
         processingTask = Task {
@@ -104,13 +104,13 @@ final class DampfAblassenWorkflow: Workflow {
                 }
                 let cleanedRawText = TranscriptionQualityService.cleanedTranscript(rawText)
                 guard !TranscriptionQualityService.isLikelyArtifact(cleanedRawText, recordingDuration: recordingDuration) else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
 
                 let processedRawText = postProcessor.process(cleanedRawText)
                 guard !processedRawText.isEmpty else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
 
@@ -118,7 +118,7 @@ final class DampfAblassenWorkflow: Workflow {
                 transcript = processedRawText
 
                 // Phase 2: AI rewrite (on device or the connected provider)
-                phase = .running("Wird umformuliert ...")
+                phase = .running(String(localized: "Wird umformuliert ..."))
 
                 let promptLanguage = PromptLanguage.detect(from: processedRawText)
                 let answer = try await TextRewriter.rewrite(
@@ -129,7 +129,7 @@ final class DampfAblassenWorkflow: Workflow {
                 )
                 let cleanedAnswer = TranscriptionQualityService.cleanedTranscript(answer)
                 guard cleanedAnswer != ModePrompts.nothingRecognizedMarker else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
                 phase = .done(cleanedAnswer)

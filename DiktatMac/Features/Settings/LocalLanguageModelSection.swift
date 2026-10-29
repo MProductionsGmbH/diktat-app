@@ -8,7 +8,7 @@ struct LocalLanguageModelSection: View {
     private let memoryGB = LocalModelVariant.installedMemoryGB
 
     var body: some View {
-        SettingsSection(title: "Lokales Sprachmodell f\u{00FC}r Meetings", isBeta: true) {
+        SettingsSection(title: String(localized: "Lokales Sprachmodell f\u{00FC}r Meetings"), isBeta: true) {
             Text("Optional. Meetings k\u{00F6}nnen auf diesem Mac genauer zusammengefasst werden als mit Apple Intelligence, vor allem lange. Der Text verl\u{00E4}sst den Mac nicht. W\u{00E4}hle ein Modell, das schon auf deinem Mac l\u{00E4}uft (Ollama, LM Studio), oder lade Gemma, ohne Zusatzprogramm.")
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
@@ -33,9 +33,9 @@ struct LocalLanguageModelSection: View {
 
     private var footnote: String {
         let mac = LocalModelVariant.isAppleSilicon
-            ? "Dieser Mac hat \(memoryGB) GB Arbeitsspeicher."
-            : "Dieser Mac hat keinen Apple-Chip."
-        return mac + " Ist Gemma geladen, nutzen Meetings es, wenn kein eigener Server gew\u{00E4}hlt ist. Gemma 4 von Google, Lizenz Apache 2.0."
+            ? String(localized: "Dieser Mac hat \(memoryGB) GB Arbeitsspeicher.")
+            : String(localized: "Dieser Mac hat keinen Apple-Chip.")
+        return mac + String(localized: " Ist Gemma geladen, nutzen Meetings es, wenn kein eigener Server gew\u{00E4}hlt ist. Gemma 4 von Google, Lizenz Apache 2.0.")
     }
 
     // MARK: - Model server on this Mac
@@ -54,7 +54,7 @@ struct LocalLanguageModelSection: View {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text("Ollama oder LM Studio")
                     .font(.ui(12.5, .semibold))
-                if usesServer { badge("Wird genutzt") }
+                if usesServer { badge(String(localized: "Wird genutzt")) }
                 Spacer(minLength: 8)
                 serverAction
             }
@@ -67,13 +67,13 @@ struct LocalLanguageModelSection: View {
 
     private var serverDetails: String {
         guard let config = localServer else {
-            return "Ein Modell, das auf diesem Mac schon l\u{00E4}uft, zum Beispiel Qwen \u{00FC}ber Ollama. Kein zus\u{00E4}tzlicher Download. Adresse und Modellname tr\u{00E4}gst du unten unter Modell-Anbieter ein."
+            return String(localized: "Ein Modell, das auf diesem Mac schon l\u{00E4}uft, zum Beispiel Qwen \u{00FC}ber Ollama. Kein zus\u{00E4}tzlicher Download. Adresse und Modellname tr\u{00E4}gst du unten unter Modell-Anbieter ein.")
         }
         let model = config.model.isEmpty ? config.provider.defaultModel : config.model
         if usesServer {
-            return "\(model) auf \(config.baseURL). Meetings, Gl\u{00E4}ttung und KI-Modi nutzen es. Der Text verl\u{00E4}sst den Mac nicht."
+            return String(localized: "\(model) auf \(config.baseURL). Meetings, Gl\u{00E4}ttung und KI-Modi nutzen es. Der Text verl\u{00E4}sst den Mac nicht.")
         }
-        return "\(model) auf \(config.baseURL) ist eingerichtet. Meetings nutzen es erst, wenn bei KI-Modi \u{201E}Immer Modell-Anbieter\u{201C} steht."
+        return String(localized: "\(model) auf \(config.baseURL) ist eingerichtet. Meetings nutzen es erst, wenn bei KI-Modi \u{201E}Immer Modell-Anbieter\u{201C} steht.")
     }
 
     @ViewBuilder
@@ -95,9 +95,9 @@ struct LocalLanguageModelSection: View {
                 Text(variant.name)
                     .font(.ui(12.5, .semibold))
                 if store.preferredInstalled == variant {
-                    badge("Wird genutzt")
+                    badge(String(localized: "Wird genutzt"))
                 } else if LocalModelVariant.recommended() == variant, state != .installed {
-                    badge("Passt zu diesem Mac")
+                    badge(String(localized: "Passt zu diesem Mac"))
                 }
                 Spacer(minLength: 8)
                 action(variant, state: state, support: support)
@@ -112,7 +112,7 @@ struct LocalLanguageModelSection: View {
             case .downloading(let fraction):
                 ProgressView(value: fraction)
                     .controlSize(.small)
-                Text("\(Int(fraction * 100)) %. Du kannst Diktat weiter nutzen.")
+                Text(String(localized: "\(Int(fraction * 100)) %. Du kannst Diktat weiter nutzen."))
                     .font(.ui(11))
                     .foregroundStyle(.secondary)
             case .failed(let message):
@@ -127,9 +127,9 @@ struct LocalLanguageModelSection: View {
     }
 
     private func details(_ variant: LocalModelVariant, support: LocalModelVariant.Support) -> String {
-        let size = "Download \(LocalModelStore.gigabytes(variant.downloadSize))"
+        let size = String(localized: "Download \(LocalModelStore.gigabytes(variant.downloadSize))")
         let memory = String(format: "%.0f", variant.memoryInUse.rounded(.up))
-        let needs = "braucht beim Zusammenfassen etwa \(memory) GB Arbeitsspeicher, empfohlen ab \(variant.minimumMemoryGB) GB"
+        let needs = String(localized: "braucht beim Zusammenfassen etwa \(memory) GB Arbeitsspeicher, empfohlen ab \(variant.minimumMemoryGB) GB")
         switch support {
         case .available:
             return "\(variant.purpose). \(size), \(needs)."

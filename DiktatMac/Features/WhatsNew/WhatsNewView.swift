@@ -16,18 +16,18 @@ enum WhatsNew {
     static let items: [Item] = [
         Item(
             icon: "video.fill",
-            title: "Online-Meetings (Beta)",
-            detail: "Mit dem Schalter \u{201E}Online-Meeting\u{201C} nimmt Diktat auch den Ton des Macs auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon w\u{00E4}hrend des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen."
+            title: String(localized: "Online-Meetings (Beta)"),
+            detail: String(localized: "Mit dem Schalter \u{201E}Online-Meeting\u{201C} nimmt Diktat auch den Ton des Macs auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon w\u{00E4}hrend des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen.")
         ),
         Item(
             icon: "cpu",
-            title: "Lokales Sprachmodell (Beta)",
-            detail: "Unter Einstellungen > Modelle l\u{00E4}sst sich Gemma 4 laden. Es fasst lange Meetings genauer zusammen als Apple Intelligence, ganz auf diesem Mac. Diktat zeigt, welche Gr\u{00F6}\u{00DF}e zu deinem Mac passt."
+            title: String(localized: "Lokales Sprachmodell (Beta)"),
+            detail: String(localized: "Unter Einstellungen > Modelle l\u{00E4}sst sich Gemma 4 laden. Es fasst lange Meetings genauer zusammen als Apple Intelligence, ganz auf diesem Mac. Diktat zeigt, welche Gr\u{00F6}\u{00DF}e zu deinem Mac passt.")
         ),
         Item(
             icon: "text.cursor",
-            title: "Text landet am richtigen Ort",
-            detail: "Klickst du in ein anderes Feld, w\u{00E4}hrend ein KI-Modus noch arbeitet, kommt der Text in die Zwischenablage statt ins falsche Feld. Nach einem KI-Modus bietet das Men\u{00FC} \u{201E}Wortgenau statt \u{2026}\u{201C} an. Das erste Wort bleibt erhalten, und Diktat sagt, wenn das Mikrofon fehlt oder sehr leise ist."
+            title: String(localized: "Text landet am richtigen Ort"),
+            detail: String(localized: "Klickst du in ein anderes Feld, w\u{00E4}hrend ein KI-Modus noch arbeitet, kommt der Text in die Zwischenablage statt ins falsche Feld. Nach einem KI-Modus bietet das Men\u{00FC} \u{201E}Wortgenau statt \u{2026}\u{201C} an. Das erste Wort bleibt erhalten, und Diktat sagt, wenn das Mikrofon fehlt oder sehr leise ist.")
         ),
     ]
 }
@@ -42,7 +42,7 @@ struct WhatsNewView: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Neu in Diktat \(WhatsNew.version)")
+                Text(String(localized: "Neu in Diktat \(WhatsNew.version)"))
                     .font(DiktatType.publicSans(20, .bold, relativeTo: .title3))
                 Text("Einmal kurz, dann geht es weiter wie gewohnt.")
                     .font(.ui(12))
@@ -76,14 +76,14 @@ struct WhatsNewView: View {
                 if !appState.isConfigured {
                     NoticeRow(
                         icon: "arrow.down.circle",
-                        title: "Noch ein Schritt",
-                        detail: "Lade einmal ein lokales Sprachmodell, sonst kann Diktat nicht transkribieren."
+                        title: String(localized: "Noch ein Schritt"),
+                        detail: String(localized: "Lade einmal ein lokales Sprachmodell, sonst kann Diktat nicht transkribieren.")
                     )
                 } else if !appState.canRewrite {
                     NoticeRow(
                         icon: "key",
-                        title: "KI-Modi einrichten",
-                        detail: "Ohne Apple Intelligence brauchen KI-Schreibstil, WTF und :-) einen eigenen API-Key."
+                        title: String(localized: "KI-Modi einrichten"),
+                        detail: String(localized: "Ohne Apple Intelligence brauchen KI-Schreibstil, WTF und :-) einen eigenen API-Key.")
                     )
                 }
             }

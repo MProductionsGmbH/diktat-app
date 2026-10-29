@@ -19,10 +19,10 @@ enum WorkflowType: String, CaseIterable, Identifiable, Codable {
     var displayName: String {
         switch self {
         case .tapTalk: return "Diktat"
-        case .localTapTalk: return "Diktat Lokal"
-        case .textImprover: return "Diktat KI-Schreibstil"
-        case .dampfAblassen: return "Diktat WTF"
-        case .emojiText: return "Diktat :-)"
+        case .localTapTalk: return String(localized: "Diktat Lokal")
+        case .textImprover: return String(localized: "Diktat KI-Schreibstil")
+        case .dampfAblassen: return String(localized: "Diktat WTF")
+        case .emojiText: return String(localized: "Diktat :-)")
         }
     }
 
@@ -38,11 +38,11 @@ enum WorkflowType: String, CaseIterable, Identifiable, Codable {
 
     var subtitle: String {
         switch self {
-        case .tapTalk: return "Sprache rein. Text raus."
-        case .localTapTalk: return "Sprache rein. Text raus."
-        case .textImprover: return "Gesprochen rein. Geschrieben raus."
-        case .dampfAblassen: return "Frust rein. Entspannt raus."
-        case .emojiText: return "Text rein. Emojis dazu."
+        case .tapTalk: return String(localized: "Sprache rein. Text raus.")
+        case .localTapTalk: return String(localized: "Sprache rein. Text raus.")
+        case .textImprover: return String(localized: "Gesprochen rein. Geschrieben raus.")
+        case .dampfAblassen: return String(localized: "Frust rein. Entspannt raus.")
+        case .emojiText: return String(localized: "Text rein. Emojis dazu.")
         }
     }
 

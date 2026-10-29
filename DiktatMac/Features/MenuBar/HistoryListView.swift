@@ -5,7 +5,7 @@ struct HistoryListView: View {
 
     private static let relativeFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
+        formatter.locale = AppLocale.current
         formatter.unitsStyle = .short
         return formatter
     }()
@@ -17,14 +17,14 @@ struct HistoryListView: View {
             if appState.appSettings.historyRetention == .off {
                 emptyState(
                     icon: "clock.badge.xmark",
-                    title: "Verlauf ist aus",
-                    detail: "In den Einstellungen unter \u{201E}Einf\u{00FC}gen & Verlauf\u{201C} einschalten."
+                    title: String(localized: "Verlauf ist aus"),
+                    detail: String(localized: "In den Einstellungen unter \u{201E}Aufnahme & Einf\u{00FC}gen\u{201C} einschalten.")
                 )
             } else if entries.isEmpty {
                 emptyState(
                     icon: "clock",
-                    title: "Noch nichts im Verlauf",
-                    detail: "Ergebnisse bleiben \(retentionHint) nur auf diesem Mac, verschl\u{00FC}sselt."
+                    title: String(localized: "Noch nichts im Verlauf"),
+                    detail: String(localized: "Ergebnisse bleiben \(retentionHint) nur auf diesem Mac, verschl\u{00FC}sselt.")
                 )
             } else {
                 ScrollView {
@@ -49,7 +49,7 @@ struct HistoryListView: View {
                 .frame(maxHeight: 360)
 
                 HStack {
-                    Text("Nur auf diesem Mac, \(retentionHint).")
+                    Text(String(localized: "Nur auf diesem Mac, \(retentionHint)."))
                         .font(.ui(10.5))
                         .foregroundStyle(.tertiary)
                     Spacer()
@@ -71,8 +71,8 @@ struct HistoryListView: View {
     private var retentionHint: String {
         switch appState.appSettings.historyRetention {
         case .off: return ""
-        case .day: return "24 Stunden"
-        case .week: return "7 Tage"
+        case .day: return String(localized: "24 Stunden")
+        case .week: return String(localized: "7 Tage")
         }
     }
 

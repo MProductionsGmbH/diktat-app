@@ -23,7 +23,7 @@ struct MacAIProviderSection: View {
     }
 
     var body: some View {
-        SettingsSection(title: "Modell-Anbieter") {
+        SettingsSection(title: String(localized: "Modell-Anbieter")) {
             Text("Optional. Mit Apple Intelligence laufen die KI-Modi auf diesem Mac. Ein eigener API-Key hilft, wenn Apple Intelligence fehlt oder mehr Qualität gefragt ist.")
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
@@ -48,7 +48,7 @@ struct MacAIProviderSection: View {
         let provider = config.provider
 
         HStack(spacing: 8) {
-            SecureField(maskedKey(provider) ?? (provider.requiresAPIKey ? "API-Key einfügen" : "API-Key (optional)"), text: $keyInput)
+            SecureField(maskedKey(provider) ?? (provider.requiresAPIKey ? String(localized: "API-Key einfügen") : String(localized: "API-Key (optional)")), text: $keyInput)
                 .textFieldStyle(.roundedBorder)
                 .font(.ui(11.5))
             Button("Sichern") { saveKey(provider) }
@@ -123,8 +123,8 @@ struct MacAIProviderSection: View {
 
         Label {
             Text(config.isOnThisMac
-                 ? "Die Texte der KI-Modi gehen an das Modell auf diesem Mac, wenn Apple Intelligence nicht übernimmt. Sie verlassen den Mac nicht. Das Programm muss dazu laufen."
-                 : "Ab jetzt gehen die Texte der KI-Modi an \(provider.displayName), wenn Apple Intelligence nicht übernimmt. Die Sprache selbst bleibt auf diesem Mac. Es gelten die Bedingungen und Kosten des Anbieters. Der Key liegt im Schlüsselbund dieses Macs.")
+                 ? String(localized: "Die Texte der KI-Modi gehen an das Modell auf diesem Mac, wenn Apple Intelligence nicht übernimmt. Sie verlassen den Mac nicht. Das Programm muss dazu laufen.")
+                 : String(localized: "Ab jetzt gehen die Texte der KI-Modi an \(provider.displayName), wenn Apple Intelligence nicht übernimmt. Die Sprache selbst bleibt auf diesem Mac. Es gelten die Bedingungen und Kosten des Anbieters. Der Key liegt im Schlüsselbund dieses Macs."))
                 .fixedSize(horizontal: false, vertical: true)
         } icon: {
             Image(systemName: "arrow.up.forward.circle.fill")
@@ -157,7 +157,7 @@ struct MacAIProviderSection: View {
         case .found(let servers):
             ForEach(servers) { server in
                 if server.models.isEmpty {
-                    Text("\(server.name) l\u{00E4}uft, hat aber noch kein Modell. In \(server.name) ein Modell laden und erneut suchen.")
+                    Text(String(localized: "\(server.name) l\u{00E4}uft, hat aber noch kein Modell. In \(server.name) ein Modell laden und erneut suchen."))
                         .font(.ui(12))
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)

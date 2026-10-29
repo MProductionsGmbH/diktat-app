@@ -68,7 +68,7 @@ struct MeetingView: View {
             Button("Sichern") { saveName() }
             Button("Abbrechen", role: .cancel) { renaming = nil }
         } message: {
-            Text("Der Name ersetzt \u{201E}Person \(renaming ?? 0)\u{201C} im Transkript.")
+            Text(String(localized: "Der Name ersetzt \u{201E}Person \(renaming ?? 0)\u{201C} im Transkript."))
         }
     }
 
@@ -96,7 +96,7 @@ struct MeetingView: View {
 
             NoticeRow(
                 icon: "hand.raised.fill",
-                title: "Bitte vorher alle Anwesenden informieren und um ihr Einverst\u{00E4}ndnis bitten.",
+                title: String(localized: "Bitte vorher alle Anwesenden informieren und um ihr Einverst\u{00E4}ndnis bitten."),
                 tint: DiktatTheme.danger
             )
 
@@ -143,7 +143,7 @@ struct MeetingView: View {
                     icon: "exclamationmark.triangle.fill",
                     title: blocker,
                     tint: DiktatTheme.danger,
-                    actionTitle: ParakeetTranscriber.isSupported ? "Einstellungen" : nil,
+                    actionTitle: ParakeetTranscriber.isSupported ? String(localized: "Einstellungen") : nil,
                     action: ParakeetTranscriber.isSupported ? { appState.page = .settings } : nil
                 )
             }
@@ -171,8 +171,8 @@ struct MeetingView: View {
     }
 
     private var recordingTitle: String {
-        if meeting.pausedAt != nil { return "Pausiert, nichts wird aufgenommen" }
-        return meeting.isRecordingSystemAudio ? "Aufnahme l\u{00E4}uft, mit Ton des Macs" : "Aufnahme l\u{00E4}uft"
+        if meeting.pausedAt != nil { return String(localized: "Pausiert, nichts wird aufgenommen") }
+        return meeting.isRecordingSystemAudio ? String(localized: "Aufnahme l\u{00E4}uft, mit Ton des Macs") : String(localized: "Aufnahme l\u{00E4}uft")
     }
 
     private var recordsSystemAudio: Bool {
@@ -180,7 +180,7 @@ struct MeetingView: View {
     }
 
     /// Asked in the call's chat before starting, so everyone can agree in writing.
-    static let chatNote = "Ich w\u{00FC}rde dieses Meeting gern mit Diktat aufnehmen und auf meinem Mac transkribieren und zusammenfassen lassen. Ton und Text bleiben auf meinem Mac, die Aufnahme wird nach der Auswertung gel\u{00F6}scht. Ist das f\u{00FC}r alle in Ordnung?"
+    static let chatNote = String(localized: "Ich w\u{00FC}rde dieses Meeting gern mit Diktat aufnehmen und auf meinem Mac transkribieren und zusammenfassen lassen. Ton und Text bleiben auf meinem Mac, die Aufnahme wird nach der Auswertung gel\u{00F6}scht. Ist das f\u{00FC}r alle in Ordnung?")
 
     private var onlineMeeting: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -220,7 +220,7 @@ struct MeetingView: View {
 
     private var earlierMeetings: some View {
         VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(title: "Meetings (Rechtsklick zum L\u{00F6}schen)")
+            SectionHeader(title: String(localized: "Meetings (Rechtsklick zum L\u{00F6}schen)"))
             VStack(spacing: 0) {
                 ForEach(Array(storedMeetings.enumerated()), id: \.element.id) { index, record in
                     if index > 0 {
@@ -239,7 +239,7 @@ struct MeetingView: View {
                                     .font(.ui(12.5, .medium))
                                     .foregroundStyle(.primary)
                                     .lineLimit(1)
-                                Text(record.status == .done ? summaryLine(record) : "Noch nicht ausgewertet, klicken zum Auswerten")
+                                Text(record.status == .done ? summaryLine(record) : String(localized: "Noch nicht ausgewertet, klicken zum Auswerten"))
                                     .font(.ui(11))
                                     .foregroundStyle(.secondary)
                             }
@@ -392,9 +392,9 @@ struct MeetingView: View {
             // At the top: a long meeting would put them far below the transcript.
             HStack(spacing: 8) {
                 // The bare transcript by person, e.g. to continue in another AI app.
-                copyButton("Transkript kopieren", target: .transcript, text: record.transcriptShareText)
+                copyButton(String(localized: "Transkript kopieren"), target: .transcript, text: record.transcriptShareText)
                 if record.summary != nil {
-                    copyButton("Alles kopieren", target: .everything, text: record.shareText)
+                    copyButton(String(localized: "Alles kopieren"), target: .everything, text: record.shareText)
                 }
                 Spacer()
             }
@@ -402,7 +402,7 @@ struct MeetingView: View {
             summaryCard(record)
 
             VStack(alignment: .leading, spacing: 8) {
-                SectionHeader(title: "Personen: Klicken zum Umbenennen")
+                SectionHeader(title: String(localized: "Personen: Klicken zum Umbenennen"))
                 FlowLayout(spacing: 6) {
                     ForEach(record.speakers, id: \.self) { speaker in
                         Button {
@@ -429,7 +429,7 @@ struct MeetingView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                SectionHeader(title: "Transkript")
+                SectionHeader(title: String(localized: "Transkript"))
                 ForEach(record.turns) { turn in
                     VStack(alignment: .leading, spacing: 3) {
                         HStack(spacing: 6) {
@@ -499,7 +499,7 @@ struct MeetingView: View {
                     .foregroundStyle(.secondary)
 
                 HStack(spacing: 8) {
-                    copyButton("Kopieren", target: .summary, text: summary)
+                    copyButton(String(localized: "Kopieren"), target: .summary, text: summary)
                     Button {
                         resummarize(record.id)
                     } label: {
@@ -509,7 +509,7 @@ struct MeetingView: View {
                     .disabled(isResummarizing)
                 }
             } else {
-                Text(record.summaryNote ?? "Noch keine Zusammenfassung.")
+                Text(record.summaryNote ?? String(localized: "Noch keine Zusammenfassung."))
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -553,8 +553,8 @@ struct MeetingView: View {
 
     private func summaryLine(_ record: MeetingRecord) -> String {
         let minutes = Int((record.duration / 60).rounded())
-        let duration = minutes < 1 ? "unter 1 Min." : "\(minutes) Min."
-        let people = record.speakers.count == 1 ? "1 Person" : "\(record.speakers.count) Personen"
+        let duration = minutes < 1 ? String(localized: "unter 1 Min.") : String(localized: "\(minutes) Min.")
+        let people = record.speakers.count == 1 ? String(localized: "1 Person") : String(localized: "\(record.speakers.count) Personen")
         return "\(duration), \(people)"
     }
 

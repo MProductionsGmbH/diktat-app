@@ -89,6 +89,6 @@ struct LiveNotesCard: View {
     private var status: String {
         guard let updatedAt = live.updatedAt else { return live.modelName ?? "" }
         let time = updatedAt.formatted(date: .omitted, time: .shortened)
-        return live.modelName.map { "Stand \(time), \($0)" } ?? "Stand \(time)"
+        return live.modelName.map { String(localized: "Stand \(time), \($0)") } ?? String(localized: "Stand \(time)")
     }
 }

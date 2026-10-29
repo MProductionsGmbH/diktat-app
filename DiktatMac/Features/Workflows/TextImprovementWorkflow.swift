@@ -47,7 +47,7 @@ final class TextImprovementWorkflow: Workflow {
     // MARK: - Workflow Protocol
 
     func start() {
-        phase = .running("Aufnahme läuft ...")
+        phase = .running(String(localized: "Aufnahme läuft ..."))
         recorder.startRecording()
 
         if let error = recorder.errorMessage {
@@ -60,7 +60,7 @@ final class TextImprovementWorkflow: Workflow {
             recorder.stopRecording()
             guard !TranscriptionQualityService.shouldRejectRecording(duration: recorder.lastRecordingDuration) else {
                 recorder.discardRecording()
-                phase = .error("Keine Aufnahme erkannt.")
+                phase = .error(String(localized: "Keine Aufnahme erkannt."))
                 return
             }
             processRecording()
@@ -83,11 +83,11 @@ final class TextImprovementWorkflow: Workflow {
 
     private func processRecording() {
         guard let url = recorder.recordingURL else {
-            phase = .error("Keine Aufnahme vorhanden.")
+            phase = .error(String(localized: "Keine Aufnahme vorhanden."))
             return
         }
 
-        phase = .running("Wird transkribiert ...")
+        phase = .running(String(localized: "Wird transkribiert ..."))
         let recordingDuration = recorder.lastRecordingDuration
 
         processingTask = Task {
@@ -104,13 +104,13 @@ final class TextImprovementWorkflow: Workflow {
                 }
                 let cleanedRawText = TranscriptionQualityService.cleanedTranscript(rawText)
                 guard !TranscriptionQualityService.isLikelyArtifact(cleanedRawText, recordingDuration: recordingDuration) else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
 
                 let processedRawText = postProcessor.process(cleanedRawText)
                 guard !processedRawText.isEmpty else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
 
@@ -118,7 +118,7 @@ final class TextImprovementWorkflow: Workflow {
                 transcript = processedRawText
 
                 // Phase 2: AI improvement (on device or the connected provider)
-                phase = .running("Text wird verbessert ...")
+                phase = .running(String(localized: "Text wird verbessert ..."))
 
                 let promptLanguage = PromptLanguage.detect(from: processedRawText)
                 let improved = try await TextRewriter.rewrite(

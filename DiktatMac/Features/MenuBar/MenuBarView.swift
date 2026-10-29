@@ -54,9 +54,9 @@ struct MenuBarView: View {
                 if DiktatInstallLocationService.shouldOfferMoveToApplications {
                     NoticeRow(
                         icon: "externaldrive.badge.plus",
-                        title: "Nach /Applications verschieben",
-                        detail: "So startet Diktat zuverl\u{00E4}ssig mit dem Mac und bekommt Updates.",
-                        actionTitle: "Pr\u{00FC}fen",
+                        title: String(localized: "Nach /Applications verschieben"),
+                        detail: String(localized: "So startet Diktat zuverl\u{00E4}ssig mit dem Mac und bekommt Updates."),
+                        actionTitle: String(localized: "Pr\u{00FC}fen"),
                         action: { appState.page = .settings }
                     )
                 }
@@ -64,9 +64,9 @@ struct MenuBarView: View {
                 if !appState.accessibilityPermissionGranted {
                     NoticeRow(
                         icon: "hand.raised.fill",
-                        title: "Einf\u{00FC}gen braucht Bedienungshilfen",
-                        detail: "Nach Updates kann macOS die Freigabe neu verlangen.",
-                        actionTitle: "\u{00D6}ffnen",
+                        title: String(localized: "Einf\u{00FC}gen braucht Bedienungshilfen"),
+                        detail: String(localized: "Nach Updates kann macOS die Freigabe neu verlangen."),
+                        actionTitle: String(localized: "\u{00D6}ffnen"),
                         action: { appState.requestAccessibilityPermission() }
                     )
                 }
@@ -74,10 +74,10 @@ struct MenuBarView: View {
                 if appState.microphoneDenied {
                     NoticeRow(
                         icon: "mic.slash.fill",
-                        title: "Aufnehmen braucht das Mikrofon",
-                        detail: "Diktat ist in den Systemeinstellungen f\u{00FC}r das Mikrofon nicht erlaubt.",
+                        title: String(localized: "Aufnehmen braucht das Mikrofon"),
+                        detail: String(localized: "Diktat ist in den Systemeinstellungen f\u{00FC}r das Mikrofon nicht erlaubt."),
                         tint: DiktatTheme.danger,
-                        actionTitle: "\u{00D6}ffnen",
+                        actionTitle: String(localized: "\u{00D6}ffnen"),
                         action: {
                             MicrophonePermission.openSystemSettings()
                             // Back from System Settings, the notice follows the new state.
@@ -89,9 +89,9 @@ struct MenuBarView: View {
                 if appState.offersTranscriptInstead, let last = appState.lastInsertion {
                     NoticeRow(
                         icon: "arrow.uturn.backward",
-                        title: "Wortgenau statt \(last.mode.displayName)",
-                        detail: "Ersetzt den eben eingef\u{00FC}gten Text durch dein w\u{00F6}rtliches Diktat.",
-                        actionTitle: "Ersetzen",
+                        title: String(localized: "Wortgenau statt \(last.mode.displayName)"),
+                        detail: String(localized: "Ersetzt den eben eingef\u{00FC}gten Text durch dein w\u{00F6}rtliches Diktat."),
+                        actionTitle: String(localized: "Ersetzen"),
                         action: { appState.insertTranscriptInstead() }
                     )
                 }
@@ -109,18 +109,18 @@ struct MenuBarView: View {
                 case .noInput:
                     NoticeRow(
                         icon: "mic.slash",
-                        title: "Kein Mikrofon gefunden",
-                        detail: "Bei zugeklapptem MacBook ein Headset oder externes Mikrofon anschlie\u{00DF}en.",
+                        title: String(localized: "Kein Mikrofon gefunden"),
+                        detail: String(localized: "Bei zugeklapptem MacBook ein Headset oder externes Mikrofon anschlie\u{00DF}en."),
                         tint: DiktatTheme.danger,
-                        actionTitle: "Ton",
+                        actionTitle: String(localized: "Ton"),
                         action: { MicrophoneCheck.openSoundSettings() }
                     )
                 case .quiet(let percent):
                     NoticeRow(
                         icon: "speaker.wave.1",
-                        title: "Mikrofon sehr leise eingestellt (\(percent) %)",
-                        detail: "Dann gehen W\u{00F6}rter verloren. In den Systemeinstellungen unter Ton, Eingang lauter stellen.",
-                        actionTitle: "Ton",
+                        title: String(localized: "Mikrofon sehr leise eingestellt (\(percent) %)"),
+                        detail: String(localized: "Dann gehen W\u{00F6}rter verloren. In den Systemeinstellungen unter Ton, Eingang lauter stellen."),
+                        actionTitle: String(localized: "Ton"),
                         action: { MicrophoneCheck.openSoundSettings() }
                     )
                 case nil:
@@ -130,8 +130,8 @@ struct MenuBarView: View {
                 if appState.meeting.isRecording || appState.meeting.isProcessing {
                     NoticeRow(
                         icon: "person.2.wave.2.fill",
-                        title: appState.meeting.isRecording ? "Meeting wird aufgenommen" : "Meeting wird ausgewertet",
-                        actionTitle: "\u{00D6}ffnen",
+                        title: appState.meeting.isRecording ? String(localized: "Meeting wird aufgenommen") : String(localized: "Meeting wird ausgewertet"),
+                        actionTitle: String(localized: "\u{00D6}ffnen"),
                         action: { appState.page = .meeting }
                     )
                 }
@@ -141,7 +141,7 @@ struct MenuBarView: View {
                 styleCard
 
                 VStack(alignment: .leading, spacing: 8) {
-                    SectionHeader(title: "Modi")
+                    SectionHeader(title: String(localized: "Modi"))
 
                     VStack(spacing: 0) {
                         ForEach(Array(WorkflowType.mainMenuCases.enumerated()), id: \.element) { index, type in
@@ -233,7 +233,7 @@ struct MenuBarView: View {
     /// The details are in the settings under "Stil".
     private var styleCard: some View {
         VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(title: "Stil")
+            SectionHeader(title: String(localized: "Stil"))
 
             VStack(alignment: .leading, spacing: 12) {
                 VStack(alignment: .leading, spacing: 6) {
@@ -317,7 +317,8 @@ struct MenuBarView: View {
                 Text("Modell")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
-                    .frame(width: 62, alignment: .leading)
+                    .frame(minWidth: 62, alignment: .leading)
+                    .fixedSize(horizontal: true, vertical: false)
 
                 Picker("", selection: Binding(
                     get: { appState.selectedLocalModelName },
@@ -340,7 +341,7 @@ struct MenuBarView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     ProgressView(value: progress)
                         .tint(DiktatTheme.accent)
-                    Text(appState.localModelDownloadStatusText ?? "Modell wird geladen ...")
+                    Text(appState.localModelDownloadStatusText ?? String(localized: "Modell wird geladen ..."))
                         .font(.ui(11))
                         .foregroundStyle(.secondary)
                 }
@@ -374,8 +375,8 @@ struct MenuBarView: View {
     private var dictationTitle: String {
         let hotkey = appState.hotkeyLabel(for: .tapTalk)
         switch appState.appSettings.hotkeyMode {
-        case .hold: return "\(hotkey) halten und sprechen"
-        default: return "\(hotkey) dr\u{00FC}cken und sprechen"
+        case .hold: return String(localized: "\(hotkey) halten und sprechen")
+        default: return String(localized: "\(hotkey) dr\u{00FC}cken und sprechen")
         }
     }
 
@@ -387,22 +388,22 @@ struct MenuBarView: View {
     private var aiStatusText: String {
         let engine = appState.appSettings.rewriteEngine
         if TextRewriter.runsLocally(engine: engine) {
-            return "Sprache und KI-Modi bleiben auf diesem Mac."
+            return String(localized: "Sprache und KI-Modi bleiben auf diesem Mac.")
         }
         if appState.isAIProviderReady, let provider = appState.aiProvider?.provider {
-            return "Sprache bleibt auf diesem Mac, KI-Modi \u{00FC}ber \(provider.displayName)."
+            return String(localized: "Sprache bleibt auf diesem Mac, KI-Modi \u{00FC}ber \(provider.displayName).")
         }
-        return "Sprache bleibt auf diesem Mac. KI-Modi brauchen Apple Intelligence oder einen API-Key."
+        return String(localized: "Sprache bleibt auf diesem Mac. KI-Modi brauchen Apple Intelligence oder einen API-Key.")
     }
 
     private func modePanelSubtitle(selectedModelInstalled: Bool) -> String {
         if appState.isDownloadingLocalModel {
-            return appState.localModelDownloadStatusText ?? "Lokales Modell wird geladen."
+            return appState.localModelDownloadStatusText ?? String(localized: "Lokales Modell wird geladen.")
         }
         if selectedModelInstalled {
-            return "Der Text landet direkt am Cursor."
+            return String(localized: "Der Text landet direkt am Cursor.")
         }
-        return "\(appState.selectedLocalModelDisplayName) ist noch nicht installiert."
+        return String(localized: "\(appState.selectedLocalModelDisplayName) ist noch nicht installiert.")
     }
 
     /// The last result as a sent message, like on iOS. A click copies it.
@@ -429,7 +430,7 @@ struct MenuBarView: View {
             }
             .buttonStyle(.plain)
             .help("Kopieren")
-            .accessibilityLabel("Letzter Text: \(entry.text)")
+            .accessibilityLabel(String(localized: "Letzter Text: \(entry.text)"))
 
             Group {
                 if copiedLast {
@@ -449,7 +450,7 @@ struct MenuBarView: View {
 
     private static let relativeFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
+        formatter.locale = AppLocale.current
         formatter.unitsStyle = .full
         return formatter
     }()
@@ -521,7 +522,7 @@ struct MenuBarView: View {
 
     private var settingsPage: some View {
         VStack(spacing: 0) {
-            PageHeader(title: "Einstellungen", onBack: { appState.page = .main }) {
+            PageHeader(title: String(localized: "Einstellungen"), onBack: { appState.page = .main }) {
                 settingsQuickAction
             }
 
@@ -559,7 +560,7 @@ struct MenuBarView: View {
 
     private var historyPage: some View {
         VStack(spacing: 0) {
-            PageHeader(title: "Verlauf", onBack: { appState.page = .main })
+            PageHeader(title: String(localized: "Verlauf"), onBack: { appState.page = .main })
 
             Divider().opacity(0.16)
 
@@ -624,11 +625,11 @@ struct WorkflowActiveView: View {
     /// modes say which step runs.
     private var runningMessage: String {
         guard case .running(let message) = workflow.phase, !message.isEmpty else {
-            return "Wird transkribiert \u{2026}"
+            return String(localized: "Wird transkribiert \u{2026}")
         }
         switch workflow.type {
         case .tapTalk, .localTapTalk:
-            return message == LocalTranscriptionService.slowPreparationMessage ? message : "Wird transkribiert \u{2026}"
+            return message == LocalTranscriptionService.slowPreparationMessage ? message : String(localized: "Wird transkribiert \u{2026}")
         default:
             return message
         }

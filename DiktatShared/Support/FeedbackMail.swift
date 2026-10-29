@@ -16,17 +16,17 @@ enum FeedbackMail {
         let version = info["CFBundleShortVersionString"] as? String ?? "?"
         let build = info["CFBundleVersion"] as? String ?? "?"
         let facts = [
-            "App: Diktat \(version) (Build \(build)) für \(platform)",
+            String(localized: "App: Diktat \(version) (Build \(build)) für \(platform)"),
             "System: \(systemName) \(ProcessInfo.processInfo.operatingSystemVersionString)",
-            "Gerät: \(deviceModel)",
+            String(localized: "Gerät: \(deviceModel)"),
         ] + details
 
         var components = URLComponents()
         components.scheme = "mailto"
         components.path = address
         components.queryItems = [
-            URLQueryItem(name: "subject", value: "Diktat Feedback (\(platform) \(version), Build \(build))"),
-            URLQueryItem(name: "body", value: "\n\n\n---\nBitte oberhalb der Linie schreiben. Diese Angaben helfen uns beim Nachvollziehen, du kannst sie auch löschen:\n" + facts.joined(separator: "\n")),
+            URLQueryItem(name: "subject", value: String(localized: "Diktat Feedback (\(platform) \(version), Build \(build))")),
+            URLQueryItem(name: "body", value: String(localized: "\n\n\n---\nBitte oberhalb der Linie schreiben. Diese Angaben helfen uns beim Nachvollziehen, du kannst sie auch löschen:\n") + facts.joined(separator: "\n")),
         ]
         return components.url
     }

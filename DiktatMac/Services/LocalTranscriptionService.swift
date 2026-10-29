@@ -26,7 +26,7 @@ struct LocalTranscriptionModel: Identifiable, Hashable {
 
     /// The same entry in the menu bar and in the settings.
     var pickerLabel: String {
-        isInstalled ? displayName : "\(displayName) (nicht installiert)"
+        isInstalled ? displayName : String(localized: "\(displayName) (nicht installiert)")
     }
 
     static func displayName(for modelName: String) -> String {
@@ -79,7 +79,7 @@ struct LocalModelRating: Equatable {
     let accuracy: Double
     let sizeLabel: String
     /// Which languages the model handles; all of them detect the language themselves.
-    var languages = "Erkennt die Sprache selbst, rund 100 Sprachen."
+    var languages = String(localized: "Erkennt die Sprache selbst, rund 100 Sprachen.")
 
     static func rating(for modelName: String) -> LocalModelRating? {
         if modelName == ParakeetTranscriber.modelName {
@@ -88,7 +88,7 @@ struct LocalModelRating: Equatable {
                 speed: legacy ? 0.95 : 0.93,
                 accuracy: legacy ? 0.77 : 0.80,
                 sizeLabel: legacy ? "~460 MB" : "~630 MB",
-                languages: "Erkennt die Sprache selbst: Deutsch, Englisch und 23 weitere europäische Sprachen."
+                languages: String(localized: "Erkennt die Sprache selbst: Deutsch, Englisch und 23 weitere europäische Sprachen.")
             )
         }
         if modelName.contains("large-v3-v20240930_turbo") {
@@ -112,11 +112,11 @@ enum LocalTranscriptionError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .modelMissing(let url):
-            return "Lokales Modell fehlt: \(url.path)"
+            return String(localized: "Lokales Modell fehlt: \(url.path)")
         case .downloadedModelInvalid(let modelName):
-            return "Das geladene Modell ist unvollständig: \(modelName)"
+            return String(localized: "Das geladene Modell ist unvollständig: \(modelName)")
         case .noText:
-            return "Das lokale Modell hat keinen Text erkannt."
+            return String(localized: "Das lokale Modell hat keinen Text erkannt.")
         }
     }
 }
@@ -410,7 +410,7 @@ actor LocalTranscriptionService {
         return try await shared.transcribe(audioURL: audioURL, language: language, modelName: modelName)
     }
 
-    static let slowPreparationMessage = "Sprachmodell wird vorbereitet. Nach einem macOS-Update dauert das einmalig einige Minuten, bitte Diktat nicht beenden."
+    static let slowPreparationMessage = String(localized: "Sprachmodell wird vorbereitet. Nach einem macOS-Update dauert das einmalig einige Minuten, bitte Diktat nicht beenden.")
 
     private func pipeline(modelName: String) async throws -> WhisperKit {
         let resolvedModelName = Self.resolvedModelName(modelName)

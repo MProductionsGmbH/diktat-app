@@ -23,8 +23,8 @@ enum AudioFileConverter {
 
         var errorDescription: String? {
             switch self {
-            case .unreadable: return "Diese Audiodatei kann Diktat nicht öffnen."
-            case .empty: return "Die Audiodatei ist leer."
+            case .unreadable: return String(localized: "Diese Audiodatei kann Diktat nicht öffnen.")
+            case .empty: return String(localized: "Die Audiodatei ist leer.")
             }
         }
     }

@@ -71,14 +71,14 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             audioRecorder?.isMeteringEnabled = true
             guard audioRecorder?.record() == true else {
                 audioRecorder = nil
-                errorMessage = "Die Aufnahme lie\u{00DF} sich nicht starten. Darf Diktat das Mikrofon nutzen?"
+                errorMessage = String(localized: "Die Aufnahme lie\u{00DF} sich nicht starten. Darf Diktat das Mikrofon nutzen?")
                 return
             }
             isRecording = true
             recordingURL = nil
             startMetering()
         } catch {
-            errorMessage = "Aufnahme konnte nicht gestartet werden: \(error.localizedDescription)"
+            errorMessage = String(localized: "Aufnahme konnte nicht gestartet werden: \(error.localizedDescription)")
         }
     }
 
@@ -139,7 +139,7 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if !flag {
             Task { @MainActor in
-                self.errorMessage = "Aufnahme fehlgeschlagen"
+                self.errorMessage = String(localized: "Aufnahme fehlgeschlagen")
             }
         }
     }

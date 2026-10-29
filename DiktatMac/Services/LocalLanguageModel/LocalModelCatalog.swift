@@ -35,9 +35,9 @@ struct LocalModelVariant: Identifiable, Equatable, Sendable {
     }
 
     func support(memoryGB: Int = Self.installedMemoryGB, appleSilicon: Bool = Self.isAppleSilicon) -> Support {
-        guard appleSilicon else { return .unavailable("Braucht einen Mac mit Apple-Chip.") }
+        guard appleSilicon else { return .unavailable(String(localized: "Braucht einen Mac mit Apple-Chip.")) }
         guard memoryGB >= minimumMemoryGB else {
-            return .unavailable("Braucht mindestens \(minimumMemoryGB) GB Arbeitsspeicher, dieser Mac hat \(memoryGB) GB.")
+            return .unavailable(String(localized: "Braucht mindestens \(minimumMemoryGB) GB Arbeitsspeicher, dieser Mac hat \(memoryGB) GB."))
         }
         return .available
     }
@@ -65,7 +65,7 @@ struct LocalModelVariant: Identifiable, Equatable, Sendable {
     static let gemma4E4B = LocalModelVariant(
         id: "gemma-4-e4b-it-4bit",
         name: "Gemma 4 E4B",
-        purpose: "Kompakt und schnell",
+        purpose: String(localized: "Kompakt und schnell"),
         repository: "mlx-community/gemma-4-e4b-it-4bit",
         revision: "475b9088d29754a3379866cf5aeb6b41acd313c2",
         files: [
@@ -85,7 +85,7 @@ struct LocalModelVariant: Identifiable, Equatable, Sendable {
     static let gemma4_12B = LocalModelVariant(
         id: "gemma-4-12b-it-4bit",
         name: "Gemma 4 12B",
-        purpose: "Gr\u{00FC}ndlicher, f\u{00FC}r lange Meetings",
+        purpose: String(localized: "Gr\u{00FC}ndlicher, f\u{00FC}r lange Meetings"),
         repository: "mlx-community/gemma-4-12B-it-4bit",
         revision: "73bcf09092aa277861d5a191b989b666f7f32e8f",
         files: [

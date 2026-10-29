@@ -91,25 +91,25 @@ final class MenuBarStatusController {
     private func tooltip(for status: MenuBarStatus) -> String {
         switch status {
         case .idle:
-            return "Diktat ist bereit"
+            return String(localized: "Diktat ist bereit")
         case .recording(let type):
-            return "\(type.displayName): Aufnahme läuft"
+            return String(localized: "\(type.displayName): Aufnahme läuft")
         case .processing(let type):
-            return "\(type.displayName): Verarbeitung läuft"
+            return String(localized: "\(type.displayName): Verarbeitung läuft")
         case .success(let type):
             if let type {
-                return "\(type.displayName): Fertig"
+                return String(localized: "\(type.displayName): Fertig")
             }
-            return "Diktat: Fertig"
+            return String(localized: "Diktat: Fertig")
         case .copied:
-            return "Diktat: Text liegt in der Zwischenablage"
+            return String(localized: "Diktat: Text liegt in der Zwischenablage")
         case .error(let type):
             if let type {
-                return "\(type.displayName): Fehler"
+                return String(localized: "\(type.displayName): Fehler")
             }
-            return "Diktat: Fehler"
+            return String(localized: "Diktat: Fehler")
         case .meeting:
-            return "Meeting: Aufnahme l\u{00E4}uft"
+            return String(localized: "Meeting: Aufnahme l\u{00E4}uft")
         }
     }
 

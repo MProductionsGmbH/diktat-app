@@ -73,7 +73,7 @@ struct KeyCombo: Codable, Hashable {
         let characters = event.charactersIgnoringModifiers?
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .uppercased() ?? ""
-        return characters.isEmpty ? "Taste \(keyCode)" : characters
+        return characters.isEmpty ? String(localized: "Taste \(keyCode)") : characters
     }
 
     private static let specialKeyLabels: [UInt32: String] = [

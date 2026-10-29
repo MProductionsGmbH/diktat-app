@@ -45,9 +45,9 @@ struct TextImprovementSettings: Codable {
 
         var displayName: String {
             switch self {
-            case .formal: return "Formell"
-            case .neutral: return "Neutral"
-            case .casual: return "Locker"
+            case .formal: return String(localized: "Formell")
+            case .neutral: return String(localized: "Neutral")
+            case .casual: return String(localized: "Locker")
             }
         }
     }
@@ -71,9 +71,9 @@ struct EmojiTextSettings: Codable {
 
         var displayName: String {
             switch self {
-            case .wenig: return "Wenig"
-            case .mittel: return "Mittel"
-            case .viel: return "Viel"
+            case .wenig: return String(localized: "Wenig")
+            case .mittel: return String(localized: "Mittel")
+            case .viel: return String(localized: "Viel")
             }
         }
     }

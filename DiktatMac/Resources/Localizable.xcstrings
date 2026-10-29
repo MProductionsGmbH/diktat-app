@@ -1,0 +1,6397 @@
+{
+  "sourceLanguage": "de",
+  "strings": {
+    "\n\n\n---\nBitte oberhalb der Linie schreiben. Diese Angaben helfen uns beim Nachvollziehen, du kannst sie auch löschen:\n": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\n\n\n---\nPlease write above the line. This information helps us understand the problem; you can delete it too:\n"
+          }
+        }
+      }
+    },
+    " Ist Gemma geladen, nutzen Meetings es, wenn kein eigener Server gewählt ist. Gemma 4 von Google, Lizenz Apache 2.0.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " Once Gemma is downloaded, meetings use it when no server of your own is chosen. Gemma 4 by Google, Apache 2.0 license."
+          }
+        }
+      }
+    },
+    "%@ (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ (%@)"
+          }
+        }
+      }
+    },
+    "%@ (nicht installiert)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ (not installed)"
+          }
+        }
+      }
+    },
+    "%@ Bis dahin übernimmt der Modell-Anbieter unten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Until then, the model provider below takes over."
+          }
+        }
+      }
+    },
+    "%@ Für die KI-Modi unten einen Modell-Anbieter mit API-Key hinterlegen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ For the AI modes below, add a model provider with an API key."
+          }
+        }
+      }
+    },
+    "%@ Stattdessen mit Apple Intelligence zusammengefasst.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ Summarized with Apple Intelligence instead."
+          }
+        }
+      }
+    },
+    "%@ auf %@ ist eingerichtet. Meetings nutzen es erst, wenn bei KI-Modi „Immer Modell-Anbieter“ steht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ at %@ is set up. Meetings only use it when AI modes is set to “Always model provider”."
+          }
+        }
+      }
+    },
+    "%@ auf %@. Meetings, Glättung und KI-Modi nutzen es. Der Text verlässt den Mac nicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ at %@. Meetings, cleanup and AI modes use it. The text does not leave your Mac."
+          }
+        }
+      }
+    },
+    "%@ auf diesem Mac konnte nicht zusammenfassen (%@). Läuft Ollama?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ on this Mac could not summarize (%@). Is Ollama running?"
+          }
+        }
+      }
+    },
+    "%@ drücken und sprechen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press %@ and speak"
+          }
+        }
+      }
+    },
+    "%@ drücken, sprechen, nochmal drücken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press %@, speak, press again"
+          }
+        }
+      }
+    },
+    "%@ halten und sprechen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold %@ and speak"
+          }
+        }
+      }
+    },
+    "%@ installieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install %@"
+          }
+        }
+      }
+    },
+    "%@ ist installiert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is installed"
+          }
+        }
+      }
+    },
+    "%@ ist installiert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is installed."
+          }
+        }
+      }
+    },
+    "%@ ist noch nicht installiert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is not installed yet."
+          }
+        }
+      }
+    },
+    "%@ kam beschädigt an. Bitte noch einmal laden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ arrived damaged. Please download it again."
+          }
+        }
+      }
+    },
+    "%@ konnte nicht zusammenfassen (%@).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ could not summarize (%@)."
+          }
+        }
+      }
+    },
+    "%@ laden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download %@"
+          }
+        }
+      }
+    },
+    "%@ läuft, hat aber noch kein Modell. In %@ ein Modell laden und erneut suchen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is running but has no model yet. Load a model in %@ and search again."
+          }
+        }
+      }
+    },
+    "%@ wird formuliert ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Writing with %@ ..."
+          }
+        }
+      }
+    },
+    "%@%@, einmalig. Danach erkennt Diktat Sprache ohne Internet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@%@, one time. After that Diktat recognizes speech without internet."
+          }
+        }
+      }
+    },
+    "%@, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@"
+          }
+        }
+      }
+    },
+    "%@, %@. Im Diktat-Menü unter Meeting.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@. In the Diktat menu under Meeting."
+          }
+        }
+      }
+    },
+    "%@. Richtwerte aus veröffentlichten Benchmarks, nicht auf diesem Mac gemessen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. Rough values from published benchmarks, not measured on this Mac."
+          }
+        }
+      }
+    },
+    "%@: Aufnahme läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: recording"
+          }
+        }
+      }
+    },
+    "%@: Der Text landet dort, wo dein Cursor steht. Ohne Apple-Tastatur legst du in den Einstellungen ein eigenes Kürzel fest.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: The text lands where your cursor is. Without an Apple keyboard, set your own shortcut in the settings."
+          }
+        }
+      }
+    },
+    "%@: Fehler": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: error"
+          }
+        }
+      }
+    },
+    "%@: Fertig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: done"
+          }
+        }
+      }
+    },
+    "%@: Verarbeitung läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: processing"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld"
+          }
+        }
+      }
+    },
+    "%lld %%. Du kannst Diktat weiter nutzen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %%. You can keep using Diktat."
+          }
+        }
+      }
+    },
+    "%lld Min.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        }
+      }
+    },
+    "%lld Personen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld people"
+          }
+        }
+      }
+    },
+    "%lld Std. %lld Min.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld h %lld min"
+          }
+        }
+      }
+    },
+    "%lld lokale Sprachmodelle installiert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld local language models installed."
+          }
+        }
+      }
+    },
+    "%lld:%@ min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld:%@ min"
+          }
+        }
+      }
+    },
+    "1 Person": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 person"
+          }
+        }
+      }
+    },
+    "1 lokales Sprachmodell installiert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 local language model installed."
+          }
+        }
+      }
+    },
+    "24 Std.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 h"
+          }
+        }
+      }
+    },
+    "24 Stunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 hours"
+          }
+        }
+      }
+    },
+    "7 Tage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days"
+          }
+        }
+      }
+    },
+    "API-Key (optional)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API key (optional)"
+          }
+        }
+      }
+    },
+    "API-Key einfügen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste API key"
+          }
+        }
+      }
+    },
+    "API-Key gespeichert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API key saved"
+          }
+        }
+      }
+    },
+    "Ab jetzt gehen die Texte der KI-Modi an %@, wenn Apple Intelligence nicht übernimmt. Die Sprache selbst bleibt auf diesem Mac. Es gelten die Bedingungen und Kosten des Anbieters. Der Key liegt im Schlüsselbund dieses Macs.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From now on, the texts of the AI modes go to %@ when Apple Intelligence does not take over. Speech itself stays on this Mac. The provider's terms and costs apply. The key is stored in this Mac's keychain."
+          }
+        }
+      }
+    },
+    "Abbrechen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Adresse": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Address"
+          }
+        }
+      }
+    },
+    "Adresse der Website, zum Beispiel mail.google.com. Die Regel gilt auch für Unteradressen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Address of the website, for example mail.google.com. The rule also covers subdomains."
+          }
+        }
+      }
+    },
+    "Alle sind einverstanden, starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everyone agrees, start"
+          }
+        }
+      }
+    },
+    "Alle zweieinhalb Minuten schreibt Diktat mit, was besprochen und entschieden wurde. Bleibt auf diesem Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every two and a half minutes Diktat writes down what was discussed and decided. Stays on this Mac."
+          }
+        }
+      }
+    },
+    "Alles bereit.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All set."
+          }
+        }
+      }
+    },
+    "Alles kopieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy everything"
+          }
+        }
+      }
+    },
+    "Alles löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all"
+          }
+        }
+      }
+    },
+    "Allgemein": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
+        }
+      }
+    },
+    "Am Zielort liegt bereits eine Diktat-Installation.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Diktat installation already exists at the destination."
+          }
+        }
+      }
+    },
+    "An den Text am Cursor anpassen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fit to the text at the cursor"
+          }
+        }
+      }
+    },
+    "Anbieter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Provider"
+          }
+        }
+      }
+    },
+    "Andere": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "Andere App …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other app …"
+          }
+        }
+      }
+    },
+    "Andere Datei ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other file ..."
+          }
+        }
+      }
+    },
+    "Andere Website …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other website …"
+          }
+        }
+      }
+    },
+    "Anmeldestart konnte nicht aktiviert werden. Lege Diktat in /Applications und versuche es erneut.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch at login could not be turned on. Put Diktat in /Applications and try again."
+          }
+        }
+      }
+    },
+    "Anmeldestart konnte nicht deaktiviert werden. Bitte versuche es erneut.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch at login could not be turned off. Please try again."
+          }
+        }
+      }
+    },
+    "Anmeldestart und lokale Daten wurden bereinigt. Jetzt Diktat beenden und aus /Applications löschen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch at login and local data were cleaned up. Now quit Diktat and delete it from /Applications."
+          }
+        }
+      }
+    },
+    "Anmeldestart wurde deaktiviert. Jetzt Diktat beenden und aus /Applications löschen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch at login was turned off. Now quit Diktat and delete it from /Applications."
+          }
+        }
+      }
+    },
+    "Anweisung (Standard)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instruction (default)"
+          }
+        }
+      }
+    },
+    "Anweisung (angepasst)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instruction (customized)"
+          }
+        }
+      }
+    },
+    "App oder Website hinzufügen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add app or website"
+          }
+        }
+      }
+    },
+    "App wählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose app"
+          }
+        }
+      }
+    },
+    "App: Diktat %@ (Build %@) für %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App: Diktat %@ (build %@) for %@"
+          }
+        }
+      }
+    },
+    "Apple Intelligence einschalten oder unter Modelle einen Modell-Anbieter mit API-Key hinterlegen. Wortgenaues Diktieren geht auch ohne.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on Apple Intelligence or add a model provider with an API key under Models. Word-for-word dictation also works without."
+          }
+        }
+      }
+    },
+    "Apple Intelligence hat den Text abgelehnt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence rejected the text."
+          }
+        }
+      }
+    },
+    "Apple Intelligence ist bereit. Umformulieren läuft auf diesem Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence is ready. Rewriting runs on this Mac."
+          }
+        }
+      }
+    },
+    "Apple Intelligence ist gerade nicht verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence is not available right now."
+          }
+        }
+      }
+    },
+    "Apple Intelligence ist in den Systemeinstellungen ausgeschaltet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence is turned off in System Settings."
+          }
+        }
+      }
+    },
+    "Apple Intelligence kann diese Sprache auf dem Gerät nicht bearbeiten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence cannot process this language on the device."
+          }
+        }
+      }
+    },
+    "Apple Intelligence konnte den Text nicht bearbeiten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence could not process the text."
+          }
+        }
+      }
+    },
+    "Apple Intelligence lädt das Modell noch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence is still loading the model."
+          }
+        }
+      }
+    },
+    "Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Work"
+          }
+        }
+      }
+    },
+    "Audiodatei": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio file"
+          }
+        }
+      }
+    },
+    "Audiodatei transkribieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribe audio file"
+          }
+        }
+      }
+    },
+    "Auf GitHub ansehen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View on GitHub"
+          }
+        }
+      }
+    },
+    "Auf diesem Mac liegen weitere Diktat-Kopien. Behalte nur eine, sonst startet die App womöglich doppelt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There are more Diktat copies on this Mac. Keep only one, otherwise the app may start twice."
+          }
+        }
+      }
+    },
+    "Auf diesem Mac nicht verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not available on this Mac."
+          }
+        }
+      }
+    },
+    "Auf diesem Mac suchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search on this Mac"
+          }
+        }
+      }
+    },
+    "Aufnahme & Einfügen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording & Pasting"
+          }
+        }
+      }
+    },
+    "Aufnahme fehlgeschlagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording failed"
+          }
+        }
+      }
+    },
+    "Aufnahme konnte nicht gestartet werden: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording could not be started: %@"
+          }
+        }
+      }
+    },
+    "Aufnahme läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording"
+          }
+        }
+      }
+    },
+    "Aufnahme läuft ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording ..."
+          }
+        }
+      }
+    },
+    "Aufnahme läuft, mit Ton des Macs": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording, with the Mac's sound"
+          }
+        }
+      }
+    },
+    "Aufnahme läuft. Klicken stoppt sie.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording. Click to stop."
+          }
+        }
+      }
+    },
+    "Aufnahme läuft. Zum Stoppen klicken.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording. Click to stop."
+          }
+        }
+      }
+    },
+    "Aufnahme starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start recording"
+          }
+        }
+      }
+    },
+    "Aufnahme stoppen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop recording"
+          }
+        }
+      }
+    },
+    "Aufnahme unten am Bildschirm zeigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show recording at the bottom of the screen"
+          }
+        }
+      }
+    },
+    "Aufnehmen braucht das Mikrofon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording needs the microphone"
+          }
+        }
+      }
+    },
+    "Aus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      }
+    },
+    "Aus: nur das Transkript mit Personen, schneller. Die Zusammenfassung geht auch später.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off: only the transcript with speakers, faster. The summary can still be written later."
+          }
+        }
+      }
+    },
+    "Auto-Updates laufen erst sauber, wenn Diktat aus /Applications gestartet wird.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic updates only run cleanly when Diktat is started from /Applications."
+          }
+        }
+      }
+    },
+    "Automatisch erstellt. Bitte vor allem die Zuständigkeiten bei den To-dos kurz prüfen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Created automatically. Please briefly check the owners of the to-dos in particular."
+          }
+        }
+      }
+    },
+    "Automatisch nach Updates suchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check for updates automatically"
+          }
+        }
+      }
+    },
+    "Automatische Absätze": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic paragraphs"
+          }
+        }
+      }
+    },
+    "Bedienungshilfen öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Accessibility"
+          }
+        }
+      }
+    },
+    "Beenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit"
+          }
+        }
+      }
+    },
+    "Beenden und auswerten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop and evaluate"
+          }
+        }
+      }
+    },
+    "Bei langen Meetings dauert das ein paar Minuten, alles läuft auf diesem Mac. Beim ersten Mal lädt Diktat dazu einmalig das Modell für die Stimmen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For long meetings this takes a few minutes, everything runs on this Mac. The first time, Diktat downloads the model for the voices once."
+          }
+        }
+      }
+    },
+    "Bei zugeklapptem MacBook ein Headset oder externes Mikrofon anschließen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With the MacBook closed, connect a headset or an external microphone."
+          }
+        }
+      }
+    },
+    "Beim Anmelden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At login"
+          }
+        }
+      }
+    },
+    "Berechtigungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permissions"
+          }
+        }
+      }
+    },
+    "Beta": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beta"
+          }
+        }
+      }
+    },
+    "Beta, noch in Erprobung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beta, still being tested"
+          }
+        }
+      }
+    },
+    "Bitte vorher alle Anwesenden informieren und um ihr Einverständnis bitten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please inform everyone present beforehand and ask for their consent."
+          }
+        }
+      }
+    },
+    "Brauchen Apple Intelligence, ein lokales Sprachmodell (Einstellungen, Modelle) oder ein Modell auf diesem Mac, etwa Ollama.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Need Apple Intelligence, a local language model (Settings, Models) or a model on this Mac, such as Ollama."
+          }
+        }
+      }
+    },
+    "Braucht Apple Intelligence oder einen API-Key.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Needs Apple Intelligence or an API key."
+          }
+        }
+      }
+    },
+    "Braucht Apple Intelligence oder einen Modell-Anbieter. Bis dahin gilt „Leicht“.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Needs Apple Intelligence or a model provider. Until then “Light” applies."
+          }
+        }
+      }
+    },
+    "Braucht einen Mac mit Apple-Chip.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Needs a Mac with an Apple chip."
+          }
+        }
+      }
+    },
+    "Braucht iOS 26 oder macOS 26 mit Apple Intelligence.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Needs iOS 26 or macOS 26 with Apple Intelligence."
+          }
+        }
+      }
+    },
+    "Braucht mindestens %lld GB Arbeitsspeicher, dieser Mac hat %lld GB.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Needs at least %lld GB of memory, this Mac has %lld GB."
+          }
+        }
+      }
+    },
+    "Damit Diktat hört, was du sagst. Die Aufnahme bleibt auf diesem Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So Diktat hears what you say. The recording stays on this Mac."
+          }
+        }
+      }
+    },
+    "Damit der Text dort landet, wo dein Cursor steht. macOS fragt dazu nach den Bedienungshilfen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So the text lands where your cursor is. macOS asks for Accessibility for this."
+          }
+        }
+      }
+    },
+    "Danach zusammenfassen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summarize afterwards"
+          }
+        }
+      }
+    },
+    "Dann gehen Wörter verloren. In den Systemeinstellungen unter Ton, Eingang lauter stellen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Then words get lost. In System Settings under Sound, Input, turn the input volume up."
+          }
+        }
+      }
+    },
+    "Das Ausgabegerät ist weg, der Ton des Macs lässt sich gerade nicht aufnehmen. Diktat versucht es weiter, das Mikrofon läuft.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The output device is gone, so the Mac's sound cannot be recorded right now. Diktat keeps trying, the microphone is running."
+          }
+        }
+      }
+    },
+    "Das Diktat-Kürzel (%@) kann je App oder Website automatisch einen anderen Modus nutzen, zum Beispiel Diktat KI-Schreibstil in Gmail. Überall sonst bleibt es wortgenau, und die übrigen Kürzel bleiben wie sie sind.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Diktat shortcut (%@) can automatically use a different mode per app or website, for example Diktat AI Writing Style in Gmail. Everywhere else it stays word for word, and the other shortcuts stay as they are."
+          }
+        }
+      }
+    },
+    "Das Meeting ließ sich nicht sichern, zum Beispiel weil der Speicher voll ist. Die Aufnahme bleibt erhalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The meeting could not be saved, for example because the storage is full. The recording is kept."
+          }
+        }
+      }
+    },
+    "Das Transkript geht dafür an deinen Modell-Anbieter. Ohne Anbieter bleibt es bei „Leicht“.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For this the transcript goes to your model provider. Without a provider it stays at “Light”."
+          }
+        }
+      }
+    },
+    "Das ausgewählte Modell wird beim Installieren lokal gespeichert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The selected model is stored locally when you install it."
+          }
+        }
+      }
+    },
+    "Das geladene Modell ist unvollständig: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The loaded model is incomplete: %@"
+          }
+        }
+      }
+    },
+    "Das gewählte Mikrofon ist nicht angeschlossen. Diktat nimmt so lange das Mikrofon des Systems.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The selected microphone is not connected. Until it is, Diktat uses the system microphone."
+          }
+        }
+      }
+    },
+    "Das gewählte Mikrofon liefert kein Signal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The selected microphone delivers no signal."
+          }
+        }
+      }
+    },
+    "Das gewählte Mikrofon lässt sich nicht öffnen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The selected microphone cannot be opened."
+          }
+        }
+      }
+    },
+    "Das lokale Modell hat keinen Text erkannt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The local model did not recognize any text."
+          }
+        }
+      }
+    },
+    "Daten konnten nicht verschlüsselt werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data could not be encrypted."
+          }
+        }
+      }
+    },
+    "Der API-Key wurde abgelehnt. Bitte in den Einstellungen prüfen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The API key was rejected. Please check it in the settings."
+          }
+        }
+      }
+    },
+    "Der Assistent führt durch Mikrofon, Einfügen und Sprachmodell. Diktat transkribiert direkt auf diesem Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The assistant guides you through microphone, pasting and language model. Diktat transcribes directly on this Mac."
+          }
+        }
+      }
+    },
+    "Der Download wurde abgelehnt (HTTP %lld). Bitte später noch einmal versuchen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The download was rejected (HTTP %lld). Please try again later."
+          }
+        }
+      }
+    },
+    "Der Installationsort konnte nicht sicher erkannt werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The install location could not be determined reliably."
+          }
+        }
+      }
+    },
+    "Der Modell-Anbieter hat die Anfrage abgelehnt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The model provider rejected the request."
+          }
+        }
+      }
+    },
+    "Der Name ersetzt „Person %lld“ im Transkript.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The name replaces “Person %lld” in the transcript."
+          }
+        }
+      }
+    },
+    "Der Text ist zu lang für Apple Intelligence auf dem Gerät.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The text is too long for Apple Intelligence on the device."
+          }
+        }
+      }
+    },
+    "Der Text landet direkt am Cursor.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The text lands right at the cursor."
+          }
+        }
+      }
+    },
+    "Der Ton des Macs ließ sich nicht auswerten, ausgewertet wird nur das Mikrofon. (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mac's sound could not be evaluated, only the microphone is evaluated. (%@)"
+          }
+        }
+      }
+    },
+    "Der Ton des Macs lässt sich nicht aufnehmen, es läuft nur das Mikrofon. (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mac's sound cannot be recorded, only the microphone is running. (%@)"
+          }
+        }
+      }
+    },
+    "Der Zielordner /Applications ist auf diesem Mac nicht beschreibbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The target folder /Applications is not writable on this Mac."
+          }
+        }
+      }
+    },
+    "Der Zielordner /Applications ist nicht verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The target folder /Applications is not available."
+          }
+        }
+      }
+    },
+    "Die Adresse des Modell-Anbieters ist ungültig.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The address of the model provider is invalid."
+          }
+        }
+      }
+    },
+    "Die Antwort des Modells wurde zu lang.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The model's answer became too long."
+          }
+        }
+      }
+    },
+    "Die Antwort war zu lang und wurde abgeschnitten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The answer was too long and was cut off."
+          }
+        }
+      }
+    },
+    "Die Audiodatei ist leer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The audio file is empty."
+          }
+        }
+      }
+    },
+    "Die Aufnahme ließ sich nicht starten. Darf Diktat das Mikrofon nutzen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The recording could not be started. Is Diktat allowed to use the microphone?"
+          }
+        }
+      }
+    },
+    "Die Aufnahme ließ sich nicht starten: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The recording could not be started: %@"
+          }
+        }
+      }
+    },
+    "Die Aufnahme wurde unterbrochen, zum Beispiel weil das Mikrofon getrennt wurde. Ausgewertet wird, was bis dahin aufgenommen wurde.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The recording was interrupted, for example because the microphone was disconnected. What was recorded until then will be evaluated."
+          }
+        }
+      }
+    },
+    "Die Beispiele zeigen das Ziel. Ein Sprachmodell formuliert jedes Mal ein wenig anders.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The examples show the goal. A language model words things a little differently every time."
+          }
+        }
+      }
+    },
+    "Die Beispiele zeigen dieselbe Aufnahme. Ohne KI-Schreibstil ändert der Ton nur den Punkt am Ende. Mit KI-Schreibstil formuliert das Sprachmodell auch im gewählten Ton, jedes Mal ein wenig anders.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The examples show the same recording. Without AI writing style the tone only changes the period at the end. With AI writing style the language model also words the text in the chosen tone, a little differently every time."
+          }
+        }
+      }
+    },
+    "Die Datei wird auf diesem Mac transkribiert und nicht verändert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file is transcribed on this Mac and not changed."
+          }
+        }
+      }
+    },
+    "Die Notizen sind zu lang für das Modell geworden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The notes have become too long for the model."
+          }
+        }
+      }
+    },
+    "Die Stimmen ließen sich nicht erkennen. Beim ersten Meeting lädt Diktat dafür ein Modell und braucht Internet. (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The voices could not be recognized. At the first meeting Diktat downloads a model for this and needs internet. (%@)"
+          }
+        }
+      }
+    },
+    "Die Taste mit der Weltkugel startet Diktat, ohne zweite Taste. Diktat wartet dafür einen Moment (0,15 s), um fn allein von fn + Shift usw. zu unterscheiden. In macOS unter Systemeinstellungen > Tastatur „🌐-Taste drücken für“ auf „Nichts tun“ stellen, sonst öffnet sich der Emoji-Picker.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The globe key starts Diktat without a second key. Diktat waits a moment (0.15 s) to tell fn alone apart from fn + Shift etc. In macOS under System Settings > Keyboard, set “Press 🌐 key to” to “Do Nothing”, otherwise the emoji picker opens."
+          }
+        }
+      }
+    },
+    "Die Texte der KI-Modi gehen an das Modell auf diesem Mac, wenn Apple Intelligence nicht übernimmt. Sie verlassen den Mac nicht. Das Programm muss dazu laufen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From now on, the texts of the AI modes go to the model on this Mac when Apple Intelligence does not take over. They do not leave the Mac. The program has to be running for this."
+          }
+        }
+      }
+    },
+    "Die aktuelle App-Installation wurde nicht gefunden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The current app installation was not found."
+          }
+        }
+      }
+    },
+    "Die ersten Notizen kommen nach etwa zweieinhalb Minuten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The first notes appear after about two and a half minutes."
+          }
+        }
+      }
+    },
+    "Diese Audiodatei kann Diktat nicht öffnen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat cannot open this audio file."
+          }
+        }
+      }
+    },
+    "Diese Kopie ist korrekt. Zusätzliche Kopien solltest du später entfernen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This copy is correct. You should remove additional copies later."
+          }
+        }
+      }
+    },
+    "Dieser Mac hat %lld GB Arbeitsspeicher.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Mac has %lld GB of memory."
+          }
+        }
+      }
+    },
+    "Dieser Mac hat keinen Apple-Chip.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Mac does not have an Apple chip."
+          }
+        }
+      }
+    },
+    "Dieses Gerät unterstützt Apple Intelligence nicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This device does not support Apple Intelligence."
+          }
+        }
+      }
+    },
+    "Dieses Kürzel ist bereits von macOS oder einer anderen App belegt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This shortcut is already used by macOS or another app."
+          }
+        }
+      }
+    },
+    "Diktat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat"
+          }
+        }
+      }
+    },
+    "Diktat :-)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat :-)"
+          }
+        }
+      }
+    },
+    "Diktat Feedback (%@ %@, Build %@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat feedback (%@ %@, build %@)"
+          }
+        }
+      }
+    },
+    "Diktat KI-Schreibstil": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat AI Writing Style"
+          }
+        }
+      }
+    },
+    "Diktat Lokal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat Local"
+          }
+        }
+      }
+    },
+    "Diktat WTF": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat WTF"
+          }
+        }
+      }
+    },
+    "Diktat automatisch starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start Diktat automatically"
+          }
+        }
+      }
+    },
+    "Diktat darf das Mikrofon nicht nutzen. Bitte in den Systemeinstellungen unter Datenschutz & Sicherheit > Mikrofon erlauben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is not allowed to use the microphone. Please allow it in System Settings under Privacy & Security > Microphone."
+          }
+        }
+      }
+    },
+    "Diktat darf das Mikrofon nutzen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat may use the microphone."
+          }
+        }
+      }
+    },
+    "Diktat darf den Text dort einfügen, wo dein Cursor steht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat may paste the text where your cursor is."
+          }
+        }
+      }
+    },
+    "Diktat erkennt, wohin dein Text geht, und schreibt ihn im passenden Ton.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat recognizes where your text is going and writes it in the fitting tone."
+          }
+        }
+      }
+    },
+    "Diktat hält sich über Sparkle aktuell.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat keeps itself up to date through Sparkle."
+          }
+        }
+      }
+    },
+    "Diktat ist Open Source. Ein Stern auf GitHub hilft.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is open source. A star on GitHub helps."
+          }
+        }
+      }
+    },
+    "Diktat ist bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is ready"
+          }
+        }
+      }
+    },
+    "Diktat ist in den Systemeinstellungen für das Mikrofon nicht erlaubt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is not allowed to use the microphone in System Settings."
+          }
+        }
+      }
+    },
+    "Diktat jetzt starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start Diktat now"
+          }
+        }
+      }
+    },
+    "Diktat konnte nicht nach /Applications kopiert werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat could not be copied to /Applications."
+          }
+        }
+      }
+    },
+    "Diktat liegt am richtigen Ort.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is in the right place."
+          }
+        }
+      }
+    },
+    "Diktat liegt noch in ~/Applications.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is still in ~/Applications."
+          }
+        }
+      }
+    },
+    "Diktat liegt noch nicht in /Applications.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is not in /Applications yet."
+          }
+        }
+      }
+    },
+    "Diktat muss in /Applications liegen, damit der Anmeldestart verfügbar ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat must be in /Applications for launch at login to be available."
+          }
+        }
+      }
+    },
+    "Diktat nimmt das Gespräch im Raum über das Mikrofon auf, erkennt, wer spricht, und schreibt auf Wunsch eine Zusammenfassung mit To-dos. Alles läuft auf diesem Mac, die Aufnahme wird nach der Auswertung gelöscht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat records the conversation in the room through the microphone, recognizes who is speaking and, if you like, writes a summary with to-dos. Everything runs on this Mac, the recording is deleted after the evaluation."
+          }
+        }
+      }
+    },
+    "Diktat nimmt ein Meeting auf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is recording a meeting"
+          }
+        }
+      }
+    },
+    "Diktat schreibt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is writing"
+          }
+        }
+      }
+    },
+    "Diktat startet beim Anmelden automatisch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat starts automatically at login."
+          }
+        }
+      }
+    },
+    "Diktat startet nicht automatisch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat does not start automatically."
+          }
+        }
+      }
+    },
+    "Diktat transkribiert immer auf diesem Mac. Das Audio verlässt das Gerät nicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat always transcribes on this Mac. The audio does not leave the device."
+          }
+        }
+      }
+    },
+    "Diktat von diesem Mac entfernen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove Diktat from this Mac …"
+          }
+        }
+      }
+    },
+    "Diktat wertet ein Meeting aus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat is evaluating a meeting"
+          }
+        }
+      }
+    },
+    "Diktat: Fehler": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat: error"
+          }
+        }
+      }
+    },
+    "Diktat: Fertig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat: done"
+          }
+        }
+      }
+    },
+    "Diktat: Text liegt in der Zwischenablage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat: text is in the clipboard"
+          }
+        }
+      }
+    },
+    "Direktes Einfügen ist noch nicht freigegeben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direct pasting is not allowed yet."
+          }
+        }
+      }
+    },
+    "Download %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download %@"
+          }
+        }
+      }
+    },
+    "Download %lld %%": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download %lld %%"
+          }
+        }
+      }
+    },
+    "Download startet...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download starting..."
+          }
+        }
+      }
+    },
+    "Drücken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press"
+          }
+        }
+      }
+    },
+    "Drücken ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press ..."
+          }
+        }
+      }
+    },
+    "Du kannst das Menü schließen, die Aufnahme läuft weiter. Das Symbol in der Menüleiste zeigt sie an. Bitte den Mac nicht zuklappen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can close the menu, the recording keeps running. The icon in the menu bar shows it. Please do not close the Mac."
+          }
+        }
+      }
+    },
+    "E-Mail": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email"
+          }
+        }
+      }
+    },
+    "Eigene Adresse": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom address"
+          }
+        }
+      }
+    },
+    "Eigene Anweisung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom instruction"
+          }
+        }
+      }
+    },
+    "Eigene Anweisung (aktiv)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom instruction (active)"
+          }
+        }
+      }
+    },
+    "Eigenes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom"
+          }
+        }
+      }
+    },
+    "Eigenes Kürzel entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove custom shortcut"
+          }
+        }
+      }
+    },
+    "Eigenes Kürzel rechts festlegen, z. B. ⌃⌥D oder F13. Es ersetzt das fn-Kürzel dieses Modus. Nötig für externe Tastaturen, dort funktioniert fn nicht. ⌃Space und ⌃⌥Space belegt macOS für die Eingabequelle.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set your own shortcut on the right, e.g. ⌃⌥D or F13. It replaces the fn shortcut of this mode. Needed for external keyboards, where fn does not work. macOS reserves ⌃Space and ⌃⌥Space for the input source."
+          }
+        }
+      }
+    },
+    "Eigenes Tastenkürzel festlegen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set custom shortcut"
+          }
+        }
+      }
+    },
+    "Eigennamen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom terms"
+          }
+        }
+      }
+    },
+    "Eigennamen automatisch korrigieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Correct custom terms automatically"
+          }
+        }
+      }
+    },
+    "Ein Abschnitt ließ sich nicht in die Notizen übernehmen. Im Transkript nach dem Meeting fehlt nichts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A section could not be added to the notes. Nothing is missing in the transcript after the meeting."
+          }
+        }
+      }
+    },
+    "Ein Meeting im Raum aufnehmen: Transkript mit Personen und auf Wunsch Zusammenfassung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record a meeting in the room: transcript with speakers and, if you like, a summary"
+          }
+        }
+      }
+    },
+    "Ein Modell, das auf diesem Mac schon läuft, zum Beispiel Qwen über Ollama. Kein zusätzlicher Download. Adresse und Modellname trägst du unten unter Modell-Anbieter ein.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A model that already runs on this Mac, for example Qwen through Ollama. No additional download. You enter the address and model name below under Model provider."
+          }
+        }
+      }
+    },
+    "Ein Sprachmodell schreibt den Text neu: Rechtschreibung, Grammatik, Formulierung und Lesefluss, im Ton, den du unten unter Stil je Kontext wählst. Die Bedeutung bleibt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A language model rewrites the text: spelling, grammar, wording and flow, in the tone you choose below under Style per context. The meaning stays."
+          }
+        }
+      }
+    },
+    "Eine kleine lila Anzeige bewegt sich mit deiner Stimme, solange Diktat aufnimmt und schreibt. Ein Klick darauf stoppt die Aufnahme.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A small purple indicator moves with your voice while Diktat records and writes. A click on it stops the recording."
+          }
+        }
+      }
+    },
+    "Einfügen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste"
+          }
+        }
+      }
+    },
+    "Einfügen braucht Bedienungshilfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasting needs Accessibility"
+          }
+        }
+      }
+    },
+    "Einfügen erlauben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow pasting"
+          }
+        }
+      }
+    },
+    "Eingefügt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasted"
+          }
+        }
+      }
+    },
+    "Einmal drücken zum Starten, nochmal oder Escape zum Stoppen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press once to start, press again or Escape to stop"
+          }
+        }
+      }
+    },
+    "Einmal kurz, dann geht es weiter wie gewohnt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Once briefly, then it continues as usual."
+          }
+        }
+      }
+    },
+    "Einrichten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up"
+          }
+        }
+      }
+    },
+    "Einrichtung nötig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setup needed"
+          }
+        }
+      }
+    },
+    "Einrichtung starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start setup"
+          }
+        }
+      }
+    },
+    "Einstellungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Einstellungen, API-Keys und Sprachmodelle löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete settings, API keys and language models"
+          }
+        }
+      }
+    },
+    "Eintrag löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete entry"
+          }
+        }
+      }
+    },
+    "Emoji-Dichte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emoji density"
+          }
+        }
+      }
+    },
+    "Emojis werden eingefügt ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adding emojis ..."
+          }
+        }
+      }
+    },
+    "Entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove"
+          }
+        }
+      }
+    },
+    "Entfernt auch den Anmeldestart. Danach Diktat beenden und die App aus /Applications löschen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Also removes launch at login. Afterwards quit Diktat and delete the app from /Applications."
+          }
+        }
+      }
+    },
+    "Entfernt „ähm“, Stottern und doppelt gesagte Satzteile. Rein regelbasiert, ohne KI.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removes “um”, stuttering and phrases said twice. Purely rule-based, no AI."
+          }
+        }
+      }
+    },
+    "Ergebnisse bleiben %@ nur auf diesem Mac, verschlüsselt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Results stay only on this Mac for %@, encrypted."
+          }
+        }
+      }
+    },
+    "Erkennt die Sprache selbst, rund 100 Sprachen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detects the language itself, around 100 languages."
+          }
+        }
+      }
+    },
+    "Erkennt die Sprache selbst: Deutsch, Englisch und 23 weitere europäische Sprachen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detects the language itself: German, English and 23 more European languages."
+          }
+        }
+      }
+    },
+    "Erlaubt. Das Mikrofon ist aber sehr leise eingestellt (%lld %%), in den Systemeinstellungen unter Ton, Eingang lauter stellen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed. But the microphone is set very quiet (%lld %%), turn the input volume up in System Settings under Sound, Input."
+          }
+        }
+      }
+    },
+    "Erlaubt. Gerade ist aber kein Mikrofon da, bei zugeklapptem MacBook ein Headset anschließen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed. But there is no microphone right now, with the MacBook closed connect a headset."
+          }
+        }
+      }
+    },
+    "Erneut auswerten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evaluate again"
+          }
+        }
+      }
+    },
+    "Erneut laden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reload"
+          }
+        }
+      }
+    },
+    "Erneut prüfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check again"
+          }
+        }
+      }
+    },
+    "Ersetzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace"
+          }
+        }
+      }
+    },
+    "Ersetzen ging hier nicht. Der wortgenaue Text liegt in der Zwischenablage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replacing did not work here. The word-for-word text is in the clipboard."
+          }
+        }
+      }
+    },
+    "Ersetzen ging in dieser App nicht. Der wortgenaue Text liegt in der Zwischenablage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replacing did not work in this app. The word-for-word text is in the clipboard."
+          }
+        }
+      }
+    },
+    "Ersetzt den eben eingefügten Text durch dein wörtliches Diktat.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replaces the text just pasted with your word-for-word dictation."
+          }
+        }
+      }
+    },
+    "Ersetzt durch dein eigenes Kürzel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replaced by your own shortcut"
+          }
+        }
+      }
+    },
+    "Ersetzung entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove replacement"
+          }
+        }
+      }
+    },
+    "Ersetzungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replacements"
+          }
+        }
+      }
+    },
+    "Fasse zusammen ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summarizing ..."
+          }
+        }
+      }
+    },
+    "Feedback senden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send feedback"
+          }
+        }
+      }
+    },
+    "Fehler vom Modell-Anbieter (%lld)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error from the model provider (%lld)"
+          }
+        }
+      }
+    },
+    "Fertig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "Formell": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formal"
+          }
+        }
+      }
+    },
+    "Fortsetzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
+          }
+        }
+      }
+    },
+    "Frage für den Chat kopieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy question for the chat"
+          }
+        }
+      }
+    },
+    "Freigabe zurücksetzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset permission"
+          }
+        }
+      }
+    },
+    "Frust rein. Entspannt raus.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frustration in. Calm out."
+          }
+        }
+      }
+    },
+    "Funktioniert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Works"
+          }
+        }
+      }
+    },
+    "Füllwörter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filler words"
+          }
+        }
+      }
+    },
+    "Für %@ fehlt der API-Key.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The API key for %@ is missing."
+          }
+        }
+      }
+    },
+    "Für Auto-Updates fehlen noch Feed-URL oder öffentlicher Sparkle-Key im Build.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For automatic updates the feed URL or the public Sparkle key is still missing in the build."
+          }
+        }
+      }
+    },
+    "Für Begriffe, die anders klingen, als sie geschrieben werden. Zum Beispiel wird aus „n acht n“ immer „n8n“.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For terms that sound different from how they are written. For example “n eight n” always becomes “n8n”."
+          }
+        }
+      }
+    },
+    "Für Meetings braucht Diktat Parakeet. Bitte in den Einstellungen unter Sprachmodell laden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For meetings Diktat needs Parakeet. Please download it in the settings under Language model."
+          }
+        }
+      }
+    },
+    "Für Team-Rollouts und saubere Updates sollte Diktat nur aus /Applications laufen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For team rollouts and clean updates, Diktat should only run from /Applications."
+          }
+        }
+      }
+    },
+    "Für die Zusammenfassung braucht Diktat Apple Intelligence, ein lokales Sprachmodell (Einstellungen, Modelle) oder ein Modell auf diesem Mac, etwa Ollama. Meetings gehen nie an einen Modell-Anbieter im Internet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For the summary Diktat needs Apple Intelligence, a local language model (Settings, Models) or a model on this Mac, such as Ollama. Meetings never go to a model provider on the internet."
+          }
+        }
+      }
+    },
+    "Für diesen Modus braucht Diktat Apple Intelligence oder einen API-Key in den Einstellungen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For this mode Diktat needs Apple Intelligence or an API key in the settings."
+          }
+        }
+      }
+    },
+    "Für stabile Login-Items und Updates nur diese Kopie weiterverwenden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For stable login items and updates, keep using only this copy."
+          }
+        }
+      }
+    },
+    "Genauigkeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accuracy"
+          }
+        }
+      }
+    },
+    "Gerade nicht möglich: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not possible right now: %@"
+          }
+        }
+      }
+    },
+    "Gerät zuerst": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Device first"
+          }
+        }
+      }
+    },
+    "Gerät: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Device: %@"
+          }
+        }
+      }
+    },
+    "Geschrieben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Written"
+          }
+        }
+      }
+    },
+    "Gesprochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spoken"
+          }
+        }
+      }
+    },
+    "Gesprochen rein. Geschrieben raus.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech in. Writing out."
+          }
+        }
+      }
+    },
+    "Gilt in Mail, Outlook, Spark und anderen Mail-Programmen, auch Gmail im Browser.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applies in Mail, Outlook, Spark and other mail apps, also Gmail in the browser."
+          }
+        }
+      }
+    },
+    "Gilt in Slack und Teams, auch im Browser.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applies in Slack and Teams, also in the browser."
+          }
+        }
+      }
+    },
+    "Gilt in WhatsApp, Telegram, Signal, Discord und Nachrichten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applies in WhatsApp, Telegram, Signal, Discord and Messages."
+          }
+        }
+      }
+    },
+    "Gilt in allen anderen Programmen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applies in all other apps."
+          }
+        }
+      }
+    },
+    "Gilt, wenn die Glättung auf „KI-Schreibstil“ steht, und für Diktat KI-Schreibstil in den Regeln pro App. Den Ton stellst du oben je Kontext ein.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applies when cleanup is set to “AI style”, and for Diktat AI Writing Style in the rules per app. You set the tone per context above."
+          }
+        }
+      }
+    },
+    "Glättung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleanup"
+          }
+        }
+      }
+    },
+    "Gründlicher, für lange Meetings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More thorough, for long meetings"
+          }
+        }
+      }
+    },
+    "Hallo Alex, es war wirklich schön, heute mit dir zu sprechen. Ich melde mich nächste Woche bezüglich des Termins.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hello Alex, it was really nice to speak with you today. I will get back to you next week regarding the appointment."
+          }
+        }
+      }
+    },
+    "Halten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold"
+          }
+        }
+      }
+    },
+    "Hey Alex, es war wirklich schön, heute mit dir zu reden. Ich melde mich nächste Woche wegen des Termins.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey Alex, it was really nice talking to you today. I'll get back to you next week about the appointment."
+          }
+        }
+      }
+    },
+    "Hey Alex, war echt schön, heute mit dir zu reden. Ich melde mich nächste Woche wegen dem Termin.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey Alex, it was really nice talking to you today. I'll get back to you next week about the appointment."
+          }
+        }
+      }
+    },
+    "Hey Alex, war echt schön, heute mit dir zu reden. Ich melde mich nächste Woche wegen des Termins.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hey Alex, really nice talking to you today. I'll get back to you next week about the appointment."
+          }
+        }
+      }
+    },
+    "Hinzufügen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        }
+      }
+    },
+    "Ich": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Me"
+          }
+        }
+      }
+    },
+    "Ich möchte fragen, ob wir den Termin auf Freitag verschieben können.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I would like to ask whether we can move the appointment to Friday."
+          }
+        }
+      }
+    },
+    "Ich wollte noch sagen, dass das Meeting morgen beginnt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I wanted to say that the meeting starts tomorrow."
+          }
+        }
+      }
+    },
+    "Ich würde dieses Meeting gern mit Diktat aufnehmen und auf meinem Mac transkribieren und zusammenfassen lassen. Ton und Text bleiben auf meinem Mac, die Aufnahme wird nach der Auswertung gelöscht. Ist das für alle in Ordnung?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I would like to record this meeting with Diktat and have it transcribed and summarized on my Mac. Sound and text stay on my Mac, the recording is deleted after the evaluation. Is that okay with everyone?"
+          }
+        }
+      }
+    },
+    "Ich ähm wollte wollte noch sagen, dass das Meeting morgen morgen beginnt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I um wanted to to say that the meeting starts tomorrow tomorrow."
+          }
+        }
+      }
+    },
+    "Im Finder zeigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show in Finder"
+          }
+        }
+      }
+    },
+    "Im Modellordner fehlt %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is missing in the model folder."
+          }
+        }
+      }
+    },
+    "Immer Modell-Anbieter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Always model provider"
+          }
+        }
+      }
+    },
+    "Immer lokal auf diesem Mac. Die Sprache verlässt ihn nie.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Always local on this Mac. Speech never leaves it."
+          }
+        }
+      }
+    },
+    "In den Einstellungen unter „Aufnahme & Einfügen“ einschalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn it on in the settings under “Recording & Pasting”."
+          }
+        }
+      }
+    },
+    "In den Systemeinstellungen bei Bedienungshilfen Diktat einschalten. Danach geht es hier von selbst weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In System Settings, turn on Diktat under Accessibility. After that it continues here by itself."
+          }
+        }
+      }
+    },
+    "In den Systemeinstellungen ist das Mikrofon für Diktat aus. Dort unter Datenschutz & Sicherheit > Mikrofon einschalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In System Settings the microphone is off for Diktat. Turn it on there under Privacy & Security > Microphone."
+          }
+        }
+      }
+    },
+    "In der Aufnahme wurde keine Sprache erkannt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No speech was recognized in the recording."
+          }
+        }
+      }
+    },
+    "In der Datei wurde keine Sprache erkannt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No speech was recognized in the file."
+          }
+        }
+      }
+    },
+    "In der Zwischenablage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the clipboard"
+          }
+        }
+      }
+    },
+    "In drei Schritten startklar. Alles läuft auf diesem Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready in three steps. Everything runs on this Mac."
+          }
+        }
+      }
+    },
+    "Installation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installation"
+          }
+        }
+      }
+    },
+    "Jetzt aktualisieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update now"
+          }
+        }
+      }
+    },
+    "Jetzt bereinigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clean up now"
+          }
+        }
+      }
+    },
+    "Jetzt nutzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use now"
+          }
+        }
+      }
+    },
+    "KI-Modi": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI modes"
+          }
+        }
+      }
+    },
+    "KI-Modi (KI-Schreibstil, WTF, :-))": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI modes (AI writing style, WTF, :-))"
+          }
+        }
+      }
+    },
+    "KI-Modi brauchen Apple Intelligence oder einen API-Key. Bis dahin diktiert Diktat dort wortgenau.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI modes need Apple Intelligence or an API key. Until then Diktat dictates word for word there."
+          }
+        }
+      }
+    },
+    "KI-Modi einrichten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up AI modes"
+          }
+        }
+      }
+    },
+    "KI-Modi sehen den Text am Cursor": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI modes see the text at the cursor"
+          }
+        }
+      }
+    },
+    "KI-Modi: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI modes: %@"
+          }
+        }
+      }
+    },
+    "KI-Schreibstil": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI style"
+          }
+        }
+      }
+    },
+    "KI-Schreibstil, WTF und :-) bekommen den Text rund um den Cursor als Kontext, etwa die Mail, auf die du antwortest. Mit einem Modell-Anbieter geht dieser Text mit an den Anbieter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI writing style, WTF and :-) get the text around the cursor as context, such as the mail you are replying to. With a model provider this text goes to the provider as well."
+          }
+        }
+      }
+    },
+    "Kein Ausgabegerät gefunden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No output device found."
+          }
+        }
+      }
+    },
+    "Kein Mikrofon gefunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No microphone found"
+          }
+        }
+      }
+    },
+    "Kein Modell-Anbieter eingerichtet. Bitte in den Einstellungen einen API-Key hinterlegen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No model provider is set up. Please add an API key in the settings."
+          }
+        }
+      }
+    },
+    "Kein Ollama und kein LM Studio gefunden. Ist das Programm gestartet? Ollama lädst du auf ollama.com.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Ollama and no LM Studio found. Is the program running? You can download Ollama at ollama.com."
+          }
+        }
+      }
+    },
+    "Keine Antwort vom Modell-Anbieter erhalten. Bitte nochmal versuchen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No answer received from the model provider. Please try again."
+          }
+        }
+      }
+    },
+    "Keine Aufnahme erkannt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recording detected."
+          }
+        }
+      }
+    },
+    "Keine Aufnahme vorhanden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recording available."
+          }
+        }
+      }
+    },
+    "Keiner, nur auf diesem Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None, only on this Mac"
+          }
+        }
+      }
+    },
+    "Key erstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create key"
+          }
+        }
+      }
+    },
+    "Klicken stoppt die Aufnahme": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click to stop recording"
+          }
+        }
+      }
+    },
+    "Klickst du in ein anderes Feld, während ein KI-Modus noch arbeitet, kommt der Text in die Zwischenablage statt ins falsche Feld. Nach einem KI-Modus bietet das Menü „Wortgenau statt …“ an. Das erste Wort bleibt erhalten, und Diktat sagt, wenn das Mikrofon fehlt oder sehr leise ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you click into another field while an AI mode is still working, the text goes to the clipboard instead of the wrong field. After an AI mode, the menu offers “Word for word instead of …”. The first word is kept, and Diktat tells you when the microphone is missing or very quiet."
+          }
+        }
+      }
+    },
+    "Kompakt und schnell": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compact and fast"
+          }
+        }
+      }
+    },
+    "Kontext": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Context"
+          }
+        }
+      }
+    },
+    "Kopieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
+          }
+        }
+      }
+    },
+    "Kopiert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied"
+          }
+        }
+      }
+    },
+    "Kopiert, im Chat einfügen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied, paste it in the chat"
+          }
+        }
+      }
+    },
+    "Korrigiert ähnlich klingende Schreibweisen auf deine Eigennamen, z. B. „Black Boat“ zu „Blackboat“. Echte Wörter bleiben unverändert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corrects similar-sounding spellings to your custom terms, e.g. “Black Boat” to “Blackboat”. Real words stay unchanged."
+          }
+        }
+      }
+    },
+    "Kurzer Ton beim Start der Aufnahme": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short sound when the recording starts"
+          }
+        }
+      }
+    },
+    "Kürzel: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortcut: %@"
+          }
+        }
+      }
+    },
+    "Lade einmal ein lokales Sprachmodell, sonst kann Diktat nicht transkribieren.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download a local language model once, otherwise Diktat cannot transcribe."
+          }
+        }
+      }
+    },
+    "Laden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download"
+          }
+        }
+      }
+    },
+    "Lange Diktate und Audiodateien bekommen nach etwa vier Sätzen einen Absatz. Wörter und Satzzeichen bleiben, wie sie sind.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long dictations and audio files get a paragraph after about four sentences. Words and punctuation stay as they are."
+          }
+        }
+      }
+    },
+    "Lege Diktat zuerst in den Ordner Programme": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First put Diktat in the Applications folder"
+          }
+        }
+      }
+    },
+    "Leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
+    "Letzter Text: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last text: %@"
+          }
+        }
+      }
+    },
+    "Live-Notizen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live notes"
+          }
+        }
+      }
+    },
+    "Live-Notizen gerade nicht möglich: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live notes are not possible right now: %@"
+          }
+        }
+      }
+    },
+    "Lizenzen und Hinweise": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Licenses and notices"
+          }
+        }
+      }
+    },
+    "Locker": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Casual"
+          }
+        }
+      }
+    },
+    "Lokal auf diesem Mac, ohne Internet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local on this Mac, without internet."
+          }
+        }
+      }
+    },
+    "Lokal: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local: %@."
+          }
+        }
+      }
+    },
+    "Lokales Modell": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local model"
+          }
+        }
+      }
+    },
+    "Lokales Modell fehlt: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local model is missing: %@"
+          }
+        }
+      }
+    },
+    "Lokales Modell wird geladen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local model is loading."
+          }
+        }
+      }
+    },
+    "Lokales Sprachmodell (Beta)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local language model (beta)"
+          }
+        }
+      }
+    },
+    "Lokales Sprachmodell fehlt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local language model is missing."
+          }
+        }
+      }
+    },
+    "Lokales Sprachmodell für Meetings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local language model for meetings"
+          }
+        }
+      }
+    },
+    "Los geht's": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let's go"
+          }
+        }
+      }
+    },
+    "Lädt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading"
+          }
+        }
+      }
+    },
+    "Lädt ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading ..."
+          }
+        }
+      }
+    },
+    "Läuft mit Apple Intelligence auf deinem Mac. Der Text verlässt das Gerät nicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Runs with Apple Intelligence on your Mac. The text does not leave the device."
+          }
+        }
+      }
+    },
+    "Läuft über dein lokales Modell %@ (%@). Der Text verlässt dein Netz nicht, das Modell muss dafür laufen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Runs through your local model %@ (%@). The text does not leave your network, the model has to be running for this."
+          }
+        }
+      }
+    },
+    "Löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "Meeting": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting"
+          }
+        }
+      }
+    },
+    "Meeting am %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting on %@"
+          }
+        }
+      }
+    },
+    "Meeting aufnehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record meeting"
+          }
+        }
+      }
+    },
+    "Meeting ausgewertet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting evaluated"
+          }
+        }
+      }
+    },
+    "Meeting läuft. Klicken öffnet die Meeting-Seite.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting running. Click to open the Meeting page."
+          }
+        }
+      }
+    },
+    "Meeting löschen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete meeting?"
+          }
+        }
+      }
+    },
+    "Meeting wird aufgenommen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting is being recorded"
+          }
+        }
+      }
+    },
+    "Meeting wird aufgenommen. Klicken öffnet die Meeting-Seite.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting is being recorded. Click to open the Meeting page."
+          }
+        }
+      }
+    },
+    "Meeting wird ausgewertet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting is being evaluated"
+          }
+        }
+      }
+    },
+    "Meeting-Auswertung fehlgeschlagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting evaluation failed"
+          }
+        }
+      }
+    },
+    "Meeting: Aufnahme läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting: recording"
+          }
+        }
+      }
+    },
+    "Meetings (Rechtsklick zum Löschen)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meetings (right-click to delete)"
+          }
+        }
+      }
+    },
+    "Meetings brauchen einen Mac mit Apple-Chip.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meetings need a Mac with an Apple chip."
+          }
+        }
+      }
+    },
+    "Mikrofon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone"
+          }
+        }
+      }
+    },
+    "Mikrofon erlauben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow microphone"
+          }
+        }
+      }
+    },
+    "Mikrofon sehr leise eingestellt (%lld %%)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone set very quiet (%lld %%)"
+          }
+        }
+      }
+    },
+    "Mit Glättung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With cleanup"
+          }
+        }
+      }
+    },
+    "Mit KI-Schreibstil": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With AI writing style"
+          }
+        }
+      }
+    },
+    "Mit KI-Schreibstil: klar und neutral formuliert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With AI writing style: worded clearly and neutrally"
+          }
+        }
+      }
+    },
+    "Mit KI-Schreibstil: sachlich und höflich formuliert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With AI writing style: worded factually and politely"
+          }
+        }
+      }
+    },
+    "Mit dem Schalter „Online-Meeting“ nimmt Diktat auch den Ton des Macs auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon während des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With the “Online meeting” switch, Diktat also records the Mac's sound, for example from Teams, Zoom or Meet, and separates the others by voice. Live notes show topics, decisions and to-dos during the meeting. Please ask everyone beforehand."
+          }
+        }
+      }
+    },
+    "Mit dem Systemstandard folgt Diktat der Einstellung des Macs (Ton, Eingang). Wähle ein bestimmtes Mikrofon, wenn andere Programme ein anderes nutzen sollen. Die Auswahl gilt für das Diktieren und für Meetings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With the system default, Diktat follows the Mac's setting (Sound, Input). Choose a specific microphone if other apps should use a different one. The choice applies to dictation and to meetings."
+          }
+        }
+      }
+    },
+    "Mit einem eigenen API-Key in den Einstellungen geht es über einen Modell-Anbieter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With your own API key in the settings, it goes through a model provider."
+          }
+        }
+      }
+    },
+    "Mit „%@“ in den Einstellungen übernimmt dein Modell-Anbieter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With “%@” in the settings, your model provider takes over."
+          }
+        }
+      }
+    },
+    "Mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medium"
+          }
+        }
+      }
+    },
+    "Modell": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Model"
+          }
+        }
+      }
+    },
+    "Modell wird geladen ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading model ..."
+          }
+        }
+      }
+    },
+    "Modell wird geladen...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading model..."
+          }
+        }
+      }
+    },
+    "Modell wählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose model"
+          }
+        }
+      }
+    },
+    "Modell-Anbieter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Model provider"
+          }
+        }
+      }
+    },
+    "Modelle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Models"
+          }
+        }
+      }
+    },
+    "Modellseite": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Model page"
+          }
+        }
+      }
+    },
+    "Modi": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modes"
+          }
+        }
+      }
+    },
+    "Modus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
+          }
+        }
+      }
+    },
+    "Modus je App": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode per app"
+          }
+        }
+      }
+    },
+    "Nach /Applications bewegen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move to /Applications"
+          }
+        }
+      }
+    },
+    "Nach /Applications verschieben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move to /Applications"
+          }
+        }
+      }
+    },
+    "Nach Updates kann macOS die Freigabe neu verlangen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After updates macOS may ask for the permission again."
+          }
+        }
+      }
+    },
+    "Nach Updates suchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check for updates"
+          }
+        }
+      }
+    },
+    "Name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "Namen und Fachbegriffe, die Diktat genau so schreiben soll. KI-Modi übernehmen sie unverändert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Names and technical terms that Diktat should spell exactly like this. AI modes keep them unchanged."
+          }
+        }
+      }
+    },
+    "Neu erstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create again"
+          }
+        }
+      }
+    },
+    "Neu in Diktat %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New in Diktat %@"
+          }
+        }
+      }
+    },
+    "Neu und noch in Erprobung. Rückmeldungen gern über „Feedback senden“.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New and still being tested. Feedback is welcome through “Send feedback”."
+          }
+        }
+      }
+    },
+    "Neue Versionen gibt es auf der Releases-Seite.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New versions are available on the Releases page."
+          }
+        }
+      }
+    },
+    "Neue Versionen installiert die Geräteverwaltung dieses Macs automatisch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New versions are installed automatically by this Mac's device management."
+          }
+        }
+      }
+    },
+    "Neuer Begriff": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New term"
+          }
+        }
+      }
+    },
+    "Neuigkeiten in %@ anzeigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show what's new in %@"
+          }
+        }
+      }
+    },
+    "Neutral": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neutral"
+          }
+        }
+      }
+    },
+    "Nicht alles konnte bereinigt werden:\n%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not everything could be cleaned up:\n%@"
+          }
+        }
+      }
+    },
+    "Nicht angeschlossen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not connected"
+          }
+        }
+      }
+    },
+    "Nicht eingefügt, der Text liegt in der Zwischenablage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not pasted, the text is in the clipboard"
+          }
+        }
+      }
+    },
+    "Nicht eingerichtet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not set up"
+          }
+        }
+      }
+    },
+    "Nimmt auch den Ton des Macs auf, zum Beispiel aus Teams, Zoom oder Meet. Beim ersten Mal fragt macOS nach der Freigabe für Systemaudio.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Also records the Mac's sound, for example from Teams, Zoom or Meet. The first time, macOS asks for the permission for system audio."
+          }
+        }
+      }
+    },
+    "Nimmt dein Mikrofon (Ich) und den Ton des Macs (die anderen) auf. Mit Kopfhörern wird das Transkript am saubersten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Records your microphone (Me) and the Mac's sound (the others). With headphones the transcript is cleanest."
+          }
+        }
+      }
+    },
+    "Nimmt nur das Mikrofon auf, gedacht für Meetings im Raum.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Records the microphone only, meant for meetings in the room."
+          }
+        }
+      }
+    },
+    "Noch %lld Schritte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld steps left"
+          }
+        }
+      }
+    },
+    "Noch 1 Schritt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 step left"
+          }
+        }
+      }
+    },
+    "Noch ein Schritt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One more step"
+          }
+        }
+      }
+    },
+    "Noch in den Systemeinstellungen freigeben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Still to be allowed in System Settings."
+          }
+        }
+      }
+    },
+    "Noch keine Zusammenfassung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No summary yet."
+          }
+        }
+      }
+    },
+    "Noch nicht ausgewertet, klicken zum Auswerten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not evaluated yet, click to evaluate"
+          }
+        }
+      }
+    },
+    "Noch nicht installiert. Unter Modelle, Spracherkennung laden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not installed yet. Download speech recognition under Models."
+          }
+        }
+      }
+    },
+    "Noch nichts aufgeschrieben. Die ersten Notizen kommen nach etwa zweieinhalb Minuten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing written down yet. The first notes appear after about two and a half minutes."
+          }
+        }
+      }
+    },
+    "Noch nichts im Verlauf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing in the history yet"
+          }
+        }
+      }
+    },
+    "Nochmal versuchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        }
+      }
+    },
+    "Normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        }
+      }
+    },
+    "Notizen kopieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy notes"
+          }
+        }
+      }
+    },
+    "Nur auf diesem Mac und verschlüsselt. Aus löscht den Verlauf sofort.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only on this Mac and encrypted. Off deletes the history immediately."
+          }
+        }
+      }
+    },
+    "Nur auf diesem Mac, %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only on this Mac, %@."
+          }
+        }
+      }
+    },
+    "Ohne Apple Intelligence brauchen KI-Schreibstil, WTF und :-) einen eigenen API-Key.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without Apple Intelligence, AI writing style, WTF and :-) need an API key of their own."
+          }
+        }
+      }
+    },
+    "Ohne Punkt am Ende, mit KI-Schreibstil ungezwungen formuliert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No period at the end, with AI writing style worded casually"
+          }
+        }
+      }
+    },
+    "Ollama oder LM Studio": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ollama or LM Studio"
+          }
+        }
+      }
+    },
+    "Online-Meeting": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online meeting"
+          }
+        }
+      }
+    },
+    "Online-Meetings (Beta)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online meetings (beta)"
+          }
+        }
+      }
+    },
+    "OpenAI-kompatible Adresse. Ollama läuft auf jedem Mac unter derselben Adresse (localhost, Port 11434), LM Studio unter Port 1234. Nur wenn du das geändert hast oder ein anderer Rechner das Modell liefert, brauchst du eine andere.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OpenAI-compatible address. Ollama runs on every Mac at the same address (localhost, port 11434), LM Studio at port 1234. Only if you changed that or another computer provides the model do you need a different one."
+          }
+        }
+      }
+    },
+    "Optional. Meetings können auf diesem Mac genauer zusammengefasst werden als mit Apple Intelligence, vor allem lange. Der Text verlässt den Mac nicht. Wähle ein Modell, das schon auf deinem Mac läuft (Ollama, LM Studio), oder lade Gemma, ohne Zusatzprogramm.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. On this Mac, meetings can be summarized more precisely than with Apple Intelligence, especially long ones. The text does not leave the Mac. Choose a model that already runs on your Mac (Ollama, LM Studio), or download Gemma, without any extra program."
+          }
+        }
+      }
+    },
+    "Optional. Mit Apple Intelligence laufen die KI-Modi auf diesem Mac. Ein eigener API-Key hilft, wenn Apple Intelligence fehlt oder mehr Qualität gefragt ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. With Apple Intelligence the AI modes run on this Mac. An API key of your own helps when Apple Intelligence is missing or more quality is needed."
+          }
+        }
+      }
+    },
+    "Original-Transkript": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original transcript"
+          }
+        }
+      }
+    },
+    "Outlook im Web": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outlook on the web"
+          }
+        }
+      }
+    },
+    "Parakeet TDT 0.6B v3 von NVIDIA, %@, via FluidAudio.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parakeet TDT 0.6B v3 by NVIDIA, %@, via FluidAudio."
+          }
+        }
+      }
+    },
+    "Parakeet Ultra von Moondream, nachtrainiert aus NVIDIA Parakeet TDT 0.6B v3, %@, via FluidAudio.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parakeet Ultra by Moondream, retrained from NVIDIA Parakeet TDT 0.6B v3, %@, via FluidAudio."
+          }
+        }
+      }
+    },
+    "Passt zu diesem Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fits this Mac"
+          }
+        }
+      }
+    },
+    "Pausieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
+    },
+    "Pausiert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused"
+          }
+        }
+      }
+    },
+    "Pausiert, nichts wird aufgenommen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused, nothing is being recorded"
+          }
+        }
+      }
+    },
+    "Person umbenennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename person"
+          }
+        }
+      }
+    },
+    "Personen: Klicken zum Umbenennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "People: click to rename"
+          }
+        }
+      }
+    },
+    "Persönlich": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal"
+          }
+        }
+      }
+    },
+    "Podcast, Musik oder Video sind stumm, solange Diktat aufnimmt, und danach sofort wieder zu hören. Pausieren kann Diktat sie nicht, weil macOS Apps nicht verrät, was gerade läuft.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Podcasts, music or video are muted while Diktat records, and audible again right after. Diktat cannot pause them, because macOS does not tell apps what is playing."
+          }
+        }
+      }
+    },
+    "Prüfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check"
+          }
+        }
+      }
+    },
+    "Rechte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permissions"
+          }
+        }
+      }
+    },
+    "Regel entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove rule"
+          }
+        }
+      }
+    },
+    "Releases-Seite öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Releases page"
+          }
+        }
+      }
+    },
+    "Schließen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "Schreibt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Writing"
+          }
+        }
+      }
+    },
+    "Setzt Leerzeichen und Groß- und Kleinschreibung passend zum Text davor und danach. Diktat liest dazu das Textfeld über die Bedienungshilfen, Passwortfelder nie.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets spaces and capitalization to fit the text before and after. For this Diktat reads the text field through Accessibility, never password fields."
+          }
+        }
+      }
+    },
+    "Setzt die Freigabe zurück, danach in den Systemeinstellungen neu einschalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resets the permission, afterwards turn it on again in System Settings."
+          }
+        }
+      }
+    },
+    "Sichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "So arbeitet Diktat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How Diktat works"
+          }
+        }
+      }
+    },
+    "So startet Diktat zuverlässig mit dem Mac und bekommt Updates.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is how Diktat starts reliably with the Mac and receives updates."
+          }
+        }
+      }
+    },
+    "So startet Diktat zuverlässig mit dem Mac, und die Freigaben bleiben erhalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is how Diktat starts reliably with the Mac, and the permissions are kept."
+          }
+        }
+      }
+    },
+    "Sprache bleibt auf diesem Mac, KI-Modi über %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech stays on this Mac, AI modes through %@."
+          }
+        }
+      }
+    },
+    "Sprache bleibt auf diesem Mac. KI-Modi brauchen Apple Intelligence oder einen API-Key.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech stays on this Mac. AI modes need Apple Intelligence or an API key."
+          }
+        }
+      }
+    },
+    "Sprache rein. Text raus.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech in. Text out."
+          }
+        }
+      }
+    },
+    "Sprache und KI-Modi bleiben auf diesem Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech and AI modes stay on this Mac."
+          }
+        }
+      }
+    },
+    "Spracherkennung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech recognition"
+          }
+        }
+      }
+    },
+    "Sprachmemo oder WhatsApp-Sprachnachricht transkribieren. Du kannst Dateien auch auf das Diktat-Symbol im Finder ziehen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribe a voice memo or WhatsApp voice message. You can also drag files onto the Diktat icon in the Finder."
+          }
+        }
+      }
+    },
+    "Sprachmemo, WhatsApp-Sprachnachricht oder andere Audiodatei wählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a voice memo, WhatsApp voice message or other audio file"
+          }
+        }
+      }
+    },
+    "Sprachmodell laden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download language model"
+          }
+        }
+      }
+    },
+    "Sprachmodell wird vorbereitet. Nach einem macOS-Update dauert das einmalig einige Minuten, bitte Diktat nicht beenden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language model is being prepared. After a macOS update this takes a few minutes once, please do not quit Diktat."
+          }
+        }
+      }
+    },
+    "Sprachmodell: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language model: %@"
+          }
+        }
+      }
+    },
+    "Später": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
+          }
+        }
+      }
+    },
+    "Stand %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As of %@"
+          }
+        }
+      }
+    },
+    "Stand %@, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As of %@, %@"
+          }
+        }
+      }
+    },
+    "Standard wiederherstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore default"
+          }
+        }
+      }
+    },
+    "Standard-Kürzel, nur auf Apple-Tastaturen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default shortcut, only on Apple keyboards"
+          }
+        }
+      }
+    },
+    "Stark": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strong"
+          }
+        }
+      }
+    },
+    "Startet %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts %@"
+          }
+        }
+      }
+    },
+    "Steht schon auf an?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Already switched on?"
+          }
+        }
+      }
+    },
+    "Stil": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Style"
+          }
+        }
+      }
+    },
+    "Stil je Kontext": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Style per context"
+          }
+        }
+      }
+    },
+    "Stimmen werden erkannt ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recognizing voices ..."
+          }
+        }
+      }
+    },
+    "Suche nach Updates …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking for updates …"
+          }
+        }
+      }
+    },
+    "Systemeinstellungen öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open System Settings"
+          }
+        }
+      }
+    },
+    "Systemstandard": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System default"
+          }
+        }
+      }
+    },
+    "Systemstandard (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System default (%@)"
+          }
+        }
+      }
+    },
+    "Systemton: %@ fehlgeschlagen (%d).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System sound: %@ failed (%d)."
+          }
+        }
+      }
+    },
+    "Taste %u": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Key %u"
+          }
+        }
+      }
+    },
+    "Tasten halten zum Aufnehmen, loslassen zum Stoppen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold keys to record, release to stop"
+          }
+        }
+      }
+    },
+    "Tastenkombination mit ⌃, ⌥ oder ⌘ drücken (fn geht nicht), Escape bricht ab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press a key combination with ⌃, ⌥ or ⌘ (fn does not work), Escape cancels."
+          }
+        }
+      }
+    },
+    "Tastenkürzel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortcuts"
+          }
+        }
+      }
+    },
+    "Tempo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speed"
+          }
+        }
+      }
+    },
+    "Text landet am richtigen Ort": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text lands in the right place"
+          }
+        }
+      }
+    },
+    "Text rein. Emojis dazu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text in. Emojis added."
+          }
+        }
+      }
+    },
+    "Text wird geglättet ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleaning up text ..."
+          }
+        }
+      }
+    },
+    "Text wird verbessert ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Improving text ..."
+          }
+        }
+      }
+    },
+    "Ton": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound"
+          }
+        }
+      }
+    },
+    "Ton aus während der Aufnahme": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound off while recording"
+          }
+        }
+      }
+    },
+    "Ton des Macs wird transkribiert ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribing the Mac's sound ..."
+          }
+        }
+      }
+    },
+    "Ton in": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tone in"
+          }
+        }
+      }
+    },
+    "Transkribieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribe"
+          }
+        }
+      }
+    },
+    "Transkript": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcript"
+          }
+        }
+      }
+    },
+    "Transkript kopieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy transcript"
+          }
+        }
+      }
+    },
+    "Umformulieren läuft über den Modell-Anbieter unten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rewriting runs through the model provider below."
+          }
+        }
+      }
+    },
+    "Umschreiben als ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rewrite as ..."
+          }
+        }
+      }
+    },
+    "Unter Einstellungen > Modelle lässt sich Gemma 4 laden. Es fasst lange Meetings genauer zusammen als Apple Intelligence, ganz auf diesem Mac. Diktat zeigt, welche Größe zu deinem Mac passt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can download Gemma 4 under Settings > Models. It summarizes long meetings more precisely than Apple Intelligence, entirely on this Mac. Diktat shows which size fits your Mac."
+          }
+        }
+      }
+    },
+    "Updates": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updates"
+          }
+        }
+      }
+    },
+    "Updates automatisch laden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download updates automatically"
+          }
+        }
+      }
+    },
+    "Updates werden über den hinterlegten Sparkle-Feed verteilt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updates are distributed through the configured Sparkle feed."
+          }
+        }
+      }
+    },
+    "Updates: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Updates: %@"
+          }
+        }
+      }
+    },
+    "Verbindung testen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test connection"
+          }
+        }
+      }
+    },
+    "Verlauf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        }
+      }
+    },
+    "Verlauf aufbewahren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep history"
+          }
+        }
+      }
+    },
+    "Verlauf ist aus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History is off"
+          }
+        }
+      }
+    },
+    "Verschiebe Diktat einmal nach /Applications, damit Anmeldestart und spätere Updates sauber bleiben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move Diktat to /Applications once, so launch at login and later updates stay clean."
+          }
+        }
+      }
+    },
+    "Version %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@"
+          }
+        }
+      }
+    },
+    "Verstanden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got it"
+          }
+        }
+      }
+    },
+    "Verwerfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard"
+          }
+        }
+      }
+    },
+    "Viel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lots"
+          }
+        }
+      }
+    },
+    "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme? Ausgewertet wird nur das Mikrofon.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing arrived from the Mac's sound. Is the permission missing under Privacy & Security > Screen & System Audio Recording? Only the microphone is evaluated."
+          }
+        }
+      }
+    },
+    "Was du vorher kopiert hattest, ist nach dem Einfügen wieder da.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What you copied before is back after pasting."
+          }
+        }
+      }
+    },
+    "Was habe ich verpasst?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What did I miss?"
+          }
+        }
+      }
+    },
+    "Website": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Website"
+          }
+        }
+      }
+    },
+    "Website hinzufügen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add website"
+          }
+        }
+      }
+    },
+    "Websites erkennt Diktat in Safari, Chrome, Edge, Brave, Arc und Firefox. Eine Website-Regel gilt vor der Regel für den Browser.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat recognizes websites in Safari, Chrome, Edge, Brave, Arc and Firefox. A website rule applies before the rule for the browser."
+          }
+        }
+      }
+    },
+    "Weitere Kopien zeigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show more copies"
+          }
+        }
+      }
+    },
+    "Wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Few"
+          }
+        }
+      }
+    },
+    "Wie stark Diktat deinen Text aufräumt. Antwortet das Sprachmodell nicht oder unplausibel, bleibt der Text, wie du ihn gesprochen hast.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How much Diktat tidies up your text. If the language model does not answer or answers implausibly, the text stays as you spoke it."
+          }
+        }
+      }
+    },
+    "Willkommen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome"
+          }
+        }
+      }
+    },
+    "Wir hatten gestern ein Treffen, und die Kunden sind zufrieden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We had a meeting yesterday, and the customers are satisfied."
+          }
+        }
+      }
+    },
+    "Wir treffen uns am Donnerstag um zehn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We'll meet on Thursday at ten."
+          }
+        }
+      }
+    },
+    "Wir treffen uns am Mittwoch, nein, Donnerstag um zehn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We'll meet on Wednesday, no, Thursday at ten."
+          }
+        }
+      }
+    },
+    "Wird genutzt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In use"
+          }
+        }
+      }
+    },
+    "Wird transkribiert ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribing ..."
+          }
+        }
+      }
+    },
+    "Wird transkribiert …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribing …"
+          }
+        }
+      }
+    },
+    "Wird umformuliert ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rewriting ..."
+          }
+        }
+      }
+    },
+    "Wird umgewandelt ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Converting ..."
+          }
+        }
+      }
+    },
+    "Wird zusammengefasst (%@, lokal) ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summarizing (%@, local) ..."
+          }
+        }
+      }
+    },
+    "Wird zusammengefasst ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summarizing ..."
+          }
+        }
+      }
+    },
+    "Wortgenau statt %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Word for word instead of %@"
+          }
+        }
+      }
+    },
+    "Wörterbuch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictionary"
+          }
+        }
+      }
+    },
+    "Zu viele Anfragen oder das Guthaben beim Anbieter ist aufgebraucht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too many requests or the provider's credit is used up."
+          }
+        }
+      }
+    },
+    "Zu wenig Speicherplatz: Das Modell braucht %@, frei sind %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough storage: the model needs %@, %@ is free."
+          }
+        }
+      }
+    },
+    "Zuerst in den Einstellungen ein lokales Sprachmodell laden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First download a local language model in the settings."
+          }
+        }
+      }
+    },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
+    "Zurücksetzen hat nicht geklappt. In Bedienungshilfen Diktat mit „−“ entfernen und neu hinzufügen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resetting did not work. In Accessibility remove Diktat with “−” and add it again."
+          }
+        }
+      }
+    },
+    "Zurücksetzen hat nicht geklappt. In den Bedienungshilfen Diktat mit „−“ entfernen und neu hinzufügen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resetting did not work. In Accessibility remove Diktat with “−” and add it again."
+          }
+        }
+      }
+    },
+    "Zusammenfassung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summary"
+          }
+        }
+      }
+    },
+    "Zusammenfassung erstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create summary"
+          }
+        }
+      }
+    },
+    "Zusammenfassung fehlgeschlagen: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summary failed: %@"
+          }
+        }
+      }
+    },
+    "Zusätzlich: Grammatik, Satzstellung und Zeichensetzung werden korrigiert. Deine Wortwahl bleibt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Additionally: grammar, word order and punctuation are corrected. Your choice of words stays."
+          }
+        }
+      }
+    },
+    "Zusätzlich: Wenn du dich verhaspelst, einen Satz neu ansetzt oder dich korrigierst, bleibt nur die richtige Fassung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Additionally: if you stumble, restart a sentence or correct yourself, only the right version stays."
+          }
+        }
+      }
+    },
+    "Zwischenablage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clipboard"
+          }
+        }
+      }
+    },
+    "Zwischenablage danach wiederherstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore clipboard afterwards"
+          }
+        }
+      }
+    },
+    "bei Diktat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to Diktat"
+          }
+        }
+      }
+    },
+    "braucht beim Zusammenfassen etwa %@ GB Arbeitsspeicher, empfohlen ab %lld GB": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "needs about %@ GB of memory for summarizing, recommended from %lld GB"
+          }
+        }
+      }
+    },
+    "by MProductions": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "by MProductions"
+          }
+        }
+      }
+    },
+    "fn geht nicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fn does not work"
+          }
+        }
+      }
+    },
+    "fn-Taste (🌐) allein zum Diktieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fn key (🌐) alone to dictate"
+          }
+        }
+      }
+    },
+    "hey alex war echt schön heute mit dir zu reden ich melde mich nächste woche wegen dem termin": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hey alex it was really nice talking to you today I'll get back to you next week about the appointment"
+          }
+        }
+      }
+    },
+    "ich wollte fragen ob wir den Termin am Donnerstag äh ich meine Freitag verschieben können": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I wanted to ask whether we can move the appointment to Thursday uh I mean Friday"
+          }
+        }
+      }
+    },
+    "unter 1 Min.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "under 1 min."
+          }
+        }
+      }
+    },
+    "wir hat gestern ein Treffen gehabt und die Kunde sind zufrieden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "we has a meeting yesterday and the customer are satisfied"
+          }
+        }
+      }
+    },
+    "z.B. \"E-Mails im Bereich Unternehmensberatung\"": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. \"Emails in the field of management consulting\""
+          }
+        }
+      }
+    },
+    "z.B. \"Formuliere den Text sachlich und freundlich um.\"": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. \"Rewrite the text in a factual and friendly way.\""
+          }
+        }
+      }
+    },
+    "z.B. \"Schreibe prägnant und ohne Füllwörter.\"": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. \"Write concisely and without filler words.\""
+          }
+        }
+      }
+    },
+    "Öffne Bedienungshilfen und aktiviere Diktat. Steht Diktat dort schon auf an, hier die Freigabe zurücksetzen und danach neu erlauben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Accessibility and turn on Diktat. If Diktat is already on there, reset the permission here and then allow it again."
+          }
+        }
+      }
+    },
+    "Öffne Diktat möglichst direkt aus /Applications.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Diktat directly from /Applications if possible."
+          }
+        }
+      }
+    },
+    "Öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open"
+          }
+        }
+      }
+    },
+    "Öffnet eine vorbereitete Mail an %@. Du siehst alles, bevor sie rausgeht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens a prepared mail to %@. You see everything before it is sent."
+          }
+        }
+      }
+    },
+    "Über Diktat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About Diktat"
+          }
+        }
+      }
+    },
+    "Über deinen API-Key. Der erkannte Text und der Text am Cursor gehen an den Anbieter, nie die Sprache.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Through your API key. The recognized text and the text at the cursor go to the provider, never the speech."
+          }
+        }
+      }
+    },
+    "Über deinen API-Key. Nur der erkannte Text geht an den Anbieter, nie die Sprache.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Through your API key. Only the recognized text goes to the provider, never the speech."
+          }
+        }
+      }
+    },
+    "„Äh“ und „ähm“ entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove “uh” and “um”"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

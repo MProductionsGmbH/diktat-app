@@ -44,7 +44,7 @@ final class TranscriptionWorkflow: Workflow {
     }
 
     func start() {
-        phase = .running("Aufnahme läuft ...")
+        phase = .running(String(localized: "Aufnahme läuft ..."))
         recorder.startRecording()
 
         if let error = recorder.errorMessage {
@@ -57,7 +57,7 @@ final class TranscriptionWorkflow: Workflow {
             recorder.stopRecording()
             guard !TranscriptionQualityService.shouldRejectRecording(duration: recorder.lastRecordingDuration) else {
                 recorder.discardRecording()
-                phase = .error("Keine Aufnahme erkannt.")
+                phase = .error(String(localized: "Keine Aufnahme erkannt."))
                 return
             }
             transcribe()
@@ -81,11 +81,11 @@ final class TranscriptionWorkflow: Workflow {
 
     private func transcribe() {
         guard let url = recorder.recordingURL else {
-            phase = .error("Keine Aufnahme vorhanden.")
+            phase = .error(String(localized: "Keine Aufnahme vorhanden."))
             return
         }
 
-        phase = .running("Wird transkribiert ...")
+        phase = .running(String(localized: "Wird transkribiert ..."))
         let recordingDuration = recorder.lastRecordingDuration
         let requestLanguage = language
         let stopTime = Date()
@@ -110,19 +110,19 @@ final class TranscriptionWorkflow: Workflow {
                     tapTalkLogger.info(
                         "TapTalk rejected short artifact after \(elapsedMilliseconds(since: stopTime)) ms"
                     )
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
 
                 var processed = postProcessor.process(cleaned)
                 if cleanup.level.usesLanguageModel, !processed.isEmpty {
-                    phase = .running("Text wird geglättet ...")
+                    phase = .running(String(localized: "Text wird geglättet ..."))
                     processed = await SpeechCleanup.polish(processed, configuration: cleanup)
                     try Task.checkCancellation()
                 }
                 processed = tone.apply(to: processed)
                 guard !processed.isEmpty else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
 

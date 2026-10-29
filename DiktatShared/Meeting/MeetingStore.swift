@@ -26,17 +26,18 @@ struct MeetingRecord: Codable, Equatable, Identifiable {
     /// Why the summary is missing, e.g. no language model available.
     var summaryNote: String?
 
-    /// "Meeting am 17. Okt. 2026, 11:58": German like the rest of the app, whatever the
-    /// system language.
+    /// "Meeting am 17. Okt. 2026, 11:58" or "Meeting on Oct 17, 2026, 11:58 AM": in the
+    /// language of the app.
     static func title(startedAt date: Date) -> String {
-        "Meeting am " + date.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened, locale: Locale(identifier: "de_DE")))
+        let when = date.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened, locale: AppLocale.current))
+        return String(localized: "Meeting am \(when)")
     }
 
     /// Speaker 0 is the microphone in an online meeting, the person at this Mac.
     func name(for speaker: Int) -> String {
         let custom = speakerNames[speaker]?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         guard custom.isEmpty else { return custom }
-        return speaker == 0 ? "Ich" : "Person \(speaker)"
+        return speaker == 0 ? String(localized: "Ich") : "Person \(speaker)"
     }
 
     var speakers: [Int] {
@@ -66,7 +67,7 @@ struct MeetingRecord: Codable, Equatable, Identifiable {
     var shareText: String {
         var parts = [title]
         if let summary { parts.append(summary) }
-        parts.append("Transkript\n\n" + transcriptText)
+        parts.append(String(localized: "Transkript") + "\n\n" + transcriptText)
         return parts.joined(separator: "\n\n")
     }
 

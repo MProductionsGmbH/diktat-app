@@ -540,13 +540,13 @@ struct ModelRatingPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            ModelRatingView(label: "Tempo", value: rating.speed)
-            ModelRatingView(label: "Genauigkeit", value: rating.accuracy)
+            ModelRatingView(label: String(localized: "Tempo"), value: rating.speed)
+            ModelRatingView(label: String(localized: "Genauigkeit"), value: rating.accuracy)
             Text(rating.languages)
                 .font(.ui(10.5))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            Text("\(rating.sizeLabel). Richtwerte aus veröffentlichten Benchmarks, nicht auf diesem Mac gemessen.")
+            Text(String(localized: "\(rating.sizeLabel). Richtwerte aus veröffentlichten Benchmarks, nicht auf diesem Mac gemessen."))
                 .font(.ui(10.5))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

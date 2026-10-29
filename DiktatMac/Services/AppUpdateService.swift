@@ -74,7 +74,7 @@ final class AppUpdateService {
 
         updaterController.startUpdater()
         didStartUpdater = true
-        statusText = "Diktat hält sich über Sparkle aktuell."
+        statusText = String(localized: "Diktat hält sich über Sparkle aktuell.")
         canCheckForUpdates = updaterController.updater.canCheckForUpdates
     }
 
@@ -85,7 +85,7 @@ final class AppUpdateService {
         }
 
         startIfConfigured()
-        statusText = "Suche nach Updates …"
+        statusText = String(localized: "Suche nach Updates …")
         NotificationCenter.default.post(name: .dismissPopover, object: nil)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             self?.updaterController.checkForUpdates(nil)
@@ -121,8 +121,8 @@ final class AppUpdateService {
 
     private static func configurationHint(isConfigured: Bool) -> String {
         if isConfigured {
-            return "Updates werden über den hinterlegten Sparkle-Feed verteilt."
+            return String(localized: "Updates werden über den hinterlegten Sparkle-Feed verteilt.")
         }
-        return "Für Auto-Updates fehlen noch Feed-URL oder öffentlicher Sparkle-Key im Build."
+        return String(localized: "Für Auto-Updates fehlen noch Feed-URL oder öffentlicher Sparkle-Key im Build.")
     }
 }

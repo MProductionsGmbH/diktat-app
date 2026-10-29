@@ -112,11 +112,11 @@ final class LiveNotesController {
                 let leftOut = try await writeNotes(with: loadedBackend())
                 updatedAt = Date()
                 problem = leftOut
-                    ? "Ein Abschnitt lie\u{00DF} sich nicht in die Notizen \u{00FC}bernehmen. Im Transkript nach dem Meeting fehlt nichts."
+                    ? String(localized: "Ein Abschnitt lie\u{00DF} sich nicht in die Notizen \u{00FC}bernehmen. Im Transkript nach dem Meeting fehlt nichts.")
                     : nil
             } catch is CancellationError {
             } catch {
-                problem = "Live-Notizen gerade nicht m\u{00F6}glich: \(error.localizedDescription)"
+                problem = String(localized: "Live-Notizen gerade nicht m\u{00F6}glich: \(error.localizedDescription)")
             }
         }
     }
@@ -176,7 +176,7 @@ final class LiveNotesController {
         let since = Date().addingTimeInterval(-minutes * 60)
         let recent = stretches.filter { $0.at >= since }.map(\.text).joined(separator: "\n\n")
         guard !recent.isEmpty else {
-            catchUp = "Noch nichts aufgeschrieben. Die ersten Notizen kommen nach etwa zweieinhalb Minuten."
+            catchUp = String(localized: "Noch nichts aufgeschrieben. Die ersten Notizen kommen nach etwa zweieinhalb Minuten.")
             return
         }
         isCatchingUp = true
@@ -192,7 +192,7 @@ final class LiveNotesController {
                 catchUp = answer
             } catch is CancellationError {
             } catch {
-                catchUp = "Gerade nicht m\u{00F6}glich: \(error.localizedDescription)"
+                catchUp = String(localized: "Gerade nicht m\u{00F6}glich: \(error.localizedDescription)")
             }
         }
     }
@@ -310,8 +310,8 @@ enum LiveNotesFailure: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .notesTooLong: "Die Notizen sind zu lang f\u{00FC}r das Modell geworden."
-        case .answerCutOff: "Die Antwort des Modells wurde zu lang."
+        case .notesTooLong: String(localized: "Die Notizen sind zu lang f\u{00FC}r das Modell geworden.")
+        case .answerCutOff: String(localized: "Die Antwort des Modells wurde zu lang.")
         }
     }
 }

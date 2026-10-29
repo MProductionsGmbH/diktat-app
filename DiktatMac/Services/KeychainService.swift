@@ -93,7 +93,7 @@ enum KeychainError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .saveFailed:
-            return "Daten konnten nicht verschlüsselt werden."
+            return String(localized: "Daten konnten nicht verschlüsselt werden.")
         }
     }
 }

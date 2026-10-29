@@ -40,11 +40,11 @@ final class AudioFileController {
         copied = false
 
         guard appState.selectedLocalModelIsInstalled else {
-            phase = .failed("Zuerst in den Einstellungen ein lokales Sprachmodell laden.")
+            phase = .failed(String(localized: "Zuerst in den Einstellungen ein lokales Sprachmodell laden."))
             return
         }
 
-        phase = .working("Wird umgewandelt ...")
+        phase = .working(String(localized: "Wird umgewandelt ..."))
         let language = appState.transcriptionSettings.language
         let modelName = appState.selectedLocalModelName
         let postProcessor = appState.postProcessor
@@ -59,7 +59,7 @@ final class AudioFileController {
                 duration = wav.duration
                 if Task.isCancelled { return }
 
-                phase = .working("Wird transkribiert ...")
+                phase = .working(String(localized: "Wird transkribiert ..."))
                 let raw = try await LocalTranscriptionService.transcribe(
                     audioURL: wav.url,
                     language: language,
@@ -72,7 +72,7 @@ final class AudioFileController {
                     processed = TranscriptParagraphService.format(processed, language: language)
                 }
                 guard !processed.isEmpty else {
-                    phase = .failed("In der Datei wurde keine Sprache erkannt.")
+                    phase = .failed(String(localized: "In der Datei wurde keine Sprache erkannt."))
                     return
                 }
                 if Task.isCancelled { return }
@@ -90,7 +90,7 @@ final class AudioFileController {
         guard !transcript.isEmpty, let instruction = Self.instruction(for: newMode, appState: appState, language: promptLanguage) else { return }
         task?.cancel()
         copied = false
-        phase = .working("\(appState.displayName(for: newMode)) wird formuliert ...")
+        phase = .working(String(localized: "\(appState.displayName(for: newMode)) wird formuliert ..."))
         let engine = appState.appSettings.rewriteEngine
         let source = transcript
 

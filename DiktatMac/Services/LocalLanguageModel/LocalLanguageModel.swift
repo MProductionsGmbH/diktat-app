@@ -20,9 +20,9 @@ actor LocalLanguageModel {
         var errorDescription: String? {
             switch self {
             case .missingFile(let name):
-                "Im Modellordner fehlt \(name)."
+                String(localized: "Im Modellordner fehlt \(name).")
             case .cutOff:
-                "Die Antwort war zu lang und wurde abgeschnitten."
+                String(localized: "Die Antwort war zu lang und wurde abgeschnitten.")
             }
         }
     }

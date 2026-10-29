@@ -176,3 +176,7 @@ The Diktat name and icon belong to MProductions GmbH, see [TRADEMARKS.md](TRADEM
 ## Legal
 
 Diktat is published by MProductions GmbH. Impressum and privacy notice: to be added before the first public release.
+
+## Languages
+
+Diktat for Mac is available in German and English and follows the language of macOS. Dictation works in German, English and the other languages the speech models support. See [docs/localization.md](docs/localization.md).

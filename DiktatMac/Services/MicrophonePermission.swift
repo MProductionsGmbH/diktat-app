@@ -3,7 +3,7 @@ import AVFoundation
 
 /// Microphone access, checked before recording and shown on the main page when it is off.
 enum MicrophonePermission {
-    static let deniedMessage = "Diktat darf das Mikrofon nicht nutzen. Bitte in den Systemeinstellungen unter Datenschutz & Sicherheit > Mikrofon erlauben."
+    static let deniedMessage = String(localized: "Diktat darf das Mikrofon nicht nutzen. Bitte in den Systemeinstellungen unter Datenschutz & Sicherheit > Mikrofon erlauben.")
 
     static var isDenied: Bool {
         switch AVCaptureDevice.authorizationStatus(for: .audio) {

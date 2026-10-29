@@ -11,8 +11,8 @@ final class EngineCapture: @unchecked Sendable {
 
         var errorDescription: String? {
             switch self {
-            case .deviceUnavailable: return "Das gew\u{00E4}hlte Mikrofon l\u{00E4}sst sich nicht \u{00F6}ffnen."
-            case .noInputFormat: return "Das gew\u{00E4}hlte Mikrofon liefert kein Signal."
+            case .deviceUnavailable: return String(localized: "Das gew\u{00E4}hlte Mikrofon l\u{00E4}sst sich nicht \u{00F6}ffnen.")
+            case .noInputFormat: return String(localized: "Das gew\u{00E4}hlte Mikrofon liefert kein Signal.")
             }
         }
     }

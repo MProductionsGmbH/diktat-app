@@ -47,7 +47,7 @@ final class EmojiTextWorkflow: Workflow {
     // MARK: - Workflow Protocol
 
     func start() {
-        phase = .running("Aufnahme l\u{00E4}uft ...")
+        phase = .running(String(localized: "Aufnahme l\u{00E4}uft ..."))
         recorder.startRecording()
 
         if let error = recorder.errorMessage {
@@ -60,7 +60,7 @@ final class EmojiTextWorkflow: Workflow {
             recorder.stopRecording()
             guard !TranscriptionQualityService.shouldRejectRecording(duration: recorder.lastRecordingDuration) else {
                 recorder.discardRecording()
-                phase = .error("Keine Aufnahme erkannt.")
+                phase = .error(String(localized: "Keine Aufnahme erkannt."))
                 return
             }
             processRecording()
@@ -83,11 +83,11 @@ final class EmojiTextWorkflow: Workflow {
 
     private func processRecording() {
         guard let url = recorder.recordingURL else {
-            phase = .error("Keine Aufnahme vorhanden.")
+            phase = .error(String(localized: "Keine Aufnahme vorhanden."))
             return
         }
 
-        phase = .running("Wird transkribiert ...")
+        phase = .running(String(localized: "Wird transkribiert ..."))
         let recordingDuration = recorder.lastRecordingDuration
 
         processingTask = Task {
@@ -104,13 +104,13 @@ final class EmojiTextWorkflow: Workflow {
                 }
                 let cleanedRawText = TranscriptionQualityService.cleanedTranscript(rawText)
                 guard !TranscriptionQualityService.isLikelyArtifact(cleanedRawText, recordingDuration: recordingDuration) else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
 
                 let processedRawText = postProcessor.process(cleanedRawText)
                 guard !processedRawText.isEmpty else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
 
@@ -118,7 +118,7 @@ final class EmojiTextWorkflow: Workflow {
                 transcript = processedRawText
 
                 // Phase 2: Add emojis
-                phase = .running("Emojis werden eingef\u{00FC}gt ...")
+                phase = .running(String(localized: "Emojis werden eingef\u{00FC}gt ..."))
 
                 let promptLanguage = PromptLanguage.detect(from: processedRawText)
                 let result = try await TextRewriter.rewrite(
@@ -129,7 +129,7 @@ final class EmojiTextWorkflow: Workflow {
                 )
                 let cleanedResult = TranscriptionQualityService.cleanedTranscript(result)
                 guard cleanedResult != ModePrompts.nothingRecognizedMarker else {
-                    phase = .error("Keine Aufnahme erkannt.")
+                    phase = .error(String(localized: "Keine Aufnahme erkannt."))
                     return
                 }
                 phase = .done(cleanedResult)

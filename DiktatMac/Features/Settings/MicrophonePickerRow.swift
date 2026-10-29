@@ -25,7 +25,8 @@ struct MicrophonePickerRow: View {
                 Text("Mikrofon")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
-                    .frame(width: 62, alignment: .leading)
+                    .frame(minWidth: 62, alignment: .leading)
+                    .fixedSize(horizontal: true, vertical: false)
 
                 Picker("", selection: selection) {
                     Text(systemLabel).tag(Self.systemTag)
@@ -52,8 +53,8 @@ struct MicrophonePickerRow: View {
 
     private var systemLabel: String {
         if let name = inputs.defaultName {
-            return "Systemstandard (\(name))"
+            return String(localized: "Systemstandard (\(name))")
         }
-        return "Systemstandard"
+        return String(localized: "Systemstandard")
     }
 }

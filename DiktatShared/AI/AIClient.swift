@@ -11,21 +11,21 @@ enum AIClientError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notConfigured:
-            return "Kein Modell-Anbieter eingerichtet. Bitte in den Einstellungen einen API-Key hinterlegen."
+            return String(localized: "Kein Modell-Anbieter eingerichtet. Bitte in den Einstellungen einen API-Key hinterlegen.")
         case .missingKey(let provider):
-            return "Für \(provider.displayName) fehlt der API-Key."
+            return String(localized: "Für \(provider.displayName) fehlt der API-Key.")
         case .invalidAddress:
-            return "Die Adresse des Modell-Anbieters ist ungültig."
+            return String(localized: "Die Adresse des Modell-Anbieters ist ungültig.")
         case .http(401, _), .http(403, _):
-            return "Der API-Key wurde abgelehnt. Bitte in den Einstellungen prüfen."
+            return String(localized: "Der API-Key wurde abgelehnt. Bitte in den Einstellungen prüfen.")
         case .http(429, _):
-            return "Zu viele Anfragen oder das Guthaben beim Anbieter ist aufgebraucht."
+            return String(localized: "Zu viele Anfragen oder das Guthaben beim Anbieter ist aufgebraucht.")
         case .http(let status, let message):
-            return "Fehler vom Modell-Anbieter (\(status))" + (message.map { ": \($0)" } ?? ".")
+            return String(localized: "Fehler vom Modell-Anbieter (\(status))") + (message.map { ": \($0)" } ?? ".")
         case .refused:
-            return "Der Modell-Anbieter hat die Anfrage abgelehnt."
+            return String(localized: "Der Modell-Anbieter hat die Anfrage abgelehnt.")
         case .emptyResponse:
-            return "Keine Antwort vom Modell-Anbieter erhalten. Bitte nochmal versuchen."
+            return String(localized: "Keine Antwort vom Modell-Anbieter erhalten. Bitte nochmal versuchen.")
         }
     }
 }

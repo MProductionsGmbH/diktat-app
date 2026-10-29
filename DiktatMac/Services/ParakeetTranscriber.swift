@@ -44,8 +44,8 @@ actor ParakeetTranscriber {
     static var attribution: String {
         let license = "[CC BY 4.0](\(licenseURL.absoluteString))"
         return usesLegacyModel
-            ? "Parakeet TDT 0.6B v3 von NVIDIA, \(license), via FluidAudio."
-            : "Parakeet Ultra von Moondream, nachtrainiert aus NVIDIA Parakeet TDT 0.6B v3, \(license), via FluidAudio."
+            ? String(localized: "Parakeet TDT 0.6B v3 von NVIDIA, \(license), via FluidAudio.")
+            : String(localized: "Parakeet Ultra von Moondream, nachtrainiert aus NVIDIA Parakeet TDT 0.6B v3, \(license), via FluidAudio.")
     }
 
     /// The folder of the build in use, or of Ultra before anything is downloaded.

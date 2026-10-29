@@ -1,0 +1,26 @@
+{
+  "sourceLanguage": "de",
+  "strings": {
+    "NSMicrophoneUsageDescription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat needs microphone access to transcribe speech."
+          }
+        }
+      }
+    },
+    "NSAudioCaptureUsageDescription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat records the sound of an online meeting so it can be transcribed on your Mac. The sound does not leave the Mac."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

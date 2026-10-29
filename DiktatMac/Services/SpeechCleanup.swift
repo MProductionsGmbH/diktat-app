@@ -14,23 +14,23 @@ enum SpeechCleanupLevel: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .light: return "Leicht"
-        case .medium: return "Mittel"
-        case .strong: return "Stark"
-        case .style: return "KI-Schreibstil"
+        case .light: return String(localized: "Leicht")
+        case .medium: return String(localized: "Mittel")
+        case .strong: return String(localized: "Stark")
+        case .style: return String(localized: "KI-Schreibstil")
         }
     }
 
     var detail: String {
         switch self {
         case .light:
-            return "Entfernt \u{201E}\u{00E4}hm\u{201C}, Stottern und doppelt gesagte Satzteile. Rein regelbasiert, ohne KI."
+            return String(localized: "Entfernt \u{201E}\u{00E4}hm\u{201C}, Stottern und doppelt gesagte Satzteile. Rein regelbasiert, ohne KI.")
         case .medium:
-            return "Zus\u{00E4}tzlich: Wenn du dich verhaspelst, einen Satz neu ansetzt oder dich korrigierst, bleibt nur die richtige Fassung."
+            return String(localized: "Zus\u{00E4}tzlich: Wenn du dich verhaspelst, einen Satz neu ansetzt oder dich korrigierst, bleibt nur die richtige Fassung.")
         case .strong:
-            return "Zus\u{00E4}tzlich: Grammatik, Satzstellung und Zeichensetzung werden korrigiert. Deine Wortwahl bleibt."
+            return String(localized: "Zus\u{00E4}tzlich: Grammatik, Satzstellung und Zeichensetzung werden korrigiert. Deine Wortwahl bleibt.")
         case .style:
-            return "Ein Sprachmodell schreibt den Text neu: Rechtschreibung, Grammatik, Formulierung und Lesefluss, im Ton, den du unten unter Stil je Kontext w\u{00E4}hlst. Die Bedeutung bleibt."
+            return String(localized: "Ein Sprachmodell schreibt den Text neu: Rechtschreibung, Grammatik, Formulierung und Lesefluss, im Ton, den du unten unter Stil je Kontext w\u{00E4}hlst. Die Bedeutung bleibt.")
         }
     }
 
