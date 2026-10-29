@@ -267,7 +267,3 @@ struct AppSettings: Codable {
 
 // MARK: - Workflow Settings
 
-struct TranscriptionSettings: Codable {
-    var language: String = "de"
-}
-

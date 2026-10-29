@@ -120,10 +120,12 @@ final class TextImprovementWorkflow: Workflow {
                 // Phase 2: AI improvement (on device or the connected provider)
                 phase = .running("Text wird verbessert ...")
 
+                let promptLanguage = PromptLanguage.detect(from: processedRawText)
                 let improved = try await TextRewriter.rewrite(
                     processedRawText,
-                    instruction: ModePrompts.withFieldContext(ModePrompts.textImprovement(settings), context: fieldContext()),
-                    engine: rewriteEngine
+                    instruction: ModePrompts.withFieldContext(ModePrompts.textImprovement(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),
+                    engine: rewriteEngine,
+                    language: promptLanguage
                 )
 
                 let cleanedImproved = TranscriptionQualityService.cleanedTranscript(improved)

@@ -20,13 +20,15 @@ extension SpeechCleanup {
         guard configuration.level.usesLanguageModel,
               wordCount(text) >= minimumWords,
               TextRewriter.canRewrite(engine: configuration.engine) else { return text }
+        let language = PromptLanguage.detect(from: text)
         do {
             let rewritten = try await TextRewriter.rewrite(
-                framedTranscript(text),
+                framedTranscript(text, language: language, level: configuration.level),
                 instruction: configuration.level == .style
-                    ? styleInstruction(configuration.styleSettings)
-                    : instruction(for: configuration.level, protectedTerms: configuration.protectedTerms),
+                    ? styleInstruction(configuration.styleSettings, language: language)
+                    : instruction(for: configuration.level, protectedTerms: configuration.protectedTerms, language: language),
                 engine: configuration.engine,
+                language: language,
                 deterministic: true
             )
             let candidate = TranscriptionQualityService.cleanedTranscript(unframed(rewritten))

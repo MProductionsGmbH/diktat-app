@@ -120,10 +120,12 @@ final class DampfAblassenWorkflow: Workflow {
                 // Phase 2: AI rewrite (on device or the connected provider)
                 phase = .running("Wird umformuliert ...")
 
+                let promptLanguage = PromptLanguage.detect(from: processedRawText)
                 let answer = try await TextRewriter.rewrite(
                     processedRawText,
-                    instruction: ModePrompts.withFieldContext(ModePrompts.dampfAblassen(settings), context: fieldContext()),
-                    engine: rewriteEngine
+                    instruction: ModePrompts.withFieldContext(ModePrompts.dampfAblassen(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),
+                    engine: rewriteEngine,
+                    language: promptLanguage
                 )
                 let cleanedAnswer = TranscriptionQualityService.cleanedTranscript(answer)
                 guard cleanedAnswer != ModePrompts.nothingRecognizedMarker else {

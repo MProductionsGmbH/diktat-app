@@ -82,6 +82,7 @@ enum TextRewriter {
     }
 
     /// - Parameters:
+    ///   - language: The language of the dictation, for the rules below; detected from the text when nil.
     ///   - dictationRules: Adds the rules for reading dictated speech (self-corrections, du/Sie).
     ///     Their examples name weekdays and numbers, which a small model copies into summaries.
     ///   - deterministic: On the device, always take the most likely wording, so the same text
@@ -90,10 +91,12 @@ enum TextRewriter {
         _ text: String,
         instruction: String,
         engine: Engine,
+        language: PromptLanguage? = nil,
         dictationRules: Bool = true,
         deterministic: Bool = false
     ) async throws -> String {
-        let instruction = dictationRules ? instruction + "\n\n" + ModePrompts.spokenTranscriptRules : instruction
+        let rulesLanguage = language ?? PromptLanguage.detect(from: text)
+        let instruction = dictationRules ? instruction + "\n\n" + ModePrompts.spokenTranscriptRules(for: rulesLanguage) : instruction
         if runsLocally(engine: engine) {
             // No silent switch to a provider: the app promises the text stays on the device.
             return try await rewriteLocally(text, instruction: instruction, deterministic: deterministic)

@@ -130,7 +130,9 @@ targets:
       - path: Services/SpeechCleanup.swift
       - path: Services/StyleContext.swift
       - path: Services/MicrophoneSelection.swift
+      - path: Features/Workflows/TranscriptionSettings.swift
       - path: ../DiktatShared/AI/ModePrompts.swift
+      - path: ../DiktatShared/AI/PromptLanguage.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: app.diktat.mac.tests

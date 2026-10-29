@@ -86,7 +86,8 @@ final class AudioFileController {
     }
 
     func rewrite(as newMode: WorkflowType, appState: AppState) {
-        guard !transcript.isEmpty, let instruction = Self.instruction(for: newMode, appState: appState) else { return }
+        let promptLanguage = PromptLanguage.detect(from: transcript)
+        guard !transcript.isEmpty, let instruction = Self.instruction(for: newMode, appState: appState, language: promptLanguage) else { return }
         task?.cancel()
         copied = false
         phase = .working("\(appState.displayName(for: newMode)) wird formuliert ...")
@@ -95,7 +96,7 @@ final class AudioFileController {
 
         task = Task {
             do {
-                let rewritten = try await TextRewriter.rewrite(source, instruction: instruction, engine: engine)
+                let rewritten = try await TextRewriter.rewrite(source, instruction: instruction, engine: engine, language: promptLanguage)
                 let cleaned = TranscriptionQualityService.cleanedTranscript(rewritten)
                 if Task.isCancelled { return }
                 finish(cleaned, mode: newMode, appState: appState)
@@ -131,11 +132,11 @@ final class AudioFileController {
         phase = .done
     }
 
-    private static func instruction(for mode: WorkflowType, appState: AppState) -> String? {
+    private static func instruction(for mode: WorkflowType, appState: AppState, language: PromptLanguage) -> String? {
         switch mode {
-        case .textImprover: return ModePrompts.textImprovement(appState.textImprovementSettings)
-        case .dampfAblassen: return ModePrompts.dampfAblassen(appState.dampfAblassenSettings)
-        case .emojiText: return ModePrompts.emoji(appState.emojiTextSettings)
+        case .textImprover: return ModePrompts.textImprovement(appState.textImprovementSettings, language: language)
+        case .dampfAblassen: return ModePrompts.dampfAblassen(appState.dampfAblassenSettings, language: language)
+        case .emojiText: return ModePrompts.emoji(appState.emojiTextSettings, language: language)
         case .tapTalk, .localTapTalk: return nil
         }
     }

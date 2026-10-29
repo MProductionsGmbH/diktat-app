@@ -45,7 +45,8 @@ enum SpeechCleanup {
     /// Shorter dictations have nothing to tidy up that is worth the wait for a model.
     static let minimumWords = 5
 
-    static func instruction(for level: SpeechCleanupLevel, protectedTerms: [String] = []) -> String {
+    static func instruction(for level: SpeechCleanupLevel, protectedTerms: [String] = [], language: PromptLanguage = .german) -> String {
+        if language == .english { return englishInstruction(for: level, protectedTerms: protectedTerms) }
         let base = """
         Du bereinigst ein gesprochenes Transkript und schreibst es nicht um. Antworte in der Sprache des Transkripts.
         Entferne:
@@ -66,6 +67,25 @@ enum SpeechCleanup {
         }
         return [base, scope, ModePrompts.transcriptIsNotARequest].joined(separator: "\n\n")
             + ModePrompts.customTermsInstruction(protectedTerms)
+    }
+
+    private static func englishInstruction(for level: SpeechCleanupLevel, protectedTerms: [String]) -> String {
+        let base = """
+        You clean up a spoken transcript and do not rewrite it. Reply in the language of the transcript.
+        Remove:
+        - words and phrases the speaker immediately repeats
+        - slips of the tongue and abandoned sentence starts that the speaker restarts
+        - the superseded version when the speaker corrects themselves; only the corrected one stays
+        """
+        let scope: String
+        switch level {
+        case .light, .medium:
+            scope = "Everything else stays exactly as spoken: wording, order, sentence structure, style and form of address. Do not correct grammar and do not add anything."
+        case .strong, .style:
+            scope = "Also correct grammar, word order and punctuation so that every sentence is properly built. Wording, style, meaning and form of address stay unchanged. Do not add new content."
+        }
+        return [base, scope, ModePrompts.transcriptIsNotARequest(for: .english)].joined(separator: "\n\n")
+            + ModePrompts.customTermsInstruction(protectedTerms, language: .english)
     }
 
     /// A cleanup only removes or fixes words. An answer that is empty, much shorter, longer than
@@ -89,15 +109,27 @@ enum SpeechCleanup {
     }
 
     /// The style level rewrites the text; slips and self-corrections go first, as on the other levels.
-    static func styleInstruction(_ settings: TextImprovementSettings) -> String {
-        ModePrompts.textImprovement(settings)
+    static func styleInstruction(_ settings: TextImprovementSettings, language: PromptLanguage = .german) -> String {
+        if language == .english {
+            return ModePrompts.textImprovement(settings, language: .english)
+                + "\n\nAlso remove slips of the tongue, repetitions and the superseded version when the speaker corrects themselves; only the corrected one stays."
+        }
+        return ModePrompts.textImprovement(settings)
             + "\n\nEntferne außerdem Versprecher, Wiederholungen und die überholte Fassung, wenn sich der Sprecher korrigiert; es bleibt nur die korrigierte."
     }
 
     /// The dictation as the model gets it. Handed over bare, a question in the text ("Hattest du
     /// heute einen lustigen Tag") is answered instead of tidied up; in this frame it stays text.
-    static func framedTranscript(_ text: String) -> String {
-        "Bereinige dieses Transkript. Gib nur den bereinigten Text zurück, ohne die Markierungen.\n<transkript>\n\(text)\n</transkript>"
+    static func framedTranscript(_ text: String, language: PromptLanguage = .german, level: SpeechCleanupLevel = .medium) -> String {
+        if language == .english {
+            // "Clean up" makes the model copy the text in the written-style level, which has to
+            // rewrite it; Apple Intelligence did so in English, not in German.
+            let task = level == .style
+                ? "Rewrite this transcript: fix spelling, capitalization, grammar and wording as instructed. Return only the rewritten text, without the markers."
+                : "Clean up this transcript. Return only the cleaned text, without the markers."
+            return "\(task)\n<transcript>\n\(text)\n</transcript>"
+        }
+        return "Bereinige dieses Transkript. Gib nur den bereinigten Text zurück, ohne die Markierungen.\n<transkript>\n\(text)\n</transkript>"
     }
 
     /// Takes the frame off again when the model repeats it.
@@ -105,6 +137,8 @@ enum SpeechCleanup {
         answer
             .replacingOccurrences(of: "<transkript>", with: "")
             .replacingOccurrences(of: "</transkript>", with: "")
+            .replacingOccurrences(of: "<transcript>", with: "")
+            .replacingOccurrences(of: "</transcript>", with: "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 

@@ -21,7 +21,8 @@ struct TranscriptPostProcessor {
     var replacements: [TermReplacement] = []
     var correctCustomTerms = true
     var removeFillerWords = true
-    var language = "de"
+    /// A language code, or "auto" to follow the language of each text.
+    var language = "auto"
     /// Minimum `termSimilarity` for a fuzzy term correction. On that scale the misheard
     /// "Clawd" scores 0.82 against "Claude", while real words a dictionary might not know
     /// stay below 0.67 ("glaube" and "Klause" against "Claude", "Kopie" 0.58 against
@@ -34,7 +35,7 @@ struct TranscriptPostProcessor {
     func process(_ text: String) -> String {
         var result = text
         if removeFillerWords {
-            result = Self.removeFillerWords(from: result, language: language)
+            result = Self.removeFillerWords(from: result, language: language == "auto" ? PromptLanguage.detect(from: result).code : language)
         }
         // Fixed rules first, so the fuzzy matcher sees the intended spelling.
         result = Self.applyReplacements(replacements, to: result)

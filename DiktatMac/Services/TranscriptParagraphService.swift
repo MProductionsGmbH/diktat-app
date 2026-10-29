@@ -30,7 +30,7 @@ enum TranscriptParagraphService {
         let sentences = NLTokenizer(unit: .sentence)
         let words = NLTokenizer(unit: .word)
         let languageCode = language.lowercased().split(separator: "-").first.map(String.init) ?? ""
-        if !languageCode.isEmpty {
+        if !languageCode.isEmpty, languageCode != "auto" {
             let hint = NLLanguage(rawValue: languageCode)
             sentences.setLanguage(hint)
             words.setLanguage(hint)
