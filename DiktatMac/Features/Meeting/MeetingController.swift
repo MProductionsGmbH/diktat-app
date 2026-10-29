@@ -52,6 +52,8 @@ final class MeetingController {
 
     @ObservationIgnored private let settingsProvider: () -> Settings
     @ObservationIgnored private var recorder: AVAudioRecorder?
+    /// Records instead of `recorder` when a microphone other than the Mac's default input is picked.
+    @ObservationIgnored private var micCapture: EngineCapture?
     /// A `SystemAudioCapture` (macOS 14.2 and later) during an online meeting.
     @ObservationIgnored private var systemCapture: Any?
     /// The live notes free their model; the evaluation waits for that.
@@ -131,16 +133,20 @@ final class MeetingController {
         ]
         do {
             try FileManager.default.createDirectory(at: MeetingStore.directoryURL, withIntermediateDirectories: true)
-            let recorder = try AVAudioRecorder(url: record.audioURL, settings: settings)
-            let observer = RecorderObserver { [weak self] in self?.recordingInterrupted() }
-            recorder.delegate = observer
-            recorder.isMeteringEnabled = true
-            guard recorder.record() else {
-                phase = .failed("Die Aufnahme lie\u{00DF} sich nicht starten. Darf Diktat das Mikrofon nutzen?", meetingID: nil)
-                return
+            if let capture = startPickedMicrophone(writingTo: record.audioURL) {
+                micCapture = capture
+            } else {
+                let recorder = try AVAudioRecorder(url: record.audioURL, settings: settings)
+                let observer = RecorderObserver { [weak self] in self?.recordingInterrupted() }
+                recorder.delegate = observer
+                recorder.isMeteringEnabled = true
+                guard recorder.record() else {
+                    phase = .failed("Die Aufnahme lie\u{00DF} sich nicht starten. Darf Diktat das Mikrofon nutzen?", meetingID: nil)
+                    return
+                }
+                self.recorder = recorder
+                recorderObserver = observer
             }
-            self.recorder = recorder
-            recorderObserver = observer
             recordingID = record.id
             store.upsert(record)
             // Keeps the Mac awake through a long meeting; closing the lid still sends it to sleep.
@@ -171,6 +177,23 @@ final class MeetingController {
         } catch {
             phase = .failed("Die Aufnahme lie\u{00DF} sich nicht starten: \(error.localizedDescription)", meetingID: nil)
         }
+    }
+
+    /// The microphone picked in the settings. Nil when none is picked, it is not connected or it
+    /// does not open: then the Mac's default input records, as without a choice.
+    private func startPickedMicrophone(writingTo url: URL) -> EngineCapture? {
+        guard let device = AudioInputDevices.preferredDeviceID() else { return nil }
+        let capture = EngineCapture()
+        capture.onInterruption = { [weak self] in
+            MainActor.assumeIsolated { self?.recordingInterrupted() }
+        }
+        do {
+            try capture.start(device: device, writingTo: url, settings: EngineCapture.meetingSettings)
+        } catch {
+            try? FileManager.default.removeItem(at: url)
+            return nil
+        }
+        return capture
     }
 
     private func startSystemAudio(for record: MeetingRecord, liveBuffer: LiveAudioBuffer?) {
@@ -216,19 +239,23 @@ final class MeetingController {
     /// Stops recording for a while, e.g. while the call is in breakout rooms. Both tracks
     /// skip the pause, so they stay in step.
     func pause() {
-        guard case .recording = phase, pausedAt == nil, let recorder else { return }
-        recorder.pause()
+        guard case .recording = phase, pausedAt == nil, recorder != nil || micCapture != nil else { return }
+        recorder?.pause()
+        micCapture?.setPaused(true)
         if #available(macOS 14.2, *) { (systemCapture as? SystemAudioCapture)?.setPaused(true) }
         pausedAt = Date()
         audioLevel = 0
     }
 
     func resume() {
-        guard case .recording(let startedAt) = phase, let pausedAt, let recorder else { return }
-        guard recorder.record() else {
-            recordingInterrupted()
-            return
+        guard case .recording(let startedAt) = phase, let pausedAt, recorder != nil || micCapture != nil else { return }
+        if let recorder {
+            guard recorder.record() else {
+                recordingInterrupted()
+                return
+            }
         }
+        micCapture?.setPaused(false)
         if #available(macOS 14.2, *) { (systemCapture as? SystemAudioCapture)?.setPaused(false) }
         self.pausedAt = nil
         // The clock shows recorded time, without the pause.
@@ -246,6 +273,7 @@ final class MeetingController {
         guard case .recording = phase else { return }
         let id = recordingID
         recorder?.stop()
+        micCapture?.stop()
         if #available(macOS 14.2, *) { (systemCapture as? SystemAudioCapture)?.stop() }
         endRecording()
         if let id { store.delete(id: id) }
@@ -268,9 +296,10 @@ final class MeetingController {
 
     /// Stops the recorder and stores the duration. Returns the meeting's ID.
     private func finishRecording() -> UUID? {
-        guard let recorder, let id = recordingID else { return nil }
-        let duration = recorder.currentTime
-        recorder.stop()
+        guard recorder != nil || micCapture != nil, let id = recordingID else { return nil }
+        let duration = recorder?.currentTime ?? micCapture?.duration ?? 0
+        recorder?.stop()
+        micCapture?.stop()
         if let record = store.meeting(id: id) { stopSystemAudio(for: record) }
         endRecording()
         if var record = store.meeting(id: id) {
@@ -282,6 +311,7 @@ final class MeetingController {
 
     private func endRecording() {
         recorder = nil
+        micCapture = nil
         pausedAt = nil
         if let liveNotes {
             liveNotesShutdown = Task { await liveNotes.stop() }
@@ -303,7 +333,16 @@ final class MeetingController {
     private func startMetering() {
         levelTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             Task { @MainActor [weak self] in
-                guard let self, let recorder = self.recorder, self.pausedAt == nil else { return }
+                guard let self, self.pausedAt == nil else { return }
+                if let capture = self.micCapture {
+                    guard capture.isRunning else {
+                        self.recordingInterrupted()
+                        return
+                    }
+                    self.audioLevel = capture.currentLevel
+                    return
+                }
+                guard let recorder = self.recorder else { return }
                 // A recorder that stopped on its own would otherwise look like silence.
                 guard recorder.isRecording else {
                     self.recordingInterrupted()

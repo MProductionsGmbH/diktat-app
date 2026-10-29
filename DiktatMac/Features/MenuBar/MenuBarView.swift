@@ -317,6 +317,7 @@ struct MenuBarView: View {
                 Text("Modell")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
+                    .frame(width: 62, alignment: .leading)
 
                 Picker("", selection: Binding(
                     get: { appState.selectedLocalModelName },
@@ -332,6 +333,8 @@ struct MenuBarView: View {
                 .controlSize(.small)
                 .disabled(appState.isDownloadingLocalModel)
             }
+
+            MicrophonePickerRow(appState: appState)
 
             if let progress = appState.localModelDownloadProgress {
                 VStack(alignment: .leading, spacing: 4) {

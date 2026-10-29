@@ -1,8 +1,8 @@
 import AppKit
 import CoreAudio
 
-/// What the default microphone looks like: whether there is one, and how loud macOS records
-/// it. Only read, never changed: the input volume belongs to the user.
+/// What the microphone looks like: whether there is one (the one picked in the settings, else
+/// the Mac's default input), and how loud macOS records it. Only read, never changed: the input volume belongs to the user.
 enum MicrophoneCheck {
     enum Issue: Equatable {
         /// No input at all, e.g. a closed MacBook with an external keyboard and no headset.
@@ -14,7 +14,7 @@ enum MicrophoneCheck {
     static let quietBelow: Float = 0.25
 
     static var issue: Issue? {
-        guard let device = defaultInput else { return .noInput }
+        guard let device = AudioInputDevices.preferredDeviceID() ?? defaultInput else { return .noInput }
         if let volume = inputVolume(of: device), volume < quietBelow {
             return .quiet(percent: Int((volume * 100).rounded()))
         }

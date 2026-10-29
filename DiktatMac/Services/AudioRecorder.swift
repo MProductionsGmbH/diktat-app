@@ -10,6 +10,8 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     var lastRecordingDuration: TimeInterval = 0
 
     private var audioRecorder: AVAudioRecorder?
+    /// Set while a microphone other than the Mac's default input records.
+    private var capture: EngineCapture?
     private var levelTimer: Timer?
 
     /// One file per recording: deleting one after its transcription never hits the next.
@@ -54,6 +56,8 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             break
         }
 
+        if startPickedMicrophone() { return }
+
         let settings: [String: Any] = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 16000,
@@ -78,10 +82,34 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         }
     }
 
+    /// Records the microphone picked in the settings. False when none is picked, it is not
+    /// connected or it does not open: then the Mac's default input records, as without a choice.
+    private func startPickedMicrophone() -> Bool {
+        guard let device = AudioInputDevices.preferredDeviceID() else { return false }
+        let capture = EngineCapture()
+        do {
+            try capture.start(device: device, writingTo: fileURL)
+        } catch {
+            try? FileManager.default.removeItem(at: fileURL)
+            return false
+        }
+        self.capture = capture
+        isRecording = true
+        recordingURL = nil
+        startMetering()
+        return true
+    }
+
     func stopRecording() {
         stopMetering()
-        lastRecordingDuration = audioRecorder?.currentTime ?? 0
-        audioRecorder?.stop()
+        if let capture {
+            lastRecordingDuration = capture.duration
+            capture.stop()
+            self.capture = nil
+        } else {
+            lastRecordingDuration = audioRecorder?.currentTime ?? 0
+            audioRecorder?.stop()
+        }
         isRecording = false
         recordingURL = fileURL
         audioLevel = 0
@@ -90,6 +118,10 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     private func startMetering() {
         levelTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
             guard let self else { return }
+            if let capture = self.capture {
+                self.audioLevel = capture.currentLevel
+                return
+            }
             self.audioRecorder?.updateMeters()
             let power = self.audioRecorder?.averagePower(forChannel: 0) ?? -160
             let normalized = max(0, min(1, (power + 50) / 50))

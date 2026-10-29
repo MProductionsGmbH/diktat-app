@@ -11,8 +11,8 @@ settings:
     SWIFT_VERSION: "5.10"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
     ONLY_ACTIVE_ARCH: NO
-    MARKETING_VERSION: "0.1.2"
-    CURRENT_PROJECT_VERSION: "3"
+    MARKETING_VERSION: "0.1.3"
+    CURRENT_PROJECT_VERSION: "4"
     # In-app updates (Sparkle) run when the feed and the key are set: the app reads the appcast of
     # the newest release (each release carries one, see docs/releasing.md) and checks its
     # signature against the public key. Forks use the appcast and key of their own releases.
@@ -129,6 +129,7 @@ targets:
       - path: ../DiktatShared/Meeting/ListDisplay.swift
       - path: Services/SpeechCleanup.swift
       - path: Services/StyleContext.swift
+      - path: Services/MicrophoneSelection.swift
       - path: ../DiktatShared/AI/ModePrompts.swift
     settings:
       base:

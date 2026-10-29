@@ -72,6 +72,10 @@ final class AppState {
                 || oldValue.hotkeyMode != appSettings.hotkeyMode {
                 applyFnAloneSetting()
             }
+            if oldValue.microphoneUID != appSettings.microphoneUID {
+                AudioInputDevices.preferredUID = appSettings.microphoneUID
+                microphoneIssue = MicrophoneCheck.issue
+            }
             if oldValue.historyRetention != appSettings.historyRetention {
                 history.updateRetention(appSettings.historyRetention)
             }
@@ -178,6 +182,7 @@ final class AppState {
     init() {
         let loadedAppSettings = Self.loadAppSettings()
         self.appSettings = loadedAppSettings
+        AudioInputDevices.preferredUID = loadedAppSettings.microphoneUID
         self.transcriptionSettings = Self.loadTranscriptionSettings()
         self.textImprovementSettings = Self.loadTextImprovementSettings()
         self.dampfAblassenSettings = Self.loadDampfAblassenSettings()

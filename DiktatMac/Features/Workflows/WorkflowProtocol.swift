@@ -167,6 +167,8 @@ struct AppSettings: Codable {
     var showsRecordingIndicator: Bool = true
     /// A short sound when the recording starts.
     var playsStartSound: Bool = true
+    /// The microphone for dictation (its UID); nil follows the Mac's default input.
+    var microphoneUID: String?
     /// Write the summary right after a meeting. Off: transcript by person only, faster;
     /// the summary can still be created later.
     var summarizesMeetings: Bool = true
@@ -208,6 +210,7 @@ struct AppSettings: Codable {
         case automaticParagraphs
         case showsRecordingIndicator
         case playsStartSound
+        case microphoneUID
         case summarizesMeetings
     }
 
@@ -243,6 +246,7 @@ struct AppSettings: Codable {
         automaticParagraphs = try container.decodeIfPresent(Bool.self, forKey: .automaticParagraphs) ?? false
         showsRecordingIndicator = try container.decodeIfPresent(Bool.self, forKey: .showsRecordingIndicator) ?? true
         playsStartSound = try container.decodeIfPresent(Bool.self, forKey: .playsStartSound) ?? true
+        microphoneUID = try? container.decodeIfPresent(String.self, forKey: .microphoneUID)
         summarizesMeetings = try container.decodeIfPresent(Bool.self, forKey: .summarizesMeetings) ?? true
     }
 

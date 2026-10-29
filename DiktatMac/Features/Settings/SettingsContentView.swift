@@ -608,6 +608,13 @@ struct CustomizeSettingsView: View {
             // MARK: Aufnahme & Einfuegen
             SettingsSection(title: "Aufnahme & Einf\u{00FC}gen") {
 
+                MicrophonePickerRow(appState: appState)
+
+                Text("Mit dem Systemstandard folgt Diktat der Einstellung des Macs (Ton, Eingang). W\u{00E4}hle ein bestimmtes Mikrofon, wenn andere Programme ein anderes nutzen sollen. Die Auswahl gilt f\u{00FC}r das Diktieren und f\u{00FC}r Meetings.")
+                    .font(.ui(12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 Toggle("Aufnahme unten am Bildschirm zeigen", isOn: $appState.appSettings.showsRecordingIndicator)
                     .toggleStyle(.trailingSwitch)
 
