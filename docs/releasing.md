@@ -55,8 +55,7 @@ With the secrets the workflow signs the app with the hardened runtime (`build.sh
 `DIKTAT_SIGN_IDENTITY` is set), sends it to Apple, waits for the result and staples the ticket
 to the app before it makes the DMG. Without them it still publishes, signed ad hoc.
 
-This path has not been run against a real account yet. The first notarization often needs a
-round of fixes; `xcrun notarytool log <id>` names the files Apple objects to.
+The first submissions of a new developer account can wait in Apple's queue for hours; the release job allows four hours for that. Run `xcrun notarytool history` to see the state of a submission, and `xcrun notarytool log <id>` names the files Apple objects to.
 
 ## Until then: opening the app
 
