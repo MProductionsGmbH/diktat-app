@@ -60,7 +60,9 @@ jobs:
     name: Build and publish
     needs: decide
     if: needs.decide.outputs.skip != 'true'
-    runs-on: macos-26
+    # An Intel Mac: the app is built for both chips anyway, and the Apple-silicon runners
+    # (macos-26) were not available for hours ("not acquired by Runner of type hosted").
+    runs-on: macos-26-intel
     timeout-minutes: 240
     env:
       TAG: ${{ needs.decide.outputs.tag }}
