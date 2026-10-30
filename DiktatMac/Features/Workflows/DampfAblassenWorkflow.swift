@@ -43,6 +43,7 @@ final class DampfAblassenWorkflow: Workflow {
 
     var isRecording: Bool { recorder.isRecording }
     var audioLevel: Float { recorder.audioLevel }
+    var noSignal: Bool { recorder.noSignal }
 
     // MARK: - Workflow Protocol
 

@@ -29,6 +29,7 @@ final class RecordingIndicatorController {
         switch status {
         case .recording:
             model.status = status
+            model.microphoneName = AudioInputDevices.activeDeviceName() ?? ""
             // A new recording picks the screen you work on now.
             show(placing: panel?.isVisible != true || isHiding)
         case .processing:
@@ -155,6 +156,11 @@ private extension MenuBarStatus {
 @MainActor
 final class RecordingIndicatorModel {
     var status: MenuBarStatus = .idle
+    /// The microphone this recording uses, shown in the pill.
+    var microphoneName = ""
+    /// What the pill shows without a running workflow (the design previews).
+    var previewLevel: Float = 0
+    var previewNoSignal = false
 }
 
 /// Takes the first click, so the pill reacts without activating Diktat.
@@ -173,7 +179,9 @@ struct RecordingPill: View {
     private static let lilac = DiktatColor.hex(0xBB84DF)
     private static let night = DiktatColor.hex(0x050722)
     /// The capsule plus room for its shadow.
-    static let panelSize = CGSize(width: 180, height: 72)
+    static let panelSize = CGSize(width: 336, height: 72)
+    /// While recording the capsule also carries the name of the microphone and the voice dots.
+    private static let recordingWidth: CGFloat = 302
 
     var body: some View {
         Group {
@@ -202,7 +210,7 @@ struct RecordingPill: View {
         HStack(spacing: 10) {
             content
         }
-        .frame(width: 148, height: 40)
+        .frame(width: model.status.isRecording ? Self.recordingWidth : 148, height: 40)
         .background {
             Capsule().fill(Self.night.opacity(0.94))
             Capsule().strokeBorder(Self.lilac.opacity(0.35), lineWidth: 1)
@@ -216,10 +224,18 @@ struct RecordingPill: View {
     private var content: some View {
         switch model.status {
         case .recording(let type):
-            Image(systemName: type.icon)
+            let silent = appState.activeWorkflow?.noSignal ?? model.previewNoSignal
+            let tint = silent ? Color(nsColor: .systemRed) : Color.white
+            Image(systemName: silent ? "mic.slash.fill" : type.icon)
                 .font(.ui(12, .semibold))
-                .foregroundStyle(.white.opacity(0.85))
-            AnimatedMark(motion: .voice(appState.activeWorkflow?.audioLevel ?? 0), color: Self.lilac)
+                .foregroundStyle(tint.opacity(0.9))
+            Text(silent ? String(localized: "Kein Ton") : model.microphoneName)
+                .font(.ui(11.5, .medium))
+                .foregroundStyle(tint.opacity(silent ? 1 : 0.8))
+                .lineLimit(1)
+                .truncationMode(.tail)
+                .frame(width: 130, alignment: .leading)
+            VoiceDots(level: appState.activeWorkflow?.audioLevel ?? model.previewLevel, silent: silent)
             Image(systemName: "stop.fill")
                 .font(.ui(7, .bold))
                 .foregroundStyle(.white.opacity(0.85))
@@ -345,5 +361,53 @@ private struct AnimatedMark: View {
         case .thinking:
             return 0.45 + 0.55 * pow(0.5 + 0.5 * sin(time * 4.5 - Double(index) * 0.9), 1.6)
         }
+    }
+}
+
+/// The voice as a dot matrix: eleven columns of five dots whose middle rises with the voice, with a
+/// soft motion of its own so the pill is alive in a quiet moment. Without any signal the dots lie in
+/// a flat red line.
+private struct VoiceDots: View {
+    let level: Float
+    let silent: Bool
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private static let columns = 11
+    private static let rows = 5
+    private static let envelope: [Double] = [0.35, 0.5, 0.68, 0.84, 0.95, 1, 0.95, 0.84, 0.68, 0.5, 0.35]
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
+            let time = context.date.timeIntervalSinceReferenceDate
+            HStack(spacing: 3) {
+                ForEach(0..<Self.columns, id: \.self) { column in
+                    let amplitude = amplitude(of: column, at: time)
+                    VStack(spacing: 3) {
+                        ForEach(0..<Self.rows, id: \.self) { row in
+                            Circle()
+                                .fill(silent ? Color(nsColor: .systemRed) : Color.white)
+                                .frame(width: 3, height: 3)
+                                .opacity(opacity(row: row, amplitude: amplitude))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func amplitude(of column: Int, at time: Double) -> Double {
+        if silent { return 0.15 }
+        let shape = Self.envelope[column]
+        if reduceMotion { return shape * 0.5 }
+        let wobble = 0.5 + 0.5 * sin(time * 8 + Double(column) * 0.9)
+        let voice = min(1, Double(level) * 1.7)
+        return shape * (0.12 + 0.88 * voice * (0.6 + 0.4 * wobble))
+    }
+
+    /// The middle row always glows a little; the others light up with the amplitude, softly at the edge.
+    private func opacity(row: Int, amplitude: Double) -> Double {
+        let distance = abs(Double(row) - Double(Self.rows / 2))
+        return max(0.16, min(1, amplitude * 3 - distance + 0.5))
     }
 }

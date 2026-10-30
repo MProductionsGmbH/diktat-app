@@ -3631,6 +3631,17 @@
         }
       }
     },
+    "Kein Ton": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No sound"
+          }
+        }
+      }
+    },
     "Keine Antwort vom Modell-Anbieter erhalten. Bitte nochmal versuchen.": {
       "extractionState": "manual",
       "localizations": {

@@ -40,6 +40,7 @@ final class EngineCapture: @unchecked Sendable {
     private var file: AVAudioFile?
     private var level: Float = 0
     private var peakDB: Float = -160
+    private var currentDB: Float = -160
     private var paused = false
     private var framesWritten: AVAudioFramePosition = 0
     private var sampleRate: Double = 16_000
@@ -53,6 +54,13 @@ final class EngineCapture: @unchecked Sendable {
         lock.lock()
         defer { lock.unlock() }
         return level
+    }
+
+    /// The level of the latest buffer in dB.
+    var currentPowerDB: Float {
+        lock.lock()
+        defer { lock.unlock() }
+        return currentDB
     }
 
     /// The loudest moment so far in dB; about -120 means digital silence (a muted or closed-lid microphone).
@@ -138,6 +146,7 @@ final class EngineCapture: @unchecked Sendable {
             lock.lock()
             level = max(0, min(1, (power + 50) / 50))
             peakDB = max(peakDB, power)
+            currentDB = power
             lock.unlock()
         }
 

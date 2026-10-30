@@ -109,6 +109,8 @@ protocol Workflow: AnyObject, Observable {
     var isRecording: Bool { get }
     /// Input level 0...1 while recording, for the waveforms.
     var audioLevel: Float { get }
+    /// The microphone has delivered only silence for a moment (muted, or a MacBook with the lid closed).
+    var noSignal: Bool { get }
     var onOutput: WorkflowOutputHandler? { get set }
     var onPhaseChange: WorkflowPhaseChangeHandler? { get set }
     /// What was said, word for word, before an AI mode rewrote it; nil for plain dictation.
@@ -120,6 +122,8 @@ protocol Workflow: AnyObject, Observable {
 }
 
 extension Workflow {
+    var noSignal: Bool { false }
+
     var transcript: String? { nil }
 }
 

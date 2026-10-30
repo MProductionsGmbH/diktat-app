@@ -83,6 +83,7 @@ final class TranscriptionWorkflow: Workflow {
 
     var isRecording: Bool { recorder.isRecording }
     var audioLevel: Float { recorder.audioLevel }
+    var noSignal: Bool { recorder.noSignal }
 
     private func transcribe() {
         guard let url = recorder.recordingURL else {

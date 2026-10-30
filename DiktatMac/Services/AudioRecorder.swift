@@ -14,6 +14,9 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     private var capture: EngineCapture?
     private var levelTimer: Timer?
     private var maxPowerDB: Float = -160
+    private var silentSince: Date?
+    /// Digital silence for more than a second while recording: the microphone delivers nothing.
+    private(set) var noSignal = false
     /// The recording was digital silence from start to end: a muted microphone, or the built-in one
     /// of a MacBook with the lid closed.
     private(set) var heardOnlySilence = false
@@ -51,6 +54,8 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         lastRecordingDuration = 0
         maxPowerDB = -160
         heardOnlySilence = false
+        silentSince = nil
+        noSignal = false
         fileURL = Self.newFileURL()
 
         // Without access macOS records silence; say why instead of "Keine Aufnahme erkannt".
@@ -129,19 +134,35 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             if let capture = self.capture {
                 self.audioLevel = capture.currentLevel
                 self.maxPowerDB = max(self.maxPowerDB, capture.peakPowerDB)
+                self.trackSignal(powerDB: capture.currentPowerDB)
                 return
             }
             self.audioRecorder?.updateMeters()
             let power = self.audioRecorder?.averagePower(forChannel: 0) ?? -160
             self.maxPowerDB = max(self.maxPowerDB, power)
+            self.trackSignal(powerDB: power)
             let normalized = max(0, min(1, (power + 50) / 50))
             self.audioLevel = normalized
+        }
+    }
+
+    /// Digital silence reads about -120 dB; the quietest real room is far above -110.
+    private func trackSignal(powerDB: Float) {
+        if powerDB < -110 {
+            let since = silentSince ?? Date()
+            silentSince = since
+            noSignal = Date().timeIntervalSince(since) > 1
+        } else {
+            silentSince = nil
+            noSignal = false
         }
     }
 
     private func stopMetering() {
         levelTimer?.invalidate()
         levelTimer = nil
+        silentSince = nil
+        noSignal = false
     }
 
     // MARK: - AVAudioRecorderDelegate
