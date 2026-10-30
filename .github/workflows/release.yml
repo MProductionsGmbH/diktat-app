@@ -60,9 +60,9 @@ jobs:
     name: Build and publish
     needs: decide
     if: needs.decide.outputs.skip != 'true'
-    # An Intel Mac: the app is built for both chips anyway, and the Apple-silicon runners
-    # (macos-26) were not available for hours ("not acquired by Runner of type hosted").
-    runs-on: macos-26-intel
+    # Apple silicon. If GitHub has no runner free ("not acquired by Runner of type hosted"),
+    # re-run the job later; macos-26-intel was tried and its build failed.
+    runs-on: macos-26
     timeout-minutes: 240
     env:
       TAG: ${{ needs.decide.outputs.tag }}
