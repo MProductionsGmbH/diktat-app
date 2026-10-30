@@ -7,11 +7,13 @@ import WhisperKit
 /// No dictionary prompt: with WhisperKit 0.18 and Large v3 Turbo, any `promptTokens`
 /// (even a single word) made the decoder stop at once and return an empty text.
 enum WhisperDictation {
-    static func transcribe(_ pipeline: WhisperKit, audioPath: String) async throws -> String {
+    /// - Parameter language: A language code to listen for only; nil detects the spoken language.
+    static func transcribe(_ pipeline: WhisperKit, audioPath: String, language: String? = nil) async throws -> String {
         let samples = try AudioProcessor.loadAudioAsFloatArray(fromPath: audioPath)
-        // No fixed language: Whisper follows a given language strictly and turns English
-        // speech into German. Detection keeps every dictation in its spoken language.
-        let options = DecodingOptions(task: .transcribe, language: nil, detectLanguage: true)
+        // By default no fixed language: Whisper follows a given language strictly and turns English
+        // speech into German. Detection keeps every dictation in its spoken language. A language the
+        // user picked in the settings is followed on purpose.
+        let options = DecodingOptions(task: .transcribe, language: language, detectLanguage: language == nil)
         let results = try await pipeline.transcribe(audioArray: samples, decodeOptions: options)
         let text = results
             .map(\.text)

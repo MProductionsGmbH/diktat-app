@@ -126,7 +126,7 @@ final class DampfAblassenWorkflow: Workflow {
                 // Phase 2: AI rewrite (on device or the connected provider)
                 phase = .running(String(localized: "Wird umformuliert ..."))
 
-                let promptLanguage = PromptLanguage.detect(from: processedRawText)
+                let promptLanguage = PromptLanguage.resolve(setting: language, text: processedRawText)
                 let answer = try await TextRewriter.rewrite(
                     processedRawText,
                     instruction: ModePrompts.withFieldContext(ModePrompts.dampfAblassen(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),

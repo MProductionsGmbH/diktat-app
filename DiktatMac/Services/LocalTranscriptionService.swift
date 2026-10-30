@@ -371,7 +371,10 @@ actor LocalTranscriptionService {
             text = HallucinationFilter.removingTrailingCredits(raw)
         } else {
             let pipeline = try await pipeline(modelName: modelName)
-            text = try await WhisperDictation.transcribe(pipeline, audioPath: audioURL.path)
+            // "auto" (and anything that is no code) lets Whisper detect the language.
+            let spoken = resolvedLanguage.lowercased()
+            let code = (spoken.isEmpty || spoken == "auto") ? nil : String(spoken.prefix(2))
+            text = try await WhisperDictation.transcribe(pipeline, audioPath: audioURL.path, language: code)
         }
 
         guard !text.isEmpty else {

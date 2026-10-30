@@ -14,6 +14,16 @@ enum PromptLanguage: Equatable {
         return language == .german ? .german : .english
     }
 
+    /// The dictation language setting ("de", "en", or "auto") decides when it names a language;
+    /// "auto" follows the text.
+    static func resolve(setting: String, text: String) -> PromptLanguage {
+        switch setting.lowercased().prefix(2) {
+        case "de": return .german
+        case "en": return .english
+        default: return detect(from: text)
+        }
+    }
+
     /// The code the filler-word list and the sentence tokenizer know.
     var code: String {
         switch self {

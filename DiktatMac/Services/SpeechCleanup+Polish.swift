@@ -13,6 +13,8 @@ extension SpeechCleanup {
         var protectedTerms: [String] = []
         /// Tone, context and own instruction for the `style` level.
         var styleSettings = TextImprovementSettings()
+        /// The dictation language setting: "de", "en" or "auto".
+        var language = "auto"
     }
 
     /// Runs the model step for `medium` and `strong`; `light` and short text come back as given.
@@ -20,7 +22,7 @@ extension SpeechCleanup {
         guard configuration.level.usesLanguageModel,
               wordCount(text) >= minimumWords,
               TextRewriter.canRewrite(engine: configuration.engine) else { return text }
-        let language = PromptLanguage.detect(from: text)
+        let language = PromptLanguage.resolve(setting: configuration.language, text: text)
         do {
             let rewritten = try await TextRewriter.rewrite(
                 framedTranscript(text, language: language, level: configuration.level),

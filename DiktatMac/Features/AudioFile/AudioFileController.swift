@@ -86,7 +86,7 @@ final class AudioFileController {
     }
 
     func rewrite(as newMode: WorkflowType, appState: AppState) {
-        let promptLanguage = PromptLanguage.detect(from: transcript)
+        let promptLanguage = PromptLanguage.resolve(setting: appState.transcriptionSettings.language, text: transcript)
         guard !transcript.isEmpty, let instruction = Self.instruction(for: newMode, appState: appState, language: promptLanguage) else { return }
         task?.cancel()
         copied = false

@@ -126,7 +126,7 @@ final class EmojiTextWorkflow: Workflow {
                 // Phase 2: Add emojis
                 phase = .running(String(localized: "Emojis werden eingef\u{00FC}gt ..."))
 
-                let promptLanguage = PromptLanguage.detect(from: processedRawText)
+                let promptLanguage = PromptLanguage.resolve(setting: language, text: processedRawText)
                 let result = try await TextRewriter.rewrite(
                     processedRawText,
                     instruction: ModePrompts.withFieldContext(ModePrompts.emoji(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),

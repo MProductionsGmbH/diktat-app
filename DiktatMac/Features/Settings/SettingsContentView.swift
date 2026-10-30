@@ -554,6 +554,8 @@ struct CustomizeSettingsView: View {
                 InstallationWarningSection()
             }
 
+            LanguageSection(appState: appState)
+
             PipelineOverviewSection(appState: appState)
 
             // MARK: Tastenkuerzel

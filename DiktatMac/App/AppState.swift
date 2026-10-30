@@ -291,7 +291,8 @@ final class AppState {
             level: appSettings.speechCleanupLevel,
             engine: appSettings.rewriteEngine,
             protectedTerms: textImprovementSettings.protectedTerms,
-            styleSettings: style
+            styleSettings: style,
+            language: transcriptionSettings.language
         )
     }
 

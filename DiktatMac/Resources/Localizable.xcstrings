@@ -1123,6 +1123,28 @@
         }
       }
     },
+    "Automatisch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic"
+          }
+        }
+      }
+    },
+    "Automatisch erkennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detect automatically"
+          }
+        }
+      }
+    },
     "Automatisch erstellt. Bitte vor allem die Zuständigkeiten bei den To-dos kurz prüfen.": {
       "extractionState": "manual",
       "localizations": {
@@ -1141,6 +1163,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Check for updates automatically"
+          }
+        }
+      }
+    },
+    "Automatisch: Die App folgt macOS.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic: The app follows macOS."
           }
         }
       }
@@ -1772,6 +1805,17 @@
         }
       }
     },
+    "Die Sprache der App ändert sich nach einem Neustart.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The language of the app changes after a restart."
+          }
+        }
+      }
+    },
     "Die Stimmen ließen sich nicht erkennen. Beim ersten Meeting lädt Diktat dafür ein Modell und braucht Internet. (%@)": {
       "extractionState": "manual",
       "localizations": {
@@ -2003,6 +2047,17 @@
         }
       }
     },
+    "Diktat erkennt bei jedem Diktat selbst, ob du Deutsch oder Englisch sprichst. Wähle eine Sprache, wenn es bei kurzen Sätzen danebenliegt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat recognizes for every dictation whether you speak German or English. Pick a language if it gets short sentences wrong."
+          }
+        }
+      }
+    },
     "Diktat erkennt, wohin dein Text geht, und schreibt ihn im passenden Ton.": {
       "extractionState": "manual",
       "localizations": {
@@ -2021,6 +2076,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diktat keeps itself up to date through Sparkle."
+          }
+        }
+      }
+    },
+    "Diktat hört nur auf Deutsch. Sprichst du Englisch, wird daraus deutscher Text.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat only listens for German. If you speak English, German text comes out."
+          }
+        }
+      }
+    },
+    "Diktat hört nur auf Englisch. Sprichst du Deutsch, wird daraus englischer Text.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat only listens for English. If you speak German, English text comes out."
           }
         }
       }
@@ -2241,6 +2318,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diktat: text is in the clipboard"
+          }
+        }
+      }
+    },
+    "Diktiersprache": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictation language"
           }
         }
       }
@@ -3484,6 +3572,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clean up now"
+          }
+        }
+      }
+    },
+    "Jetzt neu starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart now"
           }
         }
       }
@@ -5204,6 +5303,17 @@
         }
       }
     },
+    "Sprache": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        }
+      }
+    },
     "Sprache bleibt auf diesem Mac, KI-Modi über %@.": {
       "extractionState": "manual",
       "localizations": {
@@ -5222,6 +5332,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Speech stays on this Mac. AI modes need Apple Intelligence or an API key."
+          }
+        }
+      }
+    },
+    "Sprache der App": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App language"
           }
         }
       }

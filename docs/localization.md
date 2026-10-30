@@ -1,7 +1,14 @@
 # Languages
 
-Diktat for Mac speaks German and English. The app follows the language of macOS: with a German
-system it shows German, with an English one English, and any other language falls back to German.
+Diktat for Mac speaks German and English. Settings > Allgemein > Sprache has two separate choices.
+
+**Sprache der App:** Automatisch (the app follows macOS: German with a German system, English with an
+English one, any other language falls back to German), Deutsch or English. The choice is stored as the
+app's own `AppleLanguages` default and applies after a restart (a button restarts the app).
+
+**Diktiersprache:** Automatisch (default: the speech models detect the language for every dictation),
+Deutsch or English (Whisper listens for that language only, and the cleanup, AI modes and filler words
+use it). It does not change the language of the app.
 
 ## Dictation
 
