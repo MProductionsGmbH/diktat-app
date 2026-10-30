@@ -13,6 +13,10 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     /// Set while a microphone other than the Mac's default input records.
     private var capture: EngineCapture?
     private var levelTimer: Timer?
+    private var maxPowerDB: Float = -160
+    /// The recording was digital silence from start to end: a muted microphone, or the built-in one
+    /// of a MacBook with the lid closed.
+    private(set) var heardOnlySilence = false
 
     /// One file per recording: deleting one after its transcription never hits the next.
     private var fileURL = AudioRecorder.newFileURL()
@@ -45,6 +49,8 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     func startRecording() {
         errorMessage = nil
         lastRecordingDuration = 0
+        maxPowerDB = -160
+        heardOnlySilence = false
         fileURL = Self.newFileURL()
 
         // Without access macOS records silence; say why instead of "Keine Aufnahme erkannt".
@@ -111,6 +117,8 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             audioRecorder?.stop()
         }
         isRecording = false
+        // Digital silence reads about -120 dB; the quietest real room is far above -110.
+        heardOnlySilence = lastRecordingDuration > 0.6 && maxPowerDB < -110
         recordingURL = fileURL
         audioLevel = 0
     }
@@ -120,10 +128,12 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             guard let self else { return }
             if let capture = self.capture {
                 self.audioLevel = capture.currentLevel
+                self.maxPowerDB = max(self.maxPowerDB, capture.peakPowerDB)
                 return
             }
             self.audioRecorder?.updateMeters()
             let power = self.audioRecorder?.averagePower(forChannel: 0) ?? -160
+            self.maxPowerDB = max(self.maxPowerDB, power)
             let normalized = max(0, min(1, (power + 50) / 50))
             self.audioLevel = normalized
         }

@@ -123,6 +123,13 @@ struct MenuBarView: View {
                         actionTitle: String(localized: "Ton"),
                         action: { MicrophoneCheck.openSoundSettings() }
                     )
+                case .lidClosed:
+                    NoticeRow(
+                        icon: "laptopcomputer",
+                        title: String(localized: "MacBook ist zugeklappt"),
+                        detail: String(localized: "Dann nimmt das eingebaute Mikrofon nichts auf. W\u{00E4}hle unter Mikrofon ein anderes, zum Beispiel das der Webcam, oder klappe den Deckel auf."),
+                        tint: DiktatTheme.danger
+                    )
                 case nil:
                     EmptyView()
                 }

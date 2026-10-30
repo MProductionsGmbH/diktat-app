@@ -63,6 +63,11 @@ final class DampfAblassenWorkflow: Workflow {
                 phase = .error(String(localized: "Keine Aufnahme erkannt."))
                 return
             }
+            guard !recorder.heardOnlySilence else {
+                recorder.discardRecording()
+                phase = .error(String(localized: "Das Mikrofon liefert nur Stille. Ist das MacBook zugeklappt? Dann nimmt das eingebaute Mikrofon nichts auf: W\u{00E4}hle unter Mikrofon ein anderes oder klappe den Deckel auf."))
+                return
+            }
             processRecording()
         } else {
             processingTask?.cancel()

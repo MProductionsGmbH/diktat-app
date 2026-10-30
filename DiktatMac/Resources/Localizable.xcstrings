@@ -1376,6 +1376,17 @@
         }
       }
     },
+    "Dann nimmt das eingebaute Mikrofon nichts auf. Wähle unter Mikrofon ein anderes, zum Beispiel das der Webcam, oder klappe den Deckel auf.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The built-in microphone records nothing then. Choose another one under Microphone, for example the webcam's, or open the lid."
+          }
+        }
+      }
+    },
     "Das Ausgabegerät ist weg, der Ton des Macs lässt sich gerade nicht aufnehmen. Diktat versucht es weiter, das Mikrofon läuft.": {
       "extractionState": "manual",
       "localizations": {
@@ -1405,6 +1416,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The meeting could not be saved, for example because the storage is full. The recording is kept."
+          }
+        }
+      }
+    },
+    "Das Mikrofon liefert nur Stille. Ist das MacBook zugeklappt? Dann nimmt das eingebaute Mikrofon nichts auf: Wähle unter Mikrofon ein anderes oder klappe den Deckel auf.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The microphone only delivers silence. Is the MacBook closed? Then the built-in microphone records nothing: choose another one under Microphone or open the lid."
           }
         }
       }
@@ -2681,6 +2703,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Detects the language itself: German, English and 23 more European languages."
+          }
+        }
+      }
+    },
+    "Erlaubt. Das MacBook ist aber zugeklappt, dann nimmt das eingebaute Mikrofon nichts auf. Deckel aufklappen oder ein anderes Mikrofon wählen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed. But the MacBook is closed, so the built-in microphone records nothing. Open the lid or choose another microphone."
           }
         }
       }
@@ -4023,6 +4056,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete"
+          }
+        }
+      }
+    },
+    "MacBook ist zugeklappt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MacBook is closed"
           }
         }
       }

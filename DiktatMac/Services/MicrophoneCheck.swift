@@ -1,5 +1,6 @@
 import AppKit
 import CoreAudio
+import IOKit
 
 /// What the microphone looks like: whether there is one (the one picked in the settings, else
 /// the Mac's default input), and how loud macOS records it. Only read, never changed: the input volume belongs to the user.
@@ -9,16 +10,27 @@ enum MicrophoneCheck {
         case noInput
         /// macOS records very quietly; consonants get lost and words go missing.
         case quiet(percent: Int)
+        /// A MacBook with the lid closed: its built-in microphone records only silence.
+        case lidClosed
     }
 
     static let quietBelow: Float = 0.25
 
     static var issue: Issue? {
         guard let device = AudioInputDevices.preferredDeviceID() ?? defaultInput else { return .noInput }
+        if AudioInputDevices.isBuiltIn(device), lidIsClosed { return .lidClosed }
         if let volume = inputVolume(of: device), volume < quietBelow {
             return .quiet(percent: Int((volume * 100).rounded()))
         }
         return nil
+    }
+
+    static var lidIsClosed: Bool {
+        let root = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOPMrootDomain"))
+        guard root != 0 else { return false }
+        defer { IOObjectRelease(root) }
+        let value = IORegistryEntryCreateCFProperty(root, "AppleClamshellState" as CFString, kCFAllocatorDefault, 0)?.takeRetainedValue()
+        return (value as? Bool) ?? false
     }
 
     static func openSoundSettings() {

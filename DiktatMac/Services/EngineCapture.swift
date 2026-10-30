@@ -39,6 +39,7 @@ final class EngineCapture: @unchecked Sendable {
     private let lock = NSLock()
     private var file: AVAudioFile?
     private var level: Float = 0
+    private var peakDB: Float = -160
     private var paused = false
     private var framesWritten: AVAudioFramePosition = 0
     private var sampleRate: Double = 16_000
@@ -52,6 +53,13 @@ final class EngineCapture: @unchecked Sendable {
         lock.lock()
         defer { lock.unlock() }
         return level
+    }
+
+    /// The loudest moment so far in dB; about -120 means digital silence (a muted or closed-lid microphone).
+    var peakPowerDB: Float {
+        lock.lock()
+        defer { lock.unlock() }
+        return peakDB
     }
 
     /// Recorded time, without pauses.
@@ -73,19 +81,12 @@ final class EngineCapture: @unchecked Sendable {
 
     func start(device: AudioDeviceID, writingTo url: URL, settings: [String: Any] = EngineCapture.dictationSettings) throws {
         let input = engine.inputNode
-        guard let unit = input.audioUnit else { throw CaptureError.deviceUnavailable }
-        var deviceID = device
-        let status = AudioUnitSetProperty(
-            unit,
-            kAudioOutputUnitProperty_CurrentDevice,
-            kAudioUnitScope_Global,
-            0,
-            &deviceID,
-            UInt32(MemoryLayout<AudioDeviceID>.size)
-        )
-        guard status == noErr else { throw CaptureError.deviceUnavailable }
-
-        let hardwareFormat = input.outputFormat(forBus: 0)
+        // The audio unit has to take the device first: only then does `inputFormat` report what this
+        // device delivers. `outputFormat` keeps the format of the default input (1 channel, 48 kHz),
+        // and a tap in that format gets no data from a device with another format (a webcam
+        // microphone: 2 channels, 16 kHz).
+        do { try input.auAudioUnit.setDeviceID(device) } catch { throw CaptureError.deviceUnavailable }
+        let hardwareFormat = input.inputFormat(forBus: 0)
         guard hardwareFormat.sampleRate > 0, hardwareFormat.channelCount > 0 else { throw CaptureError.noInputFormat }
 
         let file = try AVAudioFile(forWriting: url, settings: settings, commonFormat: .pcmFormatFloat32, interleaved: false)
@@ -136,6 +137,7 @@ final class EngineCapture: @unchecked Sendable {
             let power = 20 * log10(max(rms, 0.000_001))
             lock.lock()
             level = max(0, min(1, (power + 50) / 50))
+            peakDB = max(peakDB, power)
             lock.unlock()
         }
 

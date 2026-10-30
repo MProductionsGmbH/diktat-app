@@ -157,6 +157,8 @@ struct SetupAssistantView: View {
                 return String(localized: "Erlaubt. Gerade ist aber kein Mikrofon da, bei zugeklapptem MacBook ein Headset anschlie\u{00DF}en.")
             case .quiet(let percent):
                 return String(localized: "Erlaubt. Das Mikrofon ist aber sehr leise eingestellt (\(percent) %), in den Systemeinstellungen unter Ton, Eingang lauter stellen.")
+            case .lidClosed:
+                return String(localized: "Erlaubt. Das MacBook ist aber zugeklappt, dann nimmt das eingebaute Mikrofon nichts auf. Deckel aufklappen oder ein anderes Mikrofon w\u{00E4}hlen.")
             case nil:
                 return String(localized: "Diktat darf das Mikrofon nutzen.")
             }

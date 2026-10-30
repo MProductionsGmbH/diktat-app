@@ -29,6 +29,10 @@ enum AudioInputDevices {
         return deviceIDs().first { string(kAudioDevicePropertyDeviceUID, of: $0) == device.uid }
     }
 
+    static func isBuiltIn(_ device: AudioObjectID) -> Bool {
+        transportType(of: device) == kAudioDeviceTransportTypeBuiltIn
+    }
+
     static func defaultDeviceName() -> String? {
         var device = AudioObjectID(kAudioObjectUnknown)
         var address = AudioObjectPropertyAddress(
