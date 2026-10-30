@@ -179,9 +179,9 @@ struct RecordingPill: View {
     private static let lilac = DiktatColor.hex(0xBB84DF)
     private static let night = DiktatColor.hex(0x050722)
     /// The capsule plus room for its shadow.
-    static let panelSize = CGSize(width: 336, height: 72)
+    static let panelSize = CGSize(width: 316, height: 72)
     /// While recording the capsule also carries the name of the microphone and the voice dots.
-    private static let recordingWidth: CGFloat = 302
+    private static let recordingWidth: CGFloat = 282
 
     var body: some View {
         Group {
@@ -210,7 +210,7 @@ struct RecordingPill: View {
         HStack(spacing: 10) {
             content
         }
-        .frame(width: model.status.isRecording ? Self.recordingWidth : 148, height: 40)
+        .frame(width: width, height: 40)
         .background {
             Capsule().fill(Self.night.opacity(0.94))
             Capsule().strokeBorder(Self.lilac.opacity(0.35), lineWidth: 1)
@@ -218,6 +218,14 @@ struct RecordingPill: View {
         .shadow(color: .black.opacity(0.22), radius: 8, y: 3)
         .padding(16)
         .contentShape(Capsule())
+    }
+
+    private var width: CGFloat {
+        switch model.status {
+        case .recording: return Self.recordingWidth
+        case .processing: return 84
+        default: return 148
+        }
     }
 
     @ViewBuilder
@@ -234,8 +242,11 @@ struct RecordingPill: View {
                 .foregroundStyle(tint.opacity(silent ? 1 : 0.8))
                 .lineLimit(1)
                 .truncationMode(.tail)
-                .frame(width: 130, alignment: .leading)
-            VoiceDots(level: appState.activeWorkflow?.audioLevel ?? model.previewLevel, silent: silent)
+                .frame(width: 132, alignment: .leading)
+            AnimatedMark(
+                motion: .voice(silent ? 0 : (appState.activeWorkflow?.audioLevel ?? model.previewLevel)),
+                color: silent ? Color(nsColor: .systemRed) : Self.lilac
+            )
             Image(systemName: "stop.fill")
                 .font(.ui(7, .bold))
                 .foregroundStyle(.white.opacity(0.85))
@@ -243,9 +254,6 @@ struct RecordingPill: View {
                 .background(Circle().fill(.white.opacity(0.14)))
         case .processing:
             AnimatedMark(motion: .thinking, color: Self.lilac)
-            Text("Schreibt")
-                .font(.ui(12, .semibold))
-                .foregroundStyle(.white.opacity(0.85))
         case .success:
             Image(systemName: "checkmark")
                 .font(.ui(12, .bold))
@@ -320,9 +328,9 @@ private struct MeetingPillContent: View {
     }
 }
 
-/// The Diktat mark, five bars in the proportions of the app icon. While recording the bars rise
-/// with the voice and keep a soft motion of their own, so the pill breathes even in a quiet
-/// moment; while writing they run in a wave.
+/// The Diktat mark, five bars in the proportions of the app icon. While recording the bars stand
+/// still and small when it is quiet and swing out when someone speaks (`VoiceBarMotion`); while
+/// writing they run in a wave.
 private struct AnimatedMark: View {
     enum Motion {
         case voice(Float)
@@ -337,8 +345,15 @@ private struct AnimatedMark: View {
     private static let heights: [Double] = [0.34, 0.62, 0.92, 0.62, 0.34]
     private static let side: Double = 26
 
+    /// The bars that show the voice are information, not decoration: they keep following the level
+    /// when macOS has "Reduce motion" on. Only the motion of their own is switched off.
+    private var showsVoice: Bool {
+        if case .voice = motion { return true }
+        return false
+    }
+
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
+        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion && !showsVoice)) { context in
             let time = context.date.timeIntervalSinceReferenceDate
             HStack(spacing: 3.2) {
                 ForEach(0..<Self.heights.count, id: \.self) { index in
@@ -352,62 +367,12 @@ private struct AnimatedMark: View {
     }
 
     private func scale(of index: Int, at time: Double) -> Double {
-        if reduceMotion { return 0.75 }
         switch motion {
         case .voice(let level):
-            let wobble = 0.5 + 0.5 * sin(time * 7 + Double(index) * 1.1)
-            let voice = min(1, Double(level) * 1.6)
-            return min(1, 0.5 + 0.5 * (0.2 * wobble + voice * (0.55 + 0.45 * wobble)))
+            return VoiceBarMotion.scale(index: index, level: level, phase: reduceMotion ? 0 : time * 7)
         case .thinking:
+            if reduceMotion { return 0.75 }
             return 0.45 + 0.55 * pow(0.5 + 0.5 * sin(time * 4.5 - Double(index) * 0.9), 1.6)
         }
-    }
-}
-
-/// The voice as a dot matrix: eleven columns of five dots whose middle rises with the voice, with a
-/// soft motion of its own so the pill is alive in a quiet moment. Without any signal the dots lie in
-/// a flat red line.
-private struct VoiceDots: View {
-    let level: Float
-    let silent: Bool
-
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    private static let columns = 11
-    private static let rows = 5
-    private static let envelope: [Double] = [0.35, 0.5, 0.68, 0.84, 0.95, 1, 0.95, 0.84, 0.68, 0.5, 0.35]
-
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
-            let time = context.date.timeIntervalSinceReferenceDate
-            HStack(spacing: 3) {
-                ForEach(0..<Self.columns, id: \.self) { column in
-                    let amplitude = amplitude(of: column, at: time)
-                    VStack(spacing: 3) {
-                        ForEach(0..<Self.rows, id: \.self) { row in
-                            Circle()
-                                .fill(silent ? Color(nsColor: .systemRed) : Color.white)
-                                .frame(width: 3, height: 3)
-                                .opacity(opacity(row: row, amplitude: amplitude))
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private func amplitude(of column: Int, at time: Double) -> Double {
-        if silent { return 0.15 }
-        let shape = Self.envelope[column]
-        if reduceMotion { return shape * 0.5 }
-        let wobble = 0.5 + 0.5 * sin(time * 8 + Double(column) * 0.9)
-        let voice = min(1, Double(level) * 1.7)
-        return shape * (0.12 + 0.88 * voice * (0.6 + 0.4 * wobble))
-    }
-
-    /// The middle row always glows a little; the others light up with the amplitude, softly at the edge.
-    private func opacity(row: Int, amplitude: Double) -> Double {
-        let distance = abs(Double(row) - Double(Self.rows / 2))
-        return max(0.16, min(1, amplitude * 3 - distance + 0.5))
     }
 }

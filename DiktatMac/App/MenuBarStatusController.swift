@@ -194,9 +194,7 @@ private enum MenuBarStatusIconRenderer {
             let scale: CGFloat
             switch status {
             case .recording:
-                let wobble = 0.5 + 0.5 * sin(phase + CGFloat(index) * 1.3)
-                let voice = min(1, CGFloat(level) * 1.6)
-                scale = min(1, 0.5 + 0.5 * (0.2 * wobble + voice * (0.55 + 0.45 * wobble)))
+                scale = CGFloat(VoiceBarMotion.scale(index: index, level: level, phase: Double(phase)))
             case .processing:
                 scale = 0.45 + 0.55 * (0.5 + 0.5 * sin(phase - CGFloat(index) * 0.9))
             default:

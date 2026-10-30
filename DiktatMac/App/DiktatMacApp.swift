@@ -1026,11 +1026,11 @@ enum MacSnapshots {
                     .background(DiktatTheme.page)
                 capture(view, appearance: appearance, to: folder.appendingPathComponent("\(mode)-settings-\(pane.rawValue).png"))
             }
-            for (status, label) in [(MenuBarStatus.recording(.tapTalk), "recording"), (.recording(.tapTalk), "recording-nosignal"), (.processing(.tapTalk), "processing"), (.success(.tapTalk), "success"), (.copied(.tapTalk), "copied")] {
+            for (status, label) in [(MenuBarStatus.recording(.tapTalk), "recording"), (.recording(.tapTalk), "recording-quiet"), (.recording(.tapTalk), "recording-nosignal"), (.processing(.tapTalk), "processing"), (.success(.tapTalk), "success"), (.copied(.tapTalk), "copied")] {
                 let model = RecordingIndicatorModel()
                 model.status = status
                 model.microphoneName = "MacBook Pro-Mikrofon"
-                model.previewLevel = 0.6
+                model.previewLevel = label == "recording-quiet" ? 0 : 0.6
                 model.previewNoSignal = label.hasSuffix("nosignal")
                 let pill = RecordingPill(model: model, appState: appState) {}
                     .frame(width: RecordingPill.panelSize.width, height: RecordingPill.panelSize.height)
