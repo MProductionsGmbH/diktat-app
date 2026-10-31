@@ -1,11 +1,16 @@
 import AppKit
+import OSLog
 import SwiftUI
 
-/// A small pill at the bottom of the screen while Diktat records or writes, so the
-/// recording is visible wherever you type, not only in the menu bar. Lilac bars follow
-/// the voice; while recording, a click stops it. During a meeting it shows the running
-/// time, and a click opens the meeting page. The panel never takes the focus, so the text
-/// still lands in the app you are typing in.
+private let indicatorLogger = Logger(subsystem: "app.diktat.mac", category: "RecordingIndicator")
+
+/// A small black pill at the bottom of the screen while Diktat records or writes, so the recording
+/// is visible wherever you type, not only in the menu bar. While recording it holds a row of thin
+/// bars that follow the voice like a seismograph: tiny dots when it is quiet, bars of changing
+/// height when someone speaks. When a recording starts, a label above the pill names the microphone
+/// for a few seconds. A click on the pill stops a recording; during a meeting it shows the running
+/// time and a click opens the meeting page. The panel never takes the focus, so the text still
+/// lands in the app you are typing in.
 @MainActor
 final class RecordingIndicatorController {
     private let appState: AppState
@@ -15,6 +20,11 @@ final class RecordingIndicatorController {
     /// Counts show and hide transitions; a fade that finishes late only hides the
     /// panel if no newer transition happened meanwhile.
     private var transition = 0
+    private var meterTimer: Timer?
+    private var hintTask: Task<Void, Never>?
+    /// The microphone the label above the pill was last shown for: it appears again only when a recording
+    /// starts with another one, not at every press.
+    private var lastAnnouncedMicrophone: String?
 
     init(appState: AppState) {
         self.appState = appState
@@ -28,27 +38,42 @@ final class RecordingIndicatorController {
         }
         switch status {
         case .recording:
+            let startsNow = !model.status.isRecording
             model.status = status
-            model.microphoneName = AudioInputDevices.activeDeviceName() ?? ""
+            if startsNow {
+                let device = AudioInputDevices.activeDevice()
+                model.microphoneName = device?.name ?? ""
+                model.resetLevels()
+                if let device, device.uid != lastAnnouncedMicrophone {
+                    lastAnnouncedMicrophone = device.uid
+                    showHintBriefly()
+                }
+            }
+            startMeter()
             // A new recording picks the screen you work on now.
             show(placing: panel?.isVisible != true || isHiding)
         case .processing:
+            stopMeter()
             model.status = status
             show(placing: panel?.isVisible != true)
         case .success:
+            stopMeter()
             guard panel?.isVisible == true, !isHiding else { return }
             model.status = status
             hide(after: .milliseconds(900))
         case .copied:
             // Longer than "Fertig": it says the text did not go where it was meant to.
+            stopMeter()
             model.status = status
             show(placing: panel?.isVisible != true)
             hide(after: .milliseconds(2_600))
         case .meeting:
             // Back after a dictation in between, or a meeting just started.
+            stopMeter()
             model.status = status
             show(placing: panel?.isVisible != true || isHiding)
         case .idle, .error:
+            stopMeter()
             hide()
         }
     }
@@ -60,6 +85,38 @@ final class RecordingIndicatorController {
 
     private var isHiding = false
 
+    /// The microphone label above the pill: gone after three seconds.
+    private func showHintBriefly() {
+        hintTask?.cancel()
+        model.showsHint = true
+        hintTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(3))
+            guard !Task.isCancelled else { return }
+            self?.model.showsHint = false
+        }
+    }
+
+    /// Feeds the bars: the input level about fifteen times a second, newest on the right.
+    private func startMeter() {
+        guard meterTimer == nil else { return }
+        meterTimer = Timer.scheduledTimer(withTimeInterval: 0.07, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                let workflow = self.appState.activeWorkflow
+                self.model.noSignal = workflow?.noSignal ?? false
+                self.model.push(level: workflow?.audioLevel ?? 0)
+            }
+        }
+    }
+
+    private func stopMeter() {
+        meterTimer?.invalidate()
+        meterTimer = nil
+        hintTask?.cancel()
+        model.showsHint = false
+        model.noSignal = false
+    }
+
     private func show(placing: Bool) {
         transition += 1
         isHiding = false
@@ -70,6 +127,7 @@ final class RecordingIndicatorController {
         if !panel.isVisible {
             panel.alphaValue = 0
             panel.orderFrontRegardless()
+            indicatorLogger.info("Pill shown: window \(panel.frame.width, privacy: .public) x \(panel.frame.height, privacy: .public)")
         }
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.18
@@ -102,7 +160,8 @@ final class RecordingIndicatorController {
     }
 
     /// Bottom centre, above the Dock, of the screen with the pointer: on a Mac with
-    /// several displays that is the one you are working on.
+    /// several displays that is the one you are working on. The size is always the full
+    /// panel, label included, so the window never depends on what is shown inside.
     private func place(_ panel: NSPanel) {
         let pointer = NSEvent.mouseLocation
         guard let screen = NSScreen.screens.first(where: { NSMouseInRect(pointer, $0.frame, false) })
@@ -110,7 +169,7 @@ final class RecordingIndicatorController {
         let size = RecordingPill.panelSize
         let frame = screen.visibleFrame
         panel.setFrame(
-            NSRect(x: frame.midX - size.width / 2, y: frame.minY + 16, width: size.width, height: size.height),
+            NSRect(x: frame.midX - size.width / 2, y: frame.minY + 8, width: size.width, height: size.height),
             display: true
         )
     }
@@ -156,11 +215,27 @@ private extension MenuBarStatus {
 @MainActor
 final class RecordingIndicatorModel {
     var status: MenuBarStatus = .idle
-    /// The microphone this recording uses, shown in the pill.
+    /// The microphone this recording uses, named in the label above the pill.
     var microphoneName = ""
-    /// What the pill shows without a running workflow (the design previews).
-    var previewLevel: Float = 0
-    var previewNoSignal = false
+    var showsHint = false
+    /// The microphone has delivered only silence for a moment.
+    var noSignal = false
+    /// The latest input levels 0...1, oldest first, one per bar.
+    private(set) var levels: [Float] = Array(repeating: 0, count: RecordingPill.barCount)
+
+    func push(level: Float) {
+        levels.removeFirst()
+        levels.append(level)
+    }
+
+    func resetLevels() {
+        levels = Array(repeating: 0, count: RecordingPill.barCount)
+    }
+
+    /// For the design previews.
+    func preview(levels: [Float]) {
+        self.levels = levels
+    }
 }
 
 /// Takes the first click, so the pill reacts without activating Diktat.
@@ -168,111 +243,107 @@ private final class FirstClickHostingView<Content: View>: NSHostingView<Content>
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }
 
-/// The pill: night surface with lilac, the same in light and dark mode, so it reads on
-/// any window behind it.
+/// The pill: small and black, the same in light and dark mode, so it reads on any window behind it.
 struct RecordingPill: View {
     let model: RecordingIndicatorModel
     let appState: AppState
     let onStop: () -> Void
     var onOpenMeeting: () -> Void = {}
 
-    private static let lilac = DiktatColor.hex(0xBB84DF)
-    private static let night = DiktatColor.hex(0x050722)
-    /// The capsule plus room for its shadow.
-    static let panelSize = CGSize(width: 316, height: 72)
-    /// While recording the capsule also carries the name of the microphone and the voice dots.
-    private static let recordingWidth: CGFloat = 282
+    static let barCount = 11
+    /// The panel is as wide as the longest label and tall enough for pill, label and shadow.
+    static let panelSize = CGSize(width: 380, height: 88)
+    private static let pillHeight: CGFloat = 26
 
     var body: some View {
-        Group {
-            switch model.status {
-            case .recording:
-                Button(action: onStop) {
-                    capsule
-                }
-                .buttonStyle(.plain)
-                .help("Klicken stoppt die Aufnahme")
-            case .meeting:
-                // Opens the meeting page instead of stopping: ending a meeting by a stray click would hurt.
-                Button(action: onOpenMeeting) {
-                    capsule
-                }
-                .buttonStyle(.plain)
-                .help("Meeting l\u{00E4}uft. Klicken \u{00F6}ffnet die Meeting-Seite.")
-            default:
-                capsule
-            }
+        VStack(spacing: 7) {
+            Spacer(minLength: 0)
+            hint
+            pill
         }
+        .frame(width: Self.panelSize.width, height: Self.panelSize.height, alignment: .bottom)
+        .padding(.bottom, 0)
+        .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityText)
     }
 
-    private var capsule: some View {
-        HStack(spacing: 10) {
-            content
-        }
-        .frame(width: width, height: 40)
-        .background {
-            Capsule().fill(Self.night.opacity(0.94))
-            Capsule().strokeBorder(Self.lilac.opacity(0.35), lineWidth: 1)
-        }
-        .shadow(color: .black.opacity(0.22), radius: 8, y: 3)
-        .padding(16)
-        .contentShape(Capsule())
-    }
-
-    private var width: CGFloat {
-        switch model.status {
-        case .recording: return Self.recordingWidth
-        case .processing: return 84
-        default: return 148
-        }
-    }
+    // MARK: Label above the pill
 
     @ViewBuilder
-    private var content: some View {
+    private var hint: some View {
+        let text = hintText
+        Text(text ?? " ")
+            .font(.ui(12, .semibold))
+            .foregroundStyle(model.noSignal ? Color(nsColor: .systemRed) : .white)
+            .lineLimit(1)
+            .truncationMode(.middle)
+            .padding(.horizontal, 14)
+            .frame(height: 28)
+            .background(Capsule().fill(Color.black.opacity(0.92)))
+            .shadow(color: .black.opacity(0.25), radius: 6, y: 2)
+            .opacity(text == nil ? 0 : 1)
+            .animation(.easeOut(duration: 0.25), value: text)
+            .allowsHitTesting(false)
+    }
+
+    /// What the label says: the microphone while a recording starts, a warning while nothing comes in,
+    /// and why a text is only on the clipboard.
+    private var hintText: String? {
         switch model.status {
-        case .recording(let type):
-            let silent = appState.activeWorkflow?.noSignal ?? model.previewNoSignal
-            let tint = silent ? Color(nsColor: .systemRed) : Color.white
-            Image(systemName: silent ? "mic.slash.fill" : type.icon)
-                .font(.ui(12, .semibold))
-                .foregroundStyle(tint.opacity(0.9))
-            Text(silent ? String(localized: "Kein Ton") : model.microphoneName)
-                .font(.ui(11.5, .medium))
-                .foregroundStyle(tint.opacity(silent ? 1 : 0.8))
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .frame(width: 132, alignment: .leading)
-            AnimatedMark(
-                motion: .voice(silent ? 0 : (appState.activeWorkflow?.audioLevel ?? model.previewLevel)),
-                color: silent ? Color(nsColor: .systemRed) : Self.lilac
-            )
-            Image(systemName: "stop.fill")
-                .font(.ui(7, .bold))
-                .foregroundStyle(.white.opacity(0.85))
-                .frame(width: 18, height: 18)
-                .background(Circle().fill(.white.opacity(0.14)))
-        case .processing:
-            AnimatedMark(motion: .thinking, color: Self.lilac)
-        case .success:
-            Image(systemName: "checkmark")
-                .font(.ui(12, .bold))
-                .foregroundStyle(Self.lilac)
-            Text("Fertig")
-                .font(.ui(12, .semibold))
-                .foregroundStyle(.white.opacity(0.85))
+        case .recording:
+            let name = model.microphoneName
+            if model.noSignal {
+                return name.isEmpty ? String(localized: "Kein Ton") : String(localized: "Kein Ton (\(name))")
+            }
+            guard model.showsHint, !name.isEmpty else { return nil }
+            return String(localized: "Mikrofon: \(name)")
         case .copied:
-            Image(systemName: "doc.on.clipboard")
-                .font(.ui(11, .bold))
-                .foregroundStyle(Self.lilac)
-            Text("Zwischenablage")
-                .font(.ui(12, .semibold))
-                .foregroundStyle(.white.opacity(0.85))
-        case .meeting:
-            MeetingPillContent(meeting: appState.meeting, lilac: Self.lilac)
-        case .idle, .error:
-            EmptyView()
+            return String(localized: "Nicht eingef\u{00FC}gt, der Text liegt in der Zwischenablage")
+        default:
+            return nil
         }
+    }
+
+    // MARK: The pill
+
+    @ViewBuilder
+    private var pill: some View {
+        switch model.status {
+        case .recording:
+            Button(action: onStop) { capsule(width: 78) { VoiceSeismograph(levels: model.levels, silent: model.noSignal) } }
+                .buttonStyle(.plain)
+                .help("Klicken stoppt die Aufnahme")
+        case .meeting:
+            // Opens the meeting page instead of stopping: ending a meeting by a stray click would hurt.
+            Button(action: onOpenMeeting) { capsule(width: 118) { MeetingPillContent(meeting: appState.meeting) } }
+                .buttonStyle(.plain)
+                .help("Meeting l\u{00E4}uft. Klicken \u{00F6}ffnet die Meeting-Seite.")
+        case .processing:
+            capsule(width: 78) { ThinkingBars() }
+        case .success:
+            capsule(width: 52) {
+                Image(systemName: "checkmark")
+                    .font(.ui(11, .bold))
+                    .foregroundStyle(.white)
+            }
+        case .copied:
+            capsule(width: 52) {
+                Image(systemName: "doc.on.clipboard")
+                    .font(.ui(11, .semibold))
+                    .foregroundStyle(.white)
+            }
+        case .idle, .error:
+            Color.clear.frame(height: Self.pillHeight)
+        }
+    }
+
+    private func capsule<Content: View>(width: CGFloat, @ViewBuilder content: () -> Content) -> some View {
+        content()
+            .frame(width: width, height: Self.pillHeight)
+            .background(Capsule().fill(Color.black.opacity(0.94)))
+            .shadow(color: .black.opacity(0.25), radius: 6, y: 2)
+            .padding(.bottom, 8)
+            .contentShape(Capsule())
     }
 
     private var accessibilityText: String {
@@ -287,37 +358,34 @@ struct RecordingPill: View {
     }
 }
 
-/// A running meeting: a pulsing red dot and the recorded time, or "Pausiert".
+/// A running meeting: a pulsing red dot and the recorded time, or a pause sign.
 private struct MeetingPillContent: View {
     let meeting: MeetingController
-    let lilac: Color
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         if case .recording(let startedAt) = meeting.phase {
             if meeting.pausedAt != nil {
-                Image(systemName: "pause.fill")
-                    .font(.ui(10, .bold))
-                    .foregroundStyle(lilac)
-                Text("Pausiert")
-                    .font(.ui(12, .semibold))
-                    .foregroundStyle(.white.opacity(0.85))
+                HStack(spacing: 6) {
+                    Image(systemName: "pause.fill")
+                        .font(.ui(9, .bold))
+                    Text("Pausiert")
+                        .font(.ui(11, .semibold))
+                }
+                .foregroundStyle(.white.opacity(0.9))
             } else {
                 TimelineView(.periodic(from: startedAt, by: 1)) { context in
                     let pulse = reduceMotion ? 1 : 0.55 + 0.45 * abs(cos(context.date.timeIntervalSince(startedAt) * .pi / 2))
-                    HStack(spacing: 8) {
+                    HStack(spacing: 7) {
                         Circle()
                             .fill(Color(nsColor: .systemRed))
-                            .frame(width: 8, height: 8)
+                            .frame(width: 7, height: 7)
                             .opacity(pulse)
                             .animation(.easeInOut(duration: 0.9), value: pulse)
-                        Text("Meeting")
-                            .font(.ui(12, .semibold))
-                            .foregroundStyle(.white.opacity(0.85))
                         Text(MeetingView.clock(context.date.timeIntervalSince(startedAt)))
-                            .font(.ui(12, .semibold).monospacedDigit())
-                            .foregroundStyle(.white.opacity(0.6))
+                            .font(.ui(11.5, .semibold).monospacedDigit())
+                            .foregroundStyle(.white.opacity(0.9))
                     }
                     // "1:02:34" after an hour still fits the capsule.
                     .lineLimit(1)
@@ -328,51 +396,49 @@ private struct MeetingPillContent: View {
     }
 }
 
-/// The Diktat mark, five bars in the proportions of the app icon. While recording the bars stand
-/// still and small when it is quiet and swing out when someone speaks (`VoiceBarMotion`); while
-/// writing they run in a wave.
-private struct AnimatedMark: View {
-    enum Motion {
-        case voice(Float)
-        case thinking
-    }
+/// The voice as thin bars, newest on the right, like a seismograph: dots while it is quiet, bars of
+/// changing height while someone speaks. The bars follow the level also with "Reduce motion" on,
+/// since they show what the microphone hears and are no decoration.
+private struct VoiceSeismograph: View {
+    let levels: [Float]
+    let silent: Bool
 
-    let motion: Motion
-    let color: Color
-
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    private static let heights: [Double] = [0.34, 0.62, 0.92, 0.62, 0.34]
-    private static let side: Double = 26
-
-    /// The bars that show the voice are information, not decoration: they keep following the level
-    /// when macOS has "Reduce motion" on. Only the motion of their own is switched off.
-    private var showsVoice: Bool {
-        if case .voice = motion { return true }
-        return false
-    }
+    private static let barWidth: CGFloat = 2.4
+    private static let maxHeight: CGFloat = 15
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion && !showsVoice)) { context in
-            let time = context.date.timeIntervalSinceReferenceDate
-            HStack(spacing: 3.2) {
-                ForEach(0..<Self.heights.count, id: \.self) { index in
-                    Capsule()
-                        .fill(color)
-                        .frame(width: 3.6, height: max(4, Self.side * Self.heights[index] * scale(of: index, at: time)))
-                }
+        HStack(spacing: 2.4) {
+            ForEach(Array(levels.enumerated()), id: \.offset) { _, level in
+                Capsule()
+                    .fill(silent ? Color(nsColor: .systemRed) : Color.white)
+                    .frame(width: Self.barWidth, height: height(for: level))
             }
-            .frame(height: Self.side)
         }
+        .animation(.easeOut(duration: 0.08), value: levels)
     }
 
-    private func scale(of index: Int, at time: Double) -> Double {
-        switch motion {
-        case .voice(let level):
-            return VoiceBarMotion.scale(index: index, level: level, phase: reduceMotion ? 0 : time * 7)
-        case .thinking:
-            if reduceMotion { return 0.75 }
-            return 0.45 + 0.55 * pow(0.5 + 0.5 * sin(time * 4.5 - Double(index) * 0.9), 1.6)
+    private func height(for level: Float) -> CGFloat {
+        if silent { return Self.barWidth }
+        let voice = VoiceBarMotion.voice(level: level)
+        return Self.barWidth + (Self.maxHeight - Self.barWidth) * voice
+    }
+}
+
+/// While the text is written: a few bars running in a wave.
+private struct ThinkingBars: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { context in
+            let time = context.date.timeIntervalSinceReferenceDate
+            HStack(spacing: 2.4) {
+                ForEach(0..<11, id: \.self) { index in
+                    let wave = reduceMotion ? 0.3 : 0.5 + 0.5 * sin(time * 5 - Double(index) * 0.7)
+                    Capsule()
+                        .fill(Color.white.opacity(0.9))
+                        .frame(width: 2.4, height: 2.4 + 7 * wave)
+                }
+            }
         }
     }
 }

@@ -34,11 +34,26 @@ enum AudioInputDevices {
     }
 
     /// The microphone a recording would use now: the picked one while it is connected, else the Mac's default.
-    static func activeDeviceName() -> String? {
+    static func activeDevice() -> InputDevice? {
         if case .device(let device) = MicrophoneSelection.resolve(preferredUID: preferredUID, available: all()) {
-            return device.name
+            return device
         }
-        return defaultDeviceName()
+        return defaultDevice()
+    }
+
+    static func defaultDevice() -> InputDevice? {
+        var device = AudioObjectID(kAudioObjectUnknown)
+        var address = AudioObjectPropertyAddress(
+            mSelector: kAudioHardwarePropertyDefaultInputDevice,
+            mScope: kAudioObjectPropertyScopeGlobal,
+            mElement: kAudioObjectPropertyElementMain
+        )
+        var size = UInt32(MemoryLayout<AudioObjectID>.size)
+        let status = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &device)
+        guard status == noErr, device != kAudioObjectUnknown,
+              let uid = string(kAudioDevicePropertyDeviceUID, of: device),
+              let name = string(kAudioObjectPropertyName, of: device) else { return nil }
+        return InputDevice(uid: uid, name: name)
     }
 
     static func defaultDeviceName() -> String? {

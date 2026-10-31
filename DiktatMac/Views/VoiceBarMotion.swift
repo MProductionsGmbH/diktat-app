@@ -14,8 +14,13 @@ enum VoiceBarMotion {
     ///   - index: The bar, 0 to 4.
     ///   - level: The input level 0...1.
     ///   - phase: A running angle, so the bars do not all swing alike.
+    /// 0 while it is quiet, up to 1 for a loud voice.
+    static func voice(level: Float) -> Double {
+        min(1, max(0, (Double(level) - gate) / 0.5))
+    }
+
     static func scale(index: Int, level: Float, phase: Double) -> Double {
-        let voice = min(1, max(0, (Double(level) - gate) / 0.5))
+        let voice = voice(level: level)
         let wobble = 0.5 + 0.5 * sin(phase + Double(index) * 1.3)
         return rest + (1 - rest) * voice * (0.55 + 0.45 * wobble)
     }

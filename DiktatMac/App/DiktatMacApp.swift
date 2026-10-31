@@ -1026,12 +1026,19 @@ enum MacSnapshots {
                     .background(DiktatTheme.page)
                 capture(view, appearance: appearance, to: folder.appendingPathComponent("\(mode)-settings-\(pane.rawValue).png"))
             }
-            for (status, label) in [(MenuBarStatus.recording(.tapTalk), "recording"), (.recording(.tapTalk), "recording-quiet"), (.recording(.tapTalk), "recording-nosignal"), (.processing(.tapTalk), "processing"), (.success(.tapTalk), "success"), (.copied(.tapTalk), "copied")] {
+            let speaking: [Float] = [0.1, 0.25, 0.5, 0.72, 0.4, 0.62, 0.88, 0.5, 0.3, 0.45, 0.2]
+            let pillStates: [(MenuBarStatus, String)] = [
+                (.recording(.tapTalk), "recording-hint"), (.recording(.tapTalk), "recording"), (.recording(.tapTalk), "recording-quiet"),
+                (.recording(.tapTalk), "recording-nosignal"), (.processing(.tapTalk), "processing"), (.success(.tapTalk), "success"),
+                (.copied(.tapTalk), "copied"),
+            ]
+            for (status, label) in pillStates {
                 let model = RecordingIndicatorModel()
                 model.status = status
                 model.microphoneName = "MacBook Pro-Mikrofon"
-                model.previewLevel = label == "recording-quiet" ? 0 : 0.6
-                model.previewNoSignal = label.hasSuffix("nosignal")
+                model.showsHint = label == "recording-hint"
+                model.noSignal = label.hasSuffix("nosignal")
+                model.preview(levels: label == "recording-quiet" || label.hasSuffix("nosignal") ? Array(repeating: 0, count: RecordingPill.barCount) : speaking)
                 let pill = RecordingPill(model: model, appState: appState) {}
                     .frame(width: RecordingPill.panelSize.width, height: RecordingPill.panelSize.height)
                     .padding(20)

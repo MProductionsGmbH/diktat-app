@@ -1134,17 +1134,6 @@
         }
       }
     },
-    "Automatisch erkennen": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Detect automatically"
-          }
-        }
-      }
-    },
     "Automatisch erstellt. Bitte vor allem die Zuständigkeiten bei den To-dos kurz prüfen.": {
       "extractionState": "manual",
       "localizations": {
@@ -3741,6 +3730,17 @@
         }
       }
     },
+    "Kein Ton (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No sound (%@)"
+          }
+        }
+      }
+    },
     "Keine Antwort vom Modell-Anbieter erhalten. Bitte nochmal versuchen.": {
       "extractionState": "manual",
       "localizations": {
@@ -4353,6 +4353,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Microphone set very quiet (%lld %%)"
+          }
+        }
+      }
+    },
+    "Mikrofon: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone: %@"
           }
         }
       }
@@ -5222,17 +5233,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Close"
-          }
-        }
-      }
-    },
-    "Schreibt": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Writing"
           }
         }
       }
@@ -6322,17 +6322,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Additionally: if you stumble, restart a sentence or correct yourself, only the right version stays."
-          }
-        }
-      }
-    },
-    "Zwischenablage": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clipboard"
           }
         }
       }
