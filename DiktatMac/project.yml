@@ -139,6 +139,7 @@ targets:
       - path: Services/MicrophoneSelection.swift
       - path: Features/Workflows/TranscriptionSettings.swift
       - path: Services/AppLanguage.swift
+      - path: Services/PillPosition.swift
       - path: Views/VoiceBarMotion.swift
       - path: ../DiktatShared/AI/ModePrompts.swift
       - path: ../DiktatShared/AI/PromptLanguage.swift

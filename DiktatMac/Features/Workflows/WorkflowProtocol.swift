@@ -169,6 +169,8 @@ struct AppSettings: Codable {
     var automaticParagraphs: Bool = false
     /// A small lilac pill at the bottom of the screen while recording and processing.
     var showsRecordingIndicator: Bool = true
+    /// Where the recording pill sits along the bottom edge of the screen.
+    var pillPosition: PillPosition = .right
     /// A short sound when the recording starts.
     var playsStartSound: Bool = true
     /// The microphone for dictation (its UID); nil follows the Mac's default input.
@@ -213,6 +215,7 @@ struct AppSettings: Codable {
         case muteOutputWhileRecording
         case automaticParagraphs
         case showsRecordingIndicator
+        case pillPosition
         case playsStartSound
         case microphoneUID
         case summarizesMeetings
@@ -249,6 +252,7 @@ struct AppSettings: Codable {
         muteOutputWhileRecording = try container.decodeIfPresent(Bool.self, forKey: .muteOutputWhileRecording) ?? true
         automaticParagraphs = try container.decodeIfPresent(Bool.self, forKey: .automaticParagraphs) ?? false
         showsRecordingIndicator = try container.decodeIfPresent(Bool.self, forKey: .showsRecordingIndicator) ?? true
+        pillPosition = (try? container.decodeIfPresent(PillPosition.self, forKey: .pillPosition)) ?? .right
         playsStartSound = try container.decodeIfPresent(Bool.self, forKey: .playsStartSound) ?? true
         microphoneUID = try? container.decodeIfPresent(String.self, forKey: .microphoneUID)
         summarizesMeetings = try container.decodeIfPresent(Bool.self, forKey: .summarizesMeetings) ?? true

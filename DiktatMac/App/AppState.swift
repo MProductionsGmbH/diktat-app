@@ -79,7 +79,8 @@ final class AppState {
             if oldValue.historyRetention != appSettings.historyRetention {
                 history.updateRetention(appSettings.historyRetention)
             }
-            if oldValue.showsRecordingIndicator != appSettings.showsRecordingIndicator {
+            if oldValue.showsRecordingIndicator != appSettings.showsRecordingIndicator
+                || oldValue.pillPosition != appSettings.pillPosition {
                 onRecordingIndicatorSettingChange?()
             }
         }

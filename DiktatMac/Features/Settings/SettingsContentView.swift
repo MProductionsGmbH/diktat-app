@@ -620,10 +620,23 @@ struct CustomizeSettingsView: View {
                 Toggle("Aufnahme unten am Bildschirm zeigen", isOn: $appState.appSettings.showsRecordingIndicator)
                     .toggleStyle(.trailingSwitch)
 
+                if appState.appSettings.showsRecordingIndicator {
+                    HStack(spacing: 10) {
+                        Text("Position")
+                            .font(.ui(12))
+                            .foregroundStyle(.secondary)
+                        SegmentedToggle(
+                            options: PillPosition.allCases,
+                            selection: $appState.appSettings.pillPosition,
+                            label: { $0.displayName }
+                        )
+                    }
+                }
+
                 Toggle("Kurzer Ton beim Start der Aufnahme", isOn: $appState.appSettings.playsStartSound)
                     .toggleStyle(.trailingSwitch)
 
-                Text("Eine kleine lila Anzeige bewegt sich mit deiner Stimme, solange Diktat aufnimmt und schreibt. Ein Klick darauf stoppt die Aufnahme.")
+                Text("Eine kleine schwarze Anzeige zeigt deine Stimme als Striche, solange Diktat aufnimmt und schreibt. Beginnt eine Aufnahme mit einem neuen Mikrofon, nennt ein Schild es kurz. Ein Klick auf die Anzeige stoppt die Aufnahme.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

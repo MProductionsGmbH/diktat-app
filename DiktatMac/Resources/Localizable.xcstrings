@@ -2553,13 +2553,13 @@
         }
       }
     },
-    "Eine kleine lila Anzeige bewegt sich mit deiner Stimme, solange Diktat aufnimmt und schreibt. Ein Klick darauf stoppt die Aufnahme.": {
+    "Eine kleine schwarze Anzeige zeigt deine Stimme als Striche, solange Diktat aufnimmt und schreibt. Beginnt eine Aufnahme mit einem neuen Mikrofon, nennt ein Schild es kurz. Ein Klick auf die Anzeige stoppt die Aufnahme.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A small purple indicator moves with your voice while Diktat records and writes. A click on it stops the recording."
+            "value": "A small black indicator shows your voice as bars while Diktat records and writes. When a recording starts with a new microphone, a label names it briefly. A click on the indicator stops the recording."
           }
         }
       }
@@ -3972,6 +3972,17 @@
         }
       }
     },
+    "Links": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left"
+          }
+        }
+      }
+    },
     "Live-Notizen": {
       "extractionState": "manual",
       "localizations": {
@@ -4452,6 +4463,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "With “%@” in the settings, your model provider takes over."
+          }
+        }
+      }
+    },
+    "Mitte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Center"
           }
         }
       }
@@ -5182,6 +5204,17 @@
         }
       }
     },
+    "Position": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position"
+          }
+        }
+      }
+    },
     "Prüfen": {
       "extractionState": "manual",
       "localizations": {
@@ -5200,6 +5233,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Permissions"
+          }
+        }
+      }
+    },
+    "Rechts": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right"
           }
         }
       }

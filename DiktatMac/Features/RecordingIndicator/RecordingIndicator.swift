@@ -159,7 +159,7 @@ final class RecordingIndicatorController {
         }
     }
 
-    /// Bottom centre, above the Dock, of the screen with the pointer: on a Mac with
+    /// Along the bottom edge, above the Dock, of the screen with the pointer: on a Mac with
     /// several displays that is the one you are working on. The size is always the full
     /// panel, label included, so the window never depends on what is shown inside.
     private func place(_ panel: NSPanel) {
@@ -168,8 +168,9 @@ final class RecordingIndicatorController {
             ?? NSScreen.main ?? NSScreen.screens.first else { return }
         let size = RecordingPill.panelSize
         let frame = screen.visibleFrame
+        let x = appState.appSettings.pillPosition.originX(in: frame, panelWidth: size.width)
         panel.setFrame(
-            NSRect(x: frame.midX - size.width / 2, y: frame.minY + 8, width: size.width, height: size.height),
+            NSRect(x: x, y: frame.minY + 8, width: size.width, height: size.height),
             display: true
         )
     }
