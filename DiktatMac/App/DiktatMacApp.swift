@@ -25,7 +25,43 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private var pendingAudioFile: URL?
     private var didFinishLaunching = false
 
+    #if DEBUG || PILLDEMO
+    /// Design check of the real pill window: a recording starts, a made-up voice runs, and the window content is
+    /// saved a few times, so it shows whether the label comes and goes and the bars move in the real panel.
+    private func runPillDemo(_ folder: URL) async {
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        var level: Float = 0
+        recordingIndicator.levelSource = { level }
+        recordingIndicator.update(to: .recording(.tapTalk))
+        let started = Date()
+        var shots = [(0.5, "a"), (1.3, "b"), (2.1, "c"), (3.7, "d"), (4.6, "e"), (5.4, "f")]
+        while let next = shots.first {
+            let elapsed = Date().timeIntervalSince(started)
+            // a voice like a webcam microphone hears it: pauses, words up to 0.39
+            level = elapsed < 0.2 ? 0 : Float(abs(sin(elapsed * 5.3)) * 0.39 * (0.5 + 0.5 * sin(elapsed * 1.7)))
+            if elapsed >= next.0 {
+                shots.removeFirst()
+                if let rep = recordingIndicator.debugImage(), let data = rep.representation(using: .png, properties: [:]) {
+                    try? data.write(to: folder.appendingPathComponent("pill-\(next.1).png"))
+                }
+            }
+            try? await Task.sleep(for: .milliseconds(20))
+        }
+        recordingIndicator.update(to: .idle)
+    }
+    #endif
+
     func applicationDidFinishLaunching(_ notification: Notification) {
+        #if DEBUG || PILLDEMO
+        if let path = UserDefaults.standard.string(forKey: "DiktatPillDemo") {
+            NSApp.setActivationPolicy(.accessory)
+            Task {
+                await runPillDemo(URL(fileURLWithPath: path))
+                NSApp.terminate(nil)
+            }
+            return
+        }
+        #endif
         #if DEBUG
         if let folder = MacSnapshots.folder {
             NSApp.setActivationPolicy(.prohibited)

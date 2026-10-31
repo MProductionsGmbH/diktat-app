@@ -14,6 +14,7 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
     private var capture: EngineCapture?
     private var levelTimer: Timer?
     private var maxPowerDB: Float = -160
+    private var adaptiveLevel = AdaptiveLevel()
     private var silentSince: Date?
     /// Digital silence for more than a second while recording: the microphone delivers nothing.
     private(set) var noSignal = false
@@ -53,6 +54,7 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         errorMessage = nil
         lastRecordingDuration = 0
         maxPowerDB = -160
+        adaptiveLevel.reset()
         heardOnlySilence = false
         silentSince = nil
         noSignal = false
@@ -132,7 +134,7 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
         levelTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
             guard let self else { return }
             if let capture = self.capture {
-                self.audioLevel = capture.currentLevel
+                self.audioLevel = self.adaptiveLevel.normalize(capture.currentLevel)
                 self.maxPowerDB = max(self.maxPowerDB, capture.peakPowerDB)
                 self.trackSignal(powerDB: capture.currentPowerDB)
                 return
@@ -141,8 +143,8 @@ final class AudioRecorder: NSObject, AVAudioRecorderDelegate {
             let power = self.audioRecorder?.averagePower(forChannel: 0) ?? -160
             self.maxPowerDB = max(self.maxPowerDB, power)
             self.trackSignal(powerDB: power)
-            let normalized = max(0, min(1, (power + 50) / 50))
-            self.audioLevel = normalized
+            let raw = max(0, min(1, (power + 50) / 50))
+            self.audioLevel = self.adaptiveLevel.normalize(raw)
         }
     }
 

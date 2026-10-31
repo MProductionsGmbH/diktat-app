@@ -25,6 +25,17 @@ final class RecordingIndicatorController {
     /// The microphone the label above the pill was last shown for: it appears again only when a recording
     /// starts with another one, not at every press.
     private var lastAnnouncedMicrophone: String?
+    /// Replaces the level of the running workflow; only the design check sets it.
+    var levelSource: (() -> Float)?
+
+    #if DEBUG || PILLDEMO
+    /// What the pill window shows right now, drawn from the real window content.
+    func debugImage() -> NSBitmapImageRep? {
+        guard let view = panel?.contentView, let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { return nil }
+        view.cacheDisplay(in: view.bounds, to: rep)
+        return rep
+    }
+    #endif
 
     init(appState: AppState) {
         self.appState = appState
@@ -104,7 +115,7 @@ final class RecordingIndicatorController {
                 guard let self else { return }
                 let workflow = self.appState.activeWorkflow
                 self.model.noSignal = workflow?.noSignal ?? false
-                self.model.push(level: workflow?.audioLevel ?? 0)
+                self.model.push(level: self.levelSource?() ?? workflow?.audioLevel ?? 0)
             }
         }
     }
