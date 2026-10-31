@@ -84,7 +84,8 @@ enum MeetingSummarizer {
             round += 1
         }
         let summary = try await rewrite(material, instruction: isGerman ? finalInstruction : englishFinalInstruction)
-        return InventedDeadlineFilter.filtered(cleaned(summary), transcript: transcript, transcriptIsGerman: isGerman)
+        let withoutInvented = InventedDeadlineFilter.filtered(cleaned(summary), transcript: transcript, transcriptIsGerman: isGerman)
+        return DecisionTodoFilter.filtered(withoutInvented)
     }
 
     /// Characters the on-device model reads at once. From iOS and macOS 27 it reports its

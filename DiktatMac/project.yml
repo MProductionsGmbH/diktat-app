@@ -120,6 +120,7 @@ targets:
       - path: ../DiktatShared/Transcription/SpokenEmailAddress.swift
       - path: Services/ShortcutModifiers.swift
       - path: ../DiktatShared/AI/InventedDeadlineFilter.swift
+      - path: ../DiktatShared/AI/DecisionTodoFilter.swift
       - path: ../DiktatShared/AI/AIClient.swift
       - path: ../DiktatShared/AI/AIProvider.swift
       - path: ../DiktatShared/AI/LocalServerDiscovery.swift

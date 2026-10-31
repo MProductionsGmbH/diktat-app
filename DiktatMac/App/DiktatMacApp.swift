@@ -621,7 +621,7 @@ enum MacSummaryCheck {
             round += 1
         }
         let summary = try await complete(material, instruction: isGerman ? MeetingSummarizer.finalInstruction : MeetingSummarizer.englishFinalInstruction, endpoint: endpoint, model: model)
-        return InventedDeadlineFilter.filtered(MeetingSummarizer.cleaned(summary), transcript: transcript, transcriptIsGerman: isGerman)
+        return DecisionTodoFilter.filtered(InventedDeadlineFilter.filtered(MeetingSummarizer.cleaned(summary), transcript: transcript, transcriptIsGerman: isGerman))
     }
 
     private static func complete(_ text: String, instruction: String, endpoint: String, model: String) async throws -> String {
