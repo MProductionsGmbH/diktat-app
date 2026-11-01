@@ -48,12 +48,13 @@ final class EmojiTextWorkflow: Workflow {
     // MARK: - Workflow Protocol
 
     func start() {
-        phase = .running(String(localized: "Aufnahme l\u{00E4}uft ..."))
+        // The recorder starts first: the phase change tells the menu bar and the pill whether it is recording.
         recorder.startRecording()
-
         if let error = recorder.errorMessage {
             phase = .error(error)
+            return
         }
+        phase = .running(String(localized: "Aufnahme l\u{00E4}uft ..."))
     }
 
     func stop() {

@@ -44,12 +44,13 @@ final class TranscriptionWorkflow: Workflow {
     }
 
     func start() {
-        phase = .running(String(localized: "Aufnahme läuft ..."))
+        // The recorder starts first: the phase change tells the menu bar and the pill whether it is recording.
         recorder.startRecording()
-
         if let error = recorder.errorMessage {
             phase = .error(error)
+            return
         }
+        phase = .running(String(localized: "Aufnahme läuft ..."))
     }
 
     func stop() {

@@ -49,9 +49,39 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         }
         recordingIndicator.update(to: .idle)
     }
+    /// Like the pill demo, but through the real path: a hotkey-style dictation starts with the real microphone,
+    /// and the window is saved while the real recorder level feeds the bars. Nothing is stopped or pasted.
+    private func runPillLive(_ folder: URL) async {
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        try? await Task.sleep(for: .seconds(1.5))
+        appState.startWorkflow(.tapTalk, source: .hotkeyBackground)
+        let started = Date()
+        var log = "t,workflowLevel,menuStatus,phase\n"
+        var shots = [(1.0, "a"), (2.0, "b"), (3.5, "c"), (5.0, "d"), (6.5, "e")]
+        while Date().timeIntervalSince(started) < 8 {
+            let elapsed = Date().timeIntervalSince(started)
+            let level = appState.activeWorkflow?.audioLevel ?? -1
+            log += "\(String(format: "%.2f", elapsed)),\(level),\(appState.menuBarStatus),\(String(describing: appState.activeWorkflow?.phase))\n"
+            if let next = shots.first, elapsed >= next.0 {
+                shots.removeFirst()
+                if let rep = recordingIndicator.debugImage(), let data = rep.representation(using: .png, properties: [:]) {
+                    try? data.write(to: folder.appendingPathComponent("live-\(next.1).png"))
+                }
+            }
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+        try? log.write(to: folder.appendingPathComponent("live.csv"), atomically: true, encoding: .utf8)
+        // The app quits mid-recording, so nothing is transcribed or pasted.
+        NSApp.terminate(nil)
+    }
     #endif
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        #if DEBUG || PILLDEMO
+        if let path = UserDefaults.standard.string(forKey: "DiktatPillLive") {
+            Task { await runPillLive(URL(fileURLWithPath: path)) }
+        }
+        #endif
         #if DEBUG || PILLDEMO
         if let path = UserDefaults.standard.string(forKey: "DiktatPillDemo") {
             NSApp.setActivationPolicy(.accessory)
