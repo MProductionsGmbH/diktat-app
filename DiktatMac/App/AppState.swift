@@ -20,6 +20,9 @@ final class AppState {
     private static let pasteRetryInitialAttempts = 22
     var activeWorkflow: (any Workflow)?
     var page: PopoverPage = .main
+    /// The page of the main window; the window itself is owned by the app delegate.
+    var mainWindowPage: MainWindowPage = .history
+    var onOpenMainWindow: ((MainWindowPage?) -> Void)?
     var isPopoverShown = false
     var menuBarStatus: MenuBarStatus = .idle {
         didSet {

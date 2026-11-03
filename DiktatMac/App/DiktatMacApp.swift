@@ -24,6 +24,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private let menuBarStatusController = MenuBarStatusController()
     let appState = AppState()
     private lazy var recordingIndicator = RecordingIndicatorController(appState: appState)
+    private lazy var mainWindow = MainWindowController(appState: appState)
     /// Files opened before launch finished (e.g. "Open With" on a closed app).
     private var pendingAudioFile: URL?
     private var didFinishLaunching = false
@@ -54,6 +55,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     }
     /// Like the pill demo, but through the real path: a hotkey-style dictation starts with the real microphone,
     /// and the window is saved while the real recorder level feeds the bars. Nothing is stopped or pasted.
+    /// Opens the real main window and closes it again, and notes what the Dock icon (activation policy) did.
+    private func runWindowCheck(_ folder: URL) async {
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        var log = "start policy: \(NSApp.activationPolicy().rawValue) (1 = accessory)\n"
+        try? await Task.sleep(for: .seconds(1.5))
+        appState.onOpenMainWindow?(.history)
+        try? await Task.sleep(for: .seconds(1.5))
+        log += "window open: \(mainWindow.isOpen), policy: \(NSApp.activationPolicy().rawValue) (0 = regular), menu items: \(NSApp.mainMenu?.items.count ?? 0)\n"
+        if let rep = mainWindow.debugImage(), let data = rep.representation(using: .png, properties: [:]) {
+            try? data.write(to: folder.appendingPathComponent("window-open.png"))
+        }
+        mainWindow.debugClose()
+        try? await Task.sleep(for: .seconds(0.8))
+        log += "after close: open \(mainWindow.isOpen), policy: \(NSApp.activationPolicy().rawValue)\n"
+        appState.onOpenMainWindow?(.modes)
+        try? await Task.sleep(for: .seconds(1))
+        log += "reopened: \(mainWindow.isOpen), policy: \(NSApp.activationPolicy().rawValue), page: \(appState.mainWindowPage.rawValue)\n"
+        try? log.write(to: folder.appendingPathComponent("window.txt"), atomically: true, encoding: .utf8)
+        NSApp.terminate(nil)
+    }
+
     private func runPillLive(_ folder: URL) async {
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         try? await Task.sleep(for: .seconds(1.5))
@@ -81,6 +103,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         #if DEBUG || PILLDEMO
+        if let path = UserDefaults.standard.string(forKey: "DiktatWindowCheck") {
+            Task { await runWindowCheck(URL(fileURLWithPath: path)) }
+        }
         if let path = UserDefaults.standard.string(forKey: "DiktatPillLive") {
             Task { await runPillLive(URL(fileURLWithPath: path)) }
         }
@@ -209,6 +234,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         appState.onRecordingIndicatorSettingChange = { [weak self] in
             self?.recordingIndicator.settingChanged()
         }
+        appState.onOpenMainWindow = { [weak self] page in
+            self?.openMainWindow(page)
+        }
         appState.onWhatsNewChange = { [weak self] unseen in
             self?.menuBarStatusController.showsNewBadge = unseen
         }
@@ -253,6 +281,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
                 self.showOnboardingIfNeeded()
             }
         }
+    }
+
+    // MARK: - Main window
+
+    /// The window is for what needs room; the popover closes when it opens.
+    private func openMainWindow(_ page: MainWindowPage?) {
+        popover.performClose(nil)
+        appState.isPopoverShown = false
+        mainWindow.show(page: page)
+    }
+
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
+
+    /// Starting Diktat again from Finder or Spotlight while it runs in the menu bar opens the window.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        guard didFinishLaunching else { return true }
+        openMainWindow(nil)
+        return false
     }
 
     // MARK: - Audio files
@@ -1102,6 +1148,11 @@ enum MacSnapshots {
                     .frame(width: MenuBarView.width, height: 1400, alignment: .top)
                     .background(DiktatTheme.page)
                 capture(view, appearance: appearance, to: folder.appendingPathComponent("\(mode)-settings-\(pane.rawValue).png"))
+            }
+            for page in MainWindowPage.allCases {
+                appState.mainWindowPage = page
+                let view = MainWindowView(appState: appState).frame(width: 1040, height: 700)
+                capture(view, appearance: appearance, to: folder.appendingPathComponent("\(mode)-window-\(page.rawValue).png"))
             }
             let speaking: [Float] = [0.1, 0.25, 0.5, 0.72, 0.4, 0.62, 0.88, 0.5, 0.3, 0.45, 0.2]
             let pillStates: [(MenuBarStatus, String)] = [

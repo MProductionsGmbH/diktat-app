@@ -562,6 +562,28 @@
         }
       }
     },
+    "Alles auf diesem Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything on this Mac"
+          }
+        }
+      }
+    },
+    "Alles auswählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select All"
+          }
+        }
+      }
+    },
     "Alles bereit.": {
       "extractionState": "manual",
       "localizations": {
@@ -1090,6 +1112,17 @@
         }
       }
     },
+    "Ausschneiden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cut"
+          }
+        }
+      }
+    },
     "Auto-Updates laufen erst sauber, wenn Diktat aus /Applications gestartet wird.": {
       "extractionState": "manual",
       "localizations": {
@@ -1152,6 +1185,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatic paragraphs"
+          }
+        }
+      }
+    },
+    "Bearbeiten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
           }
         }
       }
@@ -1398,6 +1442,17 @@
         }
       }
     },
+    "Das Dock-Symbol erscheint nur, solange dieses Fenster offen ist. Sonst bleibt Diktat unsichtbar in der Menüleiste.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Dock icon appears only while this window is open. Otherwise Diktat stays out of sight in the menu bar."
+          }
+        }
+      }
+    },
     "Das Meeting ließ sich nicht sichern, zum Beispiel weil der Speicher voll ist. Die Aufnahme bleibt erhalten.": {
       "extractionState": "manual",
       "localizations": {
@@ -1504,6 +1559,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Data could not be encrypted."
+          }
+        }
+      }
+    },
+    "Datenschutz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy"
           }
         }
       }
@@ -1959,6 +2025,17 @@
         }
       }
     },
+    "Diktat ausblenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide Diktat"
+          }
+        }
+      }
+    },
     "Diktat automatisch starten": {
       "extractionState": "manual",
       "localizations": {
@@ -1966,6 +2043,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start Diktat automatically"
+          }
+        }
+      }
+    },
+    "Diktat beenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit Diktat"
           }
         }
       }
@@ -2021,6 +2109,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diktat recognizes where your text is going and writes it in the fitting tone."
+          }
+        }
+      }
+    },
+    "Diktat hat kein Konto und kein Backend. Audio, Text und Verlauf bleiben auf diesem Mac. Das Internet erreichen nur der Download der Sprachmodelle (Hugging Face), der Update-Check (GitHub, abschaltbar) und, wenn du einen eigenen Anbieter einträgst, der erkannte Text.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat has no account and no backend. Audio, text and history stay on this Mac. Only the download of the speech models (Hugging Face), the update check (GitHub, can be turned off) and, if you add your own provider, the recognized text reach the internet."
           }
         }
       }
@@ -2256,6 +2355,17 @@
         }
       }
     },
+    "Diktat öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Diktat"
+          }
+        }
+      }
+    },
     "Diktat: Fehler": {
       "extractionState": "manual",
       "localizations": {
@@ -2285,6 +2395,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diktat: text is in the clipboard"
+          }
+        }
+      }
+    },
+    "Diktate": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictations"
           }
         }
       }
@@ -2652,6 +2773,17 @@
         }
       }
     },
+    "Einsetzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste"
+          }
+        }
+      }
+    },
     "Einstellungen": {
       "extractionState": "manual",
       "localizations": {
@@ -2949,6 +3081,17 @@
         }
       }
     },
+    "Fenster": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Window"
+          }
+        }
+      }
+    },
     "Fertig": {
       "extractionState": "manual",
       "localizations": {
@@ -3202,6 +3345,17 @@
         }
       }
     },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
+          }
+        }
+      }
+    },
     "Gilt in Mail, Outlook, Spark und anderen Mail-Programmen, auch Gmail im Browser.": {
       "extractionState": "manual",
       "localizations": {
@@ -3297,6 +3451,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hold"
+          }
+        }
+      }
+    },
+    "Heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         }
       }
@@ -3532,6 +3697,17 @@
         }
       }
     },
+    "Jeder Modus hat sein eigenes Kürzel. Du hältst es, sprichst, und Diktat schreibt den Text so, wie der Modus es verlangt. Ein Klick startet einen Modus auch ohne Kürzel.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every mode has its own shortcut. You hold it, speak, and Diktat writes the text the way the mode asks. A click also starts a mode without the shortcut."
+          }
+        }
+      }
+    },
     "Jetzt aktualisieren": {
       "extractionState": "manual",
       "localizations": {
@@ -3671,6 +3847,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "No output device found."
+          }
+        }
+      }
+    },
+    "Kein Eintrag enthält diesen Suchbegriff.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No entry contains this search term."
+          }
+        }
+      }
+    },
+    "Kein Konto, keine Telemetrie. Audio wird nach dem Diktat gelöscht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No account, no telemetry. Audio is deleted after the dictation."
           }
         }
       }
@@ -4302,6 +4500,17 @@
         }
       }
     },
+    "Meetings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meetings"
+          }
+        }
+      }
+    },
     "Meetings (Rechtsklick zum Löschen)": {
       "extractionState": "manual",
       "localizations": {
@@ -4364,6 +4573,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Microphone: %@"
+          }
+        }
+      }
+    },
+    "Minimieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minimize"
           }
         }
       }
@@ -4797,6 +5017,17 @@
         }
       }
     },
+    "Nichts gefunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing found"
+          }
+        }
+      }
+    },
     "Nimmt auch den Ton des Macs auf, zum Beispiel aus Teams, Zoom oder Meet. Beim ersten Mal fragt macOS nach der Freigabe für Systemaudio.": {
       "extractionState": "manual",
       "localizations": {
@@ -4958,6 +5189,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copy notes"
+          }
+        }
+      }
+    },
+    "Nur auf diesem Mac aus dem Verlauf berechnet. Abschaltbar unter Einstellungen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Worked out on this Mac from the history. Can be turned off in the settings."
           }
         }
       }
@@ -5556,6 +5798,17 @@
         }
       }
     },
+    "Statistik im Verlauf zeigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show statistics in the history"
+          }
+        }
+      }
+    },
     "Steht schon auf an?": {
       "extractionState": "manual",
       "localizations": {
@@ -5941,6 +6194,17 @@
         }
       }
     },
+    "Verlauf durchsuchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search the history"
+          }
+        }
+      }
+    },
     "Verlauf ist aus": {
       "extractionState": "manual",
       "localizations": {
@@ -5948,6 +6212,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "History is off"
+          }
+        }
+      }
+    },
+    "Verlauf, Modi, Einstellungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History, modes, settings"
           }
         }
       }
@@ -6095,6 +6370,17 @@
         }
       }
     },
+    "Widerrufen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        }
+      }
+    },
     "Wie stark Diktat deinen Text aufräumt. Antwortet das Sprachmodell nicht oder unplausibel, bleibt der Text, wie du ihn gesprochen hast.": {
       "extractionState": "manual",
       "localizations": {
@@ -6102,6 +6388,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "How much Diktat tidies up your text. If the language model does not answer or answers implausibly, the text stays as you spoke it."
+          }
+        }
+      }
+    },
+    "Wiederholen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redo"
           }
         }
       }
@@ -6245,6 +6542,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notes with topics, decisions and to-dos appear while the meeting runs. Diktat updates them every two and a half minutes from what was said. Everything stays on this Mac."
+          }
+        }
+      }
+    },
+    "Wörter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Words"
+          }
+        }
+      }
+    },
+    "Wörter pro Diktat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Words per dictation"
+          }
+        }
+      }
+    },
+    "Wörter und Diktate aus dem Verlauf. Nur auf diesem Mac berechnet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Words and dictations from the history. Worked out on this Mac only."
           }
         }
       }
@@ -6553,6 +6883,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open"
+          }
+        }
+      }
+    },
+    "Öffnet das Fenster mit Verlauf, Modi, Meetings und Einstellungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the window with history, modes, meetings and settings"
           }
         }
       }

@@ -6,6 +6,8 @@ struct MeetingView: View {
     @Bindable var appState: AppState
     /// The popover height; snapshots render the whole page.
     var height: CGFloat = 560
+    /// In the main window: no back header, and the height is the window's.
+    var embedded = false
 
     @State private var renaming: Int?
     @State private var newName = ""
@@ -29,12 +31,14 @@ struct MeetingView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            PageHeader(title: "Meeting", onBack: {
-                meeting.close()
-                appState.page = .main
-            })
+            if !embedded {
+                PageHeader(title: "Meeting", onBack: {
+                    meeting.close()
+                    appState.page = .main
+                })
 
-            Divider().opacity(0.16)
+                Divider().opacity(0.16)
+            }
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
@@ -62,7 +66,7 @@ struct MeetingView: View {
                 .padding(16)
             }
         }
-        .frame(height: height)
+        .frame(height: embedded ? nil : height)
         .alert("Person umbenennen", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
             TextField("Name", text: $newName)
             Button("Sichern") { saveName() }

@@ -173,6 +173,8 @@ struct AppSettings: Codable {
     var pillPosition: PillPosition = .right
     /// A short sound when the recording starts.
     var playsStartSound: Bool = true
+    /// Counts of words and dictations above the history in the main window, worked out on this Mac.
+    var showsHistoryStatistics: Bool = true
     /// The microphone for dictation (its UID); nil follows the Mac's default input.
     var microphoneUID: String?
     /// Write the summary right after a meeting. Off: transcript by person only, faster;
@@ -217,6 +219,7 @@ struct AppSettings: Codable {
         case showsRecordingIndicator
         case pillPosition
         case playsStartSound
+        case showsHistoryStatistics
         case microphoneUID
         case summarizesMeetings
     }
@@ -254,6 +257,7 @@ struct AppSettings: Codable {
         showsRecordingIndicator = try container.decodeIfPresent(Bool.self, forKey: .showsRecordingIndicator) ?? true
         pillPosition = (try? container.decodeIfPresent(PillPosition.self, forKey: .pillPosition)) ?? .right
         playsStartSound = try container.decodeIfPresent(Bool.self, forKey: .playsStartSound) ?? true
+        showsHistoryStatistics = try container.decodeIfPresent(Bool.self, forKey: .showsHistoryStatistics) ?? true
         microphoneUID = try? container.decodeIfPresent(String.self, forKey: .microphoneUID)
         summarizesMeetings = try container.decodeIfPresent(Bool.self, forKey: .summarizesMeetings) ?? true
     }

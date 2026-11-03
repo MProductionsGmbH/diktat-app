@@ -145,6 +145,8 @@ struct MenuBarView: View {
 
                 dictationCard
 
+                openWindowButton
+
                 styleCard
 
                 VStack(alignment: .leading, spacing: 8) {
@@ -179,6 +181,41 @@ struct MenuBarView: View {
 
             footerBar
         }
+    }
+
+    /// The main window: history, modes, meetings and settings with room. The menu bar stays the center.
+    private var openWindowButton: some View {
+        Button {
+            appState.onOpenMainWindow?(nil)
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "macwindow")
+                    .font(.ui(14, .semibold))
+                    .foregroundStyle(DiktatTheme.accent)
+                Text("Diktat öffnen")
+                    .font(.ui(13.5, .semibold))
+                    .foregroundStyle(.primary)
+                Spacer(minLength: 6)
+                Text("Verlauf, Modi, Einstellungen")
+                    .font(.ui(11))
+                    .foregroundStyle(.secondary)
+                Text("⌘O")
+                    .font(.ui(11))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.horizontal, 14)
+            .frame(height: 46)
+            .frame(maxWidth: .infinity)
+            .glassPanel()
+            .overlay {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(DiktatTheme.accent.opacity(0.5), lineWidth: 1.5)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .keyboardShortcut("o", modifiers: .command)
+        .help("Öffnet das Fenster mit Verlauf, Modi, Meetings und Einstellungen")
     }
 
     private var miniHeader: some View {

@@ -95,7 +95,7 @@ struct HistoryListView: View {
     }
 }
 
-private struct HistoryRow: View {
+struct HistoryRow: View {
     let entry: TranscriptHistoryEntry
     let workflowName: String
     let timestamp: String

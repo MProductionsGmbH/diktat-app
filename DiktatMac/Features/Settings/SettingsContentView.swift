@@ -3,6 +3,8 @@ import AppKit
 
 struct SettingsContentView: View {
     @Bindable var appState: AppState
+    /// In the main window: the pane "Allgemein" also holds the window's own settings and the privacy note.
+    var inWindow = false
     @State private var activePane: SettingsPane = Self.initialPane
 
     #if DEBUG
@@ -25,7 +27,7 @@ struct SettingsContentView: View {
             .padding(.bottom, 10)
 
             ScrollView {
-                CustomizeSettingsView(appState: appState, pane: activePane)
+                CustomizeSettingsView(appState: appState, pane: activePane, inWindow: inWindow)
                     .id(activePane)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 16)
@@ -511,6 +513,7 @@ struct AboutDiktatSection: View {
 struct CustomizeSettingsView: View {
     @Bindable var appState: AppState
     var pane: SettingsPane = .general
+    var inWindow = false
     @State private var newTerm = ""
     @State private var newSpoken = ""
     @State private var newWritten = ""
@@ -557,6 +560,10 @@ struct CustomizeSettingsView: View {
             LanguageSection(appState: appState)
 
             PipelineOverviewSection(appState: appState)
+
+            if inWindow {
+                MainWindowSettingsSection(appState: appState)
+            }
 
             // MARK: Tastenkuerzel
             SettingsSection(title: String(localized: "Tastenk\u{00FC}rzel")) {
