@@ -957,8 +957,7 @@ final class AppState {
         let workflowID = ObjectIdentifier(workflow)
 
         workflowCleanupTask = Task { @MainActor [weak self] in
-            // `try?` alone would run the cleanup at once when the task is cancelled
-            // (pattern found in the upstream Blitztext project PR #10).
+            // `try?` alone would run the cleanup at once when the task is cancelled.
             try? await Task.sleep(for: .seconds(delay))
             guard !Task.isCancelled, let self, let activeWorkflow = self.activeWorkflow else { return }
             guard ObjectIdentifier(activeWorkflow) == workflowID else { return }

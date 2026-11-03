@@ -4,7 +4,7 @@ import NaturalLanguage
 /// Formats transcript whitespace without rewriting words or punctuation: long dictation
 /// gets a blank line at a sentence end after 45 words or four substantial sentences.
 ///
-/// Contributed by dan-rot to the upstream Blitztext project (PR #21, MIT).
+/// Contributed by dan-rot (MIT).
 enum TranscriptParagraphService {
     private static let paragraphSeparator = try! NSRegularExpression(
         pattern: #"\r?\n[\t ]*\r?\n(?:[\t ]*\r?\n)*"#

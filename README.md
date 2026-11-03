@@ -159,13 +159,13 @@ Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md), and s
 - **[WhisperKit](https://github.com/argmaxinc/argmax-oss-swift)** by Argmax and **OpenAI** for Whisper
 - **[Sparkle](https://sparkle-project.org)** for updates
 - **Google** for Gemma 4 and **[MLX](https://github.com/ml-explore/mlx-swift)** for running it on the Mac
-- **The Blitztext project** (MIT) by its contributors, on which Diktat is based, see [Origin](#origin)
+- **Open-source code** (MIT) by its original contributors, on which Diktat is based, see [Origin](#origin)
 
 Full license texts: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), also inside the app (Settings > Allgemein > Über Diktat).
 
 ## Origin
 
-Diktat started as a fork of [Blitztext](https://github.com/cmagnussen/blitztext-app) by Blackboat Internet GmbH and its contributors (MIT License). It is now an independent project by MProductions GmbH with its own name, icon and development. The original copyright notice stays in [LICENSE](LICENSE). Blitztext and Blackboat are not affiliated with this project.
+Diktat is based on open-source code under the MIT License. The copyright notices are in [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## License
 

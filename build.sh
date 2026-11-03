@@ -93,7 +93,6 @@ PROJECT_FILE="$PROJECT_DIR/DiktatMac.xcodeproj"
 # Keep DerivedData outside iCloud-synced folders (Desktop/Documents): the file
 # provider adds com.apple.FinderInfo xattrs to bundles, which breaks codesign with
 # "resource fork, Finder information, or similar detritus not allowed".
-# (the upstream Blitztext project PR #5)
 DERIVED_DATA_PATH="$HOME/Library/Caches/diktat-build/derivedData"
 cd "$PROJECT_DIR"
 
@@ -144,7 +143,7 @@ cp -f "$PROJECT_DIR/Resources/menubar_icon.png" "$RESOURCES_DIR/" 2>/dev/null ||
 cp -f "$PROJECT_DIR/Resources/menubar_icon@2x.png" "$RESOURCES_DIR/" 2>/dev/null || true
 
 # Ziel vorab bestimmen: nur einmal kopieren, signieren und pruefen, ohne zweite Kopie
-# im Projektordner (the upstream Blitztext project PR #16).
+# im Projektordner.
 if [ "$INSTALL_APP" = true ]; then
     APPS_DIR="/Applications"
     DEST="$APPS_DIR/Diktat.app"

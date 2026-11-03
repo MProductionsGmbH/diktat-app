@@ -1,6 +1,5 @@
 import XCTest
 
-/// Ported from the checks in the upstream Blitztext project PR #21.
 final class TranscriptParagraphServiceTests: XCTestCase {
     private let sentences = [
         "Heute schreiben wir einen Brief.",
