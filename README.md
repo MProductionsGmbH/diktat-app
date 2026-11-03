@@ -165,7 +165,7 @@ Full license texts: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), also insid
 
 ## Origin
 
-Diktat started as a fork and its contributors (MIT License). It is now an independent project by MProductions GmbH with its own name, icon and development. The original copyright notice stays in [LICENSE](LICENSE). 
+Diktat started as a fork of [Blitztext](https://github.com/cmagnussen/blitztext-app) by Blackboat Internet GmbH and its contributors (MIT License). It is now an independent project by MProductions GmbH with its own name, icon and development. The original copyright notice stays in [LICENSE](LICENSE). Blitztext and Blackboat are not affiliated with this project.
 
 ## License
 
