@@ -7,6 +7,32 @@ final class HallucinationFilterTests: XCTestCase {
         XCTAssertTrue(HallucinationFilter.isInvented("Thanks for watching!", voicedSeconds: 5))
     }
 
+    func testClosingOverRoomNoiseAtTheEndIsDropped() {
+        // Whisper decodes the noise after the last word as a window of its own and invents a closing there.
+        let segments = [
+            HallucinationFilter.Segment(text: " Danke für deine Rückmeldung.", voicedSeconds: 2.5),
+            HallucinationFilter.Segment(text: " Thank you.", voicedSeconds: 0.1),
+        ]
+        XCTAssertEqual(HallucinationFilter.removingSilentSegments(segments).map(\.text), [" Danke für deine Rückmeldung."])
+    }
+
+    func testSpokenClosingStays() {
+        let segments = [
+            HallucinationFilter.Segment(text: " Alles klar.", voicedSeconds: 1.5),
+            HallucinationFilter.Segment(text: " Vielen Dank.", voicedSeconds: 0.9),
+        ]
+        XCTAssertEqual(HallucinationFilter.removingSilentSegments(segments).count, 2)
+    }
+
+    func testRecordingWithoutAnySpeechIsLeftToTheOtherCheck() {
+        let segments = [HallucinationFilter.Segment(text: " Thank you.", voicedSeconds: 0.1)]
+        XCTAssertEqual(HallucinationFilter.removingSilentSegments(segments), segments)
+    }
+
+    func testControlTokensAreNoText() {
+        XCTAssertEqual(HallucinationFilter.strippingTokens("<|startoftranscript|><|de|><|0.00|> Guten Tag.<|3.20|>"), "Guten Tag.")
+    }
+
     func testPoliteWordsOnlyCountOnSilence() {
         XCTAssertTrue(HallucinationFilter.isInvented("Thank you.", voicedSeconds: 0))
         XCTAssertTrue(HallucinationFilter.isInvented("Vielen Dank.", voicedSeconds: 0.1))

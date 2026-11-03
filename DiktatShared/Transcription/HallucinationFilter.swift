@@ -50,6 +50,33 @@ enum HallucinationFilter {
     /// Less speech than this and a doubtful phrase counts as invented.
     static let minimumVoicedSeconds = 0.3
 
+    /// A stretch of the recording that Whisper decoded on its own, with how much speech it holds.
+    struct Segment: Equatable {
+        var text: String
+        var voicedSeconds: Double
+    }
+
+    /// Less speech than this in a stretch of the recording while the rest has speech: a stretch of room
+    /// noise at the end. Whisper decodes it as a window of its own, detects the language again
+    /// (often English) and invents a closing like "Thank you." or "*Extreme noise*".
+    static let minimumVoicedSecondsInSegment = 0.2
+
+    /// Which segments hold what was said: a segment with hardly any speech is dropped when other
+    /// segments have speech. A recording with no speech at all is left to `isInvented`.
+    static func keepFlags(voicedSeconds: [Double]) -> [Bool] {
+        let totalVoiced = voicedSeconds.reduce(0, +)
+        return voicedSeconds.map { voiced in
+            let isSilent = voiced < minimumVoicedSecondsInSegment
+            let othersSpeak = totalVoiced - voiced >= minimumVoicedSeconds
+            return !(isSilent && othersSpeak)
+        }
+    }
+
+    static func removingSilentSegments(_ segments: [Segment]) -> [Segment] {
+        let flags = keepFlags(voicedSeconds: segments.map(\.voicedSeconds))
+        return zip(segments, flags).filter(\.1).map(\.0)
+    }
+
     /// True when the whole transcript is a credit, or a doubtful phrase on a recording
     /// with hardly any speech.
     static func isInvented(_ text: String, voicedSeconds: Double) -> Bool {
@@ -57,6 +84,12 @@ enum HallucinationFilter {
         guard !key.isEmpty else { return false }
         if credits.contains(key) { return true }
         return voicedSeconds < minimumVoicedSeconds && doubtfulPhrases.contains(key)
+    }
+
+    /// Whisper's control tokens ("<|de|>", "<|3.20|>") are no text.
+    static func strippingTokens(_ text: String) -> String {
+        text.replacingOccurrences(of: "<\\|[^|]*\\|>", with: "", options: .regularExpression)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     /// Seconds of audio loud enough to be speech: 30 ms frames above about -40 dBFS.

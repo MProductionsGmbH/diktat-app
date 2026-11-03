@@ -72,6 +72,9 @@ final class AppState {
                 || oldValue.hotkeyMode != appSettings.hotkeyMode {
                 applyFnAloneSetting()
             }
+            if oldValue.selectedLocalTranscriptionModelName != appSettings.selectedLocalTranscriptionModelName {
+                MeetingTranscriber.preferredModelName = appSettings.selectedLocalTranscriptionModelName
+            }
             if oldValue.microphoneUID != appSettings.microphoneUID {
                 AudioInputDevices.preferredUID = appSettings.microphoneUID
                 microphoneIssue = MicrophoneCheck.issue
@@ -184,6 +187,7 @@ final class AppState {
         let loadedAppSettings = Self.loadAppSettings()
         self.appSettings = loadedAppSettings
         AudioInputDevices.preferredUID = loadedAppSettings.microphoneUID
+        MeetingTranscriber.preferredModelName = loadedAppSettings.selectedLocalTranscriptionModelName
         self.transcriptionSettings = Self.loadTranscriptionSettings()
         self.textImprovementSettings = Self.loadTextImprovementSettings()
         self.dampfAblassenSettings = Self.loadDampfAblassenSettings()

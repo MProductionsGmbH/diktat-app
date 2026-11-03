@@ -248,7 +248,7 @@ final class LiveNotesController {
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("diktat-live-\(UUID().uuidString).wav")
         defer { try? FileManager.default.removeItem(at: url) }
         try LiveAudioBuffer.write(samples, to: url)
-        return try await ParakeetTranscriber.shared.transcribeWords(audioURL: url, language: language)
+        return try await MeetingTranscriber.words(audioURL: url, language: language)
     }
 
     // MARK: - Instructions

@@ -562,17 +562,6 @@
         }
       }
     },
-    "Alle zweieinhalb Minuten schreibt Diktat mit, was besprochen und entschieden wurde. Bleibt auf diesem Mac.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Every two and a half minutes Diktat writes down what was discussed and decided. Stays on this Mac."
-          }
-        }
-      }
-    },
     "Alles bereit.": {
       "extractionState": "manual",
       "localizations": {
@@ -1101,17 +1090,6 @@
         }
       }
     },
-    "Aus: nur das Transkript mit Personen, schneller. Die Zusammenfassung geht auch später.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Off: only the transcript with speakers, faster. The summary can still be written later."
-          }
-        }
-      }
-    },
     "Auto-Updates laufen erst sauber, wenn Diktat aus /Applications gestartet wird.": {
       "extractionState": "manual",
       "localizations": {
@@ -1372,17 +1350,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "So the text lands where your cursor is. macOS asks for Accessibility for this."
-          }
-        }
-      }
-    },
-    "Danach zusammenfassen": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Summarize afterwards"
           }
         }
       }
@@ -2223,6 +2190,17 @@
         }
       }
     },
+    "Diktat schreibt nach dem Meeting eine Zusammenfassung mit Entscheidungen und To-dos. Das dauert etwas länger.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After the meeting Diktat writes a summary with decisions and to-dos. This takes a little longer."
+          }
+        }
+      }
+    },
     "Diktat startet beim Anmelden automatisch.": {
       "extractionState": "manual",
       "localizations": {
@@ -2384,6 +2362,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Press ..."
+          }
+        }
+      }
+    },
+    "Du bekommst nur das Transkript mit den Personen, das geht schneller. Die Zusammenfassung kannst du später starten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You only get the transcript with the people, which is faster. You can start the summary later."
           }
         }
       }
@@ -3081,13 +3070,13 @@
         }
       }
     },
-    "Für Meetings braucht Diktat Parakeet. Bitte in den Einstellungen unter Sprachmodell laden.": {
+    "Für Meetings braucht Diktat ein Sprachmodell. Bitte in den Einstellungen unter Sprachmodell laden.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "For meetings Diktat needs Parakeet. Please download it in the settings under Language model."
+            "value": "For meetings Diktat needs a language model. Please download one in the settings under Language model."
           }
         }
       }
@@ -3873,13 +3862,13 @@
         }
       }
     },
-    "Korrigiert ähnlich klingende Schreibweisen auf deine Eigennamen, z. B. „Black Boat“ zu „Blackboat“. Echte Wörter bleiben unverändert.": {
+    "Korrigiert ähnlich klingende Schreibweisen auf deine Eigennamen, z. B. „White Rabbit“ zu „WhiteRabbit“. Echte Wörter bleiben unverändert.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Corrects similar-sounding spellings to your custom terms, e.g. “Black Boat” to “Blackboat”. Real words stay unchanged."
+            "value": "Corrects similar-sounding spellings to your custom terms, e.g. “White Rabbit” to “WhiteRabbit”. Real words stay unchanged."
           }
         }
       }
@@ -4639,6 +4628,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Check for updates"
+          }
+        }
+      }
+    },
+    "Nach dem Meeting zusammenfassen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summarize after the meeting"
           }
         }
       }
@@ -6234,6 +6234,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Word for word instead of %@"
+          }
+        }
+      }
+    },
+    "Während des Meetings erscheinen laufend Notizen mit Themen, Entscheidungen und To-dos. Diktat aktualisiert sie alle zweieinhalb Minuten aus dem, was gesagt wurde. Alles bleibt auf diesem Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes with topics, decisions and to-dos appear while the meeting runs. Diktat updates them every two and a half minutes from what was said. Everything stays on this Mac."
           }
         }
       }

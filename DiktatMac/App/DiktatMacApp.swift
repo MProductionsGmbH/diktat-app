@@ -2,6 +2,9 @@ import AVFoundation
 import NaturalLanguage
 import SwiftUI
 import UniformTypeIdentifiers
+#if DEBUG
+import WhisperKit
+#endif
 
 @main
 struct DiktatMacApp: App {
@@ -103,6 +106,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             NSApp.setActivationPolicy(.prohibited)
             Task {
                 await MacMeetingCheck.run(file)
+                NSApp.terminate(nil)
+            }
+            return
+        }
+        if let path = UserDefaults.standard.string(forKey: "DiktatTranscribeCheck") {
+            NSApp.setActivationPolicy(.prohibited)
+            Task {
+                await MacTranscribeCheck.run(URL(fileURLWithPath: path))
                 NSApp.terminate(nil)
             }
             return
@@ -1194,6 +1205,39 @@ enum MacSnapshots {
         window.isReleasedWhenClosed = false
         window.contentView = nil
         window.close()
+    }
+}
+#endif
+
+
+#if DEBUG
+/// Design check for the dictation text: prints what Whisper returns per segment, with times and how much of
+/// each segment is loud enough to be speech. `-DiktatTranscribeCheck file.wav`; nothing is pasted or saved.
+enum MacTranscribeCheck {
+    static func run(_ file: URL) async {
+        do {
+            let model = LocalTranscriptionService.resolvedModelName(UserDefaults.standard.string(forKey: "DiktatCheckModel") ?? "openai_whisper-large-v3-v20240930_turbo_632MB")
+            let pipeline = try await LocalTranscriptionService.shared.pipeline(modelName: model)
+            let padded = AudioPadding.paddedCopy(of: file)
+            let url = padded ?? file
+            let samples = try AudioProcessor.loadAudioAsFloatArray(fromPath: url.path)
+            print("samples: \(samples.count) (\(Double(samples.count) / 16_000) s), voiced: \(HallucinationFilter.voicedSeconds(samples)) s, model \(model)")
+            let options = DecodingOptions(task: .transcribe, language: nil, detectLanguage: true)
+            let results = try await pipeline.transcribe(audioArray: samples, decodeOptions: options)
+            for result in results {
+                print("language: \(result.language)")
+                for segment in result.segments {
+                    let from = max(0, Int(Double(segment.start) * 16_000)), to = min(samples.count, Int(Double(segment.end) * 16_000))
+                    let voiced = to > from ? HallucinationFilter.voicedSeconds(Array(samples[from..<to])) : 0
+                    print(String(format: "[%.2f-%.2f] voiced %.2f s  %@", segment.start, segment.end, voiced, segment.text))
+                }
+            }
+            let final = try await WhisperDictation.transcribe(pipeline, audioPath: url.path, language: nil)
+            print("FINAL: \(final)")
+            if let padded { try? FileManager.default.removeItem(at: padded) }
+        } catch {
+            print("check failed: \(error)")
+        }
     }
 }
 #endif

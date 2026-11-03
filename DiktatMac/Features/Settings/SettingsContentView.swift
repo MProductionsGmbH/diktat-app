@@ -942,7 +942,7 @@ struct CustomizeSettingsView: View {
                     .toggleStyle(.trailingSwitch)
                     .font(.ui(11.5))
 
-                Text("Korrigiert \u{00E4}hnlich klingende Schreibweisen auf deine Eigennamen, z.\u{202F}B. \u{201E}Black Boat\u{201C} zu \u{201E}Blackboat\u{201C}. Echte W\u{00F6}rter bleiben unver\u{00E4}ndert.")
+                Text("Korrigiert \u{00E4}hnlich klingende Schreibweisen auf deine Eigennamen, z.\u{202F}B. \u{201E}White Rabbit\u{201C} zu \u{201E}WhiteRabbit\u{201C}. Echte W\u{00F6}rter bleiben unver\u{00E4}ndert.")
                     .font(.ui(12))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

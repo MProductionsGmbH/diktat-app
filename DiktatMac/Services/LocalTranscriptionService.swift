@@ -383,6 +383,14 @@ actor LocalTranscriptionService {
         return text
     }
 
+    /// The words of a recording with their times, from the Whisper model picked for dictation.
+    func transcribeWords(audioURL: URL, language: String, modelName: String) async throws -> [TimedWord] {
+        let pipeline = try await pipeline(modelName: modelName)
+        let spoken = language.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let code = (spoken.isEmpty || spoken == "auto") ? nil : String(spoken.prefix(2))
+        return try await WhisperDictation.words(pipeline, audioPath: audioURL.path, language: code)
+    }
+
     /// True once the model is loaded and compiled for this Mac, so a transcription
     /// starts right away.
     func isReady(modelName: String) async -> Bool {
@@ -415,7 +423,7 @@ actor LocalTranscriptionService {
 
     static let slowPreparationMessage = String(localized: "Sprachmodell wird vorbereitet. Nach einem macOS-Update dauert das einmalig einige Minuten, bitte Diktat nicht beenden.")
 
-    private func pipeline(modelName: String) async throws -> WhisperKit {
+    func pipeline(modelName: String) async throws -> WhisperKit {
         let resolvedModelName = Self.resolvedModelName(modelName)
         if let whisperKit, loadedModelName == resolvedModelName {
             return whisperKit

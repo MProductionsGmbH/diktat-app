@@ -112,7 +112,7 @@ struct MeetingView: View {
                         BetaBadge()
                     }
                     Text(LiveNotesController.isAvailable
-                         ? "Alle zweieinhalb Minuten schreibt Diktat mit, was besprochen und entschieden wurde. Bleibt auf diesem Mac."
+                         ? "Während des Meetings erscheinen laufend Notizen mit Themen, Entscheidungen und To-dos. Diktat aktualisiert sie alle zweieinhalb Minuten aus dem, was gesagt wurde. Alles bleibt auf diesem Mac."
                          : "Brauchen Apple Intelligence, ein lokales Sprachmodell (Einstellungen, Modelle) oder ein Modell auf diesem Mac, etwa Ollama.")
                         .font(.ui(11))
                         .foregroundStyle(.secondary)
@@ -126,9 +126,15 @@ struct MeetingView: View {
 
             Toggle(isOn: $appState.appSettings.summarizesMeetings) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Danach zusammenfassen")
+                    Text("Nach dem Meeting zusammenfassen")
                         .font(.ui(12.5, .medium))
-                    Text("Aus: nur das Transkript mit Personen, schneller. Die Zusammenfassung geht auch sp\u{00E4}ter.")
+                    Group {
+                        if appState.appSettings.summarizesMeetings {
+                            Text("Diktat schreibt nach dem Meeting eine Zusammenfassung mit Entscheidungen und To-dos. Das dauert etwas l\u{00E4}nger.")
+                        } else {
+                            Text("Du bekommst nur das Transkript mit den Personen, das geht schneller. Die Zusammenfassung kannst du sp\u{00E4}ter starten.")
+                        }
+                    }
                         .font(.ui(11))
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)

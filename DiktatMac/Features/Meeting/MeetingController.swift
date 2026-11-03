@@ -87,15 +87,8 @@ final class MeetingController {
         return false
     }
 
-    /// Meetings need Parakeet: its word timings place every word with a person.
-    static var blocker: String? {
-        guard ParakeetTranscriber.isSupported else {
-            return String(localized: "Meetings brauchen einen Mac mit Apple-Chip.")
-        }
-        return ParakeetTranscriber.isInstalled
-            ? nil
-            : String(localized: "F\u{00FC}r Meetings braucht Diktat Parakeet. Bitte in den Einstellungen unter Sprachmodell laden.")
-    }
+    /// The speech model of a meeting is the one picked for dictation.
+    static var blocker: String? { MeetingTranscriber.blocker }
 
     /// Recording the Mac's sound needs Core Audio taps.
     static var canRecordSystemAudio: Bool {
@@ -397,7 +390,7 @@ final class MeetingController {
             }
 
             do {
-                let words = try await ParakeetTranscriber.shared.transcribeWords(
+                let words = try await MeetingTranscriber.words(
                     audioURL: record.audioURL,
                     language: settings.language
                 )
@@ -491,7 +484,7 @@ final class MeetingController {
     private static func transcribeSystemAudio(_ url: URL, language: String) async throws -> (words: [TimedWord], wav: URL)? {
         let wav = try AudioFileConverter.convertToWAV(url).url
         do {
-            let words = try await ParakeetTranscriber.shared.transcribeWords(audioURL: wav, language: language)
+            let words = try await MeetingTranscriber.words(audioURL: wav, language: language)
             guard !words.isEmpty else {
                 try? FileManager.default.removeItem(at: wav)
                 return nil

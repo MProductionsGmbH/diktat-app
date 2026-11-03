@@ -1,7 +1,7 @@
 import XCTest
 
 final class TranscriptPostProcessorTests: XCTestCase {
-    private let terms = ["Blackboat", "HubSpot", "Claude", "Copper", "iPhone", "n8n", "Jamf", "Magnussen"]
+    private let terms = ["WhiteRabbit", "HubSpot", "Claude", "Copper", "iPhone", "n8n", "Jamf", "Magnussen"]
     private let dictionary: Set<String> = ["cloud", "blackbox", "jam"]
     private let threshold = TranscriptPostProcessor().correctionThreshold
 
@@ -22,13 +22,13 @@ final class TranscriptPostProcessorTests: XCTestCase {
 
     func testMergesMultiWordArtifacts() {
         XCTAssertEqual(processor().process("Die Kontakte liegen in Hub Spot."), "Die Kontakte liegen in HubSpot.")
-        XCTAssertEqual(processor().process("Das ist Black Boat."), "Das ist Blackboat.")
+        XCTAssertEqual(processor().process("Das ist White Rabbit."), "Das ist WhiteRabbit.")
         XCTAssertEqual(processor().process("Prüf n 8 n bitte."), "Prüf n8n bitte.")
     }
 
     func testDoesNotMergeAcrossPunctuation() {
-        XCTAssertEqual(processor().process("Erst Black, dann Boat."), "Erst Black, dann Boat.")
-        XCTAssertEqual(processor().process("Das war Black. Boat kommt später."), "Das war Black. Boat kommt später.")
+        XCTAssertEqual(processor().process("Erst White, dann Rabbit."), "Erst White, dann Rabbit.")
+        XCTAssertEqual(processor().process("Das war White. Rabbit kommt später."), "Das war White. Rabbit kommt später.")
     }
 
     func testFixesMisheardSingleWords() {
@@ -39,12 +39,12 @@ final class TranscriptPostProcessorTests: XCTestCase {
 
     func testKeepsRealDictionaryWords() {
         XCTAssertEqual(processor().process("Das liegt in der Cloud."), "Das liegt in der Cloud.")
-        XCTAssertEqual(processor().process("Die Blackbox bleibt."), "Die Blackbox bleibt.")
+        XCTAssertEqual(processor().process("Das Whiteboard bleibt."), "Das Whiteboard bleibt.")
     }
 
     func testUsesConfiguredSpelling() {
         XCTAssertEqual(processor().process("Schick das ans iphone."), "Schick das ans iPhone.")
-        XCTAssertEqual(processor().process("blackboat rockt"), "Blackboat rockt")
+        XCTAssertEqual(processor().process("whiterabbit rockt"), "WhiteRabbit rockt")
     }
 
     func testCorrectionCanBeDisabled() {
@@ -81,13 +81,13 @@ final class TranscriptPostProcessorTests: XCTestCase {
 
     func testFuzzyMatchesSkipKnownWords() {
         var processor = processor()
-        processor.isDictionaryWord = { ["blackboard", "hab", "spot"].contains($0.lowercased()) }
-        // Written as one, "Black Board" is a word; "Hab" and "Spot" are words each.
-        XCTAssertEqual(processor.process("Schreib es an das Black Board."), "Schreib es an das Black Board.")
+        processor.isDictionaryWord = { ["whiterabbet", "hab", "spot"].contains($0.lowercased()) }
+        // Written as one, "White Rabbet" is a word; "Hab" and "Spot" are words each.
+        XCTAssertEqual(processor.process("Schreib es an das White Rabbet."), "Schreib es an das White Rabbet.")
         XCTAssertEqual(processor.process("Leg das in Hab Spot an."), "Leg das in Hab Spot an.")
 
         processor.isDictionaryWord = { _ in false }
-        XCTAssertEqual(processor.process("Schreib es an das Black Board."), "Schreib es an das Blackboat.")
+        XCTAssertEqual(processor.process("Schreib es an das White Rabbet."), "Schreib es an das WhiteRabbit.")
         XCTAssertEqual(processor.process("Leg das in Hab Spot an."), "Leg das in HubSpot an.")
     }
 
