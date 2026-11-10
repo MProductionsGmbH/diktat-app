@@ -67,7 +67,7 @@ struct MeetingSettingsPane: View {
         }
 
         if MeetingController.canRecordSystemAudio {
-            SettingsSection(title: String(localized: "Ton des Macs")) {
+            SettingsSection(title: String(localized: "System-Audio")) {
                 permissionContent
             }
         }
@@ -106,7 +106,7 @@ struct MeetingSettingsPane: View {
                 .font(.ui(12, .medium))
                 .foregroundStyle(DiktatTheme.ready)
         case .notDetermined:
-            Label("macOS hat noch nicht gefragt. Das passiert beim ersten Meeting mit Ton des Macs.", systemImage: "questionmark.circle")
+            Label("macOS hat noch nicht gefragt. Das passiert beim ersten Meeting mit System-Audio.", systemImage: "questionmark.circle")
                 .font(.ui(12, .medium))
                 .foregroundStyle(.secondary)
             Button {

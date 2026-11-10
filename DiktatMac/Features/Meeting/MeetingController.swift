@@ -157,14 +157,14 @@ final class MeetingController {
             )
             let withLiveNotes = wantsLiveNotes && LiveNotesController.isAvailable
             let liveBuffer = withLiveNotes && includingSystemAudio ? LiveAudioBuffer() : nil
-            if includingSystemAudio, let error = startSystemAudio(for: record, liveBuffer: liveBuffer) {
+            if includingSystemAudio, let error = startSystemAudio(for: record, liveBuffer: liveBuffer, micOpen: source.usesMicrophone) {
                 if source.usesMicrophone {
-                    notice = String(localized: "Der Ton des Macs l\u{00E4}sst sich nicht aufnehmen, es l\u{00E4}uft nur das Mikrofon. (\(error.localizedDescription))")
+                    notice = String(localized: "Das System-Audio l\u{00E4}sst sich nicht aufnehmen, es l\u{00E4}uft nur das Mikrofon. (\(error.localizedDescription))")
                 } else {
                     // Without the microphone the Mac's sound is the whole meeting.
                     endRecording()
                     store.delete(id: record.id)
-                    phase = .failed(String(localized: "Der Ton des Macs l\u{00E4}sst sich nicht aufnehmen. (\(error.localizedDescription))"), meetingID: nil)
+                    phase = .failed(String(localized: "Das System-Audio l\u{00E4}sst sich nicht aufnehmen. (\(error.localizedDescription))"), meetingID: nil)
                     return
                 }
             }
@@ -208,7 +208,7 @@ final class MeetingController {
     }
 
     /// Starts recording the Mac's sound. Returns why it failed, nil when it runs.
-    private func startSystemAudio(for record: MeetingRecord, liveBuffer: LiveAudioBuffer?) -> Error? {
+    private func startSystemAudio(for record: MeetingRecord, liveBuffer: LiveAudioBuffer?, micOpen: Bool) -> Error? {
         guard #available(macOS 14.2, *) else { return nil }
         let capture = SystemAudioCapture()
         capture.liveBuffer = liveBuffer
@@ -216,7 +216,7 @@ final class MeetingController {
             MainActor.assumeIsolated { self?.outputChanged(error) }
         }
         do {
-            try capture.start(writingTo: record.systemAudioURL)
+            try capture.start(writingTo: record.systemAudioURL, restartOnceSettled: micOpen)
             systemCapture = capture
             isRecordingSystemAudio = true
             return nil
@@ -227,7 +227,7 @@ final class MeetingController {
         }
     }
 
-    private static let outputLostNotice = String(localized: "Das Ausgabeger\u{00E4}t ist weg, der Ton des Macs l\u{00E4}sst sich gerade nicht aufnehmen. Diktat versucht es weiter, das Mikrofon l\u{00E4}uft.")
+    private static let outputLostNotice = String(localized: "Das Ausgabeger\u{00E4}t ist weg, das System-Audio l\u{00E4}sst sich gerade nicht aufnehmen. Diktat versucht es weiter, das Mikrofon l\u{00E4}uft.")
 
     /// Headphones unplugged or Bluetooth gone: the capture moves to the current output by itself.
     private func outputChanged(_ error: Error?) {
@@ -246,8 +246,8 @@ final class MeetingController {
         if capture.peak == 0 {
             try? FileManager.default.removeItem(at: record.systemAudioURL)
             notice = FileManager.default.fileExists(atPath: record.audioURL.path)
-                ? String(localized: "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme? Ausgewertet wird nur das Mikrofon.")
-                : String(localized: "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme?")
+                ? String(localized: "Vom System-Audio kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme? Ausgewertet wird nur das Mikrofon.")
+                : String(localized: "Vom System-Audio kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme?")
         }
     }
 
@@ -417,12 +417,12 @@ final class MeetingController {
                 record.duration = Self.duration(of: record.audioURL) ?? Self.duration(of: record.systemAudioURL) ?? record.duration
             }
 
-            // "Nur Ton des Macs" has no microphone file, and nothing may have arrived at all.
+            // "Nur System-Audio" has no microphone file, and nothing may have arrived at all.
             let hasMicrophone = FileManager.default.fileExists(atPath: record.audioURL.path)
             guard hasMicrophone || FileManager.default.fileExists(atPath: record.systemAudioURL.path) else {
                 store.upsert(record)
                 update(.failed(
-                    String(localized: "Von diesem Meeting ist kein Ton da. Kam vom Ton des Macs nichts an, fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme."),
+                    String(localized: "Von diesem Meeting ist kein Ton da. Kam vom System-Audio nichts an, fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme."),
                     meetingID: record.id
                 ))
                 return
@@ -442,14 +442,14 @@ final class MeetingController {
                 // An online meeting: the system sound holds the other people.
                 var system: (words: [TimedWord], wav: URL)?
                 if FileManager.default.fileExists(atPath: record.systemAudioURL.path) {
-                    update(.processing(String(localized: "Ton des Macs wird transkribiert ...")))
+                    update(.processing(String(localized: "System-Audio wird transkribiert ...")))
                     do {
                         system = try await Self.transcribeSystemAudio(record.systemAudioURL, language: settings.language)
                     } catch is CancellationError {
                         throw CancellationError()
                     } catch {
                         // The microphone alone still gives a transcript, e.g. when a crash left the file unreadable.
-                        notice = String(localized: "Der Ton des Macs lie\u{00DF} sich nicht auswerten, ausgewertet wird nur das Mikrofon. (\(error.localizedDescription))")
+                        notice = String(localized: "Das System-Audio lie\u{00DF} sich nicht auswerten, ausgewertet wird nur das Mikrofon. (\(error.localizedDescription))")
                     }
                     try Task.checkCancellation()
                 }

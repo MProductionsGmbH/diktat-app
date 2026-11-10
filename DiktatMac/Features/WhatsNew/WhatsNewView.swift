@@ -17,7 +17,7 @@ enum WhatsNew {
         Item(
             icon: "video.fill",
             title: String(localized: "Online-Meetings (Beta)"),
-            detail: String(localized: "Mit dem Schalter \u{201E}Online-Meeting\u{201C} nimmt Diktat auch den Ton des Macs auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon w\u{00E4}hrend des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen.")
+            detail: String(localized: "Mit dem Schalter \u{201E}Online-Meeting\u{201C} nimmt Diktat auch das System-Audio auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon w\u{00E4}hrend des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen.")
         ),
         Item(
             icon: "cpu",

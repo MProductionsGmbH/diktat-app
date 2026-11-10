@@ -189,7 +189,7 @@ struct MeetingView: View {
 
     private var recordingTitle: String {
         if meeting.pausedAt != nil { return String(localized: "Pausiert, nichts wird aufgenommen") }
-        return meeting.isRecordingSystemAudio ? String(localized: "Aufnahme l\u{00E4}uft, mit Ton des Macs") : String(localized: "Aufnahme l\u{00E4}uft")
+        return meeting.isRecordingSystemAudio ? String(localized: "Aufnahme l\u{00E4}uft, mit System-Audio") : String(localized: "Aufnahme l\u{00E4}uft")
     }
 
     private var source: MeetingSource {
@@ -297,12 +297,12 @@ struct MeetingView: View {
     private var permissionRow: some View {
         switch permission {
         case .authorized:
-            Label("Freigabe f\u{00FC}r den Ton des Macs ist erteilt.", systemImage: "checkmark.circle.fill")
+            Label("Freigabe f\u{00FC}r das System-Audio ist erteilt.", systemImage: "checkmark.circle.fill")
                 .font(.ui(11.5))
                 .foregroundStyle(DiktatTheme.ready)
         case .notDetermined:
             VStack(alignment: .leading, spacing: 6) {
-                Text("macOS fragt einmal nach der Freigabe f\u{00FC}r den Ton des Macs. Ohne sie kommt kein Ton an.")
+                Text("macOS fragt einmal nach der Freigabe f\u{00FC}r das System-Audio. Ohne sie kommt kein Ton an.")
                     .font(.ui(11))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -316,7 +316,7 @@ struct MeetingView: View {
         case .denied:
             NoticeRow(
                 icon: "exclamationmark.triangle.fill",
-                title: String(localized: "Die Freigabe f\u{00FC}r den Ton des Macs fehlt. Erlaube Diktat unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme."),
+                title: String(localized: "Die Freigabe f\u{00FC}r das System-Audio fehlt. Erlaube Diktat unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme."),
                 tint: DiktatTheme.danger,
                 actionTitle: String(localized: "Einstellungen \u{00F6}ffnen"),
                 action: { NSWorkspace.shared.open(SystemAudioPermission.settingsURL) }
@@ -350,7 +350,7 @@ struct MeetingView: View {
             }
             if soundTest.isRunning {
                 Text(soundTest.isHearingSound
-                     ? "Der Ton des Macs kommt an."
+                     ? "Das System-Audio kommt an."
                      : "Noch kein Ton. Spiel etwas ab, zum Beispiel das Meeting oder ein Video.")
                     .font(.ui(11))
                     .foregroundStyle(soundTest.isHearingSound ? DiktatTheme.ready : Color.secondary)
@@ -360,7 +360,7 @@ struct MeetingView: View {
                     .foregroundStyle(DiktatTheme.danger)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text("Pr\u{00FC}ft, ob der Ton des Macs bei Diktat ankommt. Spiel dazu etwas ab, zum Beispiel das Meeting. Es wird nichts aufgenommen.")
+                Text("Pr\u{00FC}ft, ob das System-Audio bei Diktat ankommt. Spiel dazu etwas ab, zum Beispiel das Meeting. Es wird nichts aufgenommen.")
                     .font(.ui(11))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

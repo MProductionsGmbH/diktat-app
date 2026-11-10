@@ -1035,13 +1035,13 @@
         }
       }
     },
-    "Aufnahme läuft, mit Ton des Macs": {
+    "Aufnahme läuft, mit System-Audio": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recording, with the Mac's sound"
+            "value": "Recording, with the system audio"
           }
         }
       }
@@ -1453,13 +1453,13 @@
         }
       }
     },
-    "Das Ausgabegerät ist weg, der Ton des Macs lässt sich gerade nicht aufnehmen. Diktat versucht es weiter, das Mikrofon läuft.": {
+    "Das Ausgabegerät ist weg, das System-Audio lässt sich gerade nicht aufnehmen. Diktat versucht es weiter, das Mikrofon läuft.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The output device is gone, so the Mac's sound cannot be recorded right now. Diktat keeps trying, the microphone is running."
+            "value": "The output device is gone, so the system audio cannot be recorded right now. Diktat keeps trying, the microphone is running."
           }
         }
       }
@@ -1504,6 +1504,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "The microphone only delivers silence. Is the MacBook closed? Then the built-in microphone records nothing: choose another one under Microphone or open the lid."
+          }
+        }
+      }
+    },
+    "Das System-Audio kommt an.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The system audio is arriving."
+          }
+        }
+      }
+    },
+    "Das System-Audio ließ sich nicht auswerten, ausgewertet wird nur das Mikrofon. (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The system audio could not be evaluated, only the microphone is evaluated. (%@)"
+          }
+        }
+      }
+    },
+    "Das System-Audio lässt sich nicht aufnehmen, es läuft nur das Mikrofon. (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The system audio cannot be recorded, only the microphone is running. (%@)"
+          }
+        }
+      }
+    },
+    "Das System-Audio lässt sich nicht aufnehmen. (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The system audio cannot be recorded. (%@)"
           }
         }
       }
@@ -1695,50 +1739,6 @@
         }
       }
     },
-    "Der Ton des Macs kommt an.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Mac's sound is arriving."
-          }
-        }
-      }
-    },
-    "Der Ton des Macs ließ sich nicht auswerten, ausgewertet wird nur das Mikrofon. (%@)": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Mac's sound could not be evaluated, only the microphone is evaluated. (%@)"
-          }
-        }
-      }
-    },
-    "Der Ton des Macs lässt sich nicht aufnehmen, es läuft nur das Mikrofon. (%@)": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Mac's sound cannot be recorded, only the microphone is running. (%@)"
-          }
-        }
-      }
-    },
-    "Der Ton des Macs lässt sich nicht aufnehmen. (%@)": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The Mac's sound cannot be recorded. (%@)"
-          }
-        }
-      }
-    },
     "Der Zielordner /Applications ist auf diesem Mac nicht beschreibbar.": {
       "extractionState": "manual",
       "localizations": {
@@ -1882,13 +1882,13 @@
         }
       }
     },
-    "Die Freigabe für den Ton des Macs fehlt. Erlaube Diktat unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme.": {
+    "Die Freigabe für das System-Audio fehlt. Erlaube Diktat unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The permission for the Mac's sound is missing. Allow Diktat under Privacy & Security > Screen & System Audio Recording."
+            "value": "The permission for the system audio is missing. Allow Diktat under Privacy & Security > Screen & System Audio Recording."
           }
         }
       }
@@ -3268,13 +3268,13 @@
         }
       }
     },
-    "Freigabe für den Ton des Macs ist erteilt.": {
+    "Freigabe für das System-Audio ist erteilt.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The permission for the Mac's sound is granted."
+            "value": "The permission for the system audio is granted."
           }
         }
       }
@@ -4753,13 +4753,13 @@
         }
       }
     },
-    "Mikrofon + Ton des Macs": {
+    "Mikrofon + System-Audio": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Microphone + Mac sound"
+            "value": "Microphone + system audio"
           }
         }
       }
@@ -4852,13 +4852,13 @@
         }
       }
     },
-    "Mit dem Schalter „Online-Meeting“ nimmt Diktat auch den Ton des Macs auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon während des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen.": {
+    "Mit dem Schalter „Online-Meeting“ nimmt Diktat auch das System-Audio auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon während des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "With the “Online meeting” switch, Diktat also records the Mac's sound, for example from Teams, Zoom or Meet, and separates the others by voice. Live notes show topics, decisions and to-dos during the meeting. Please ask everyone beforehand."
+            "value": "With the “Online meeting” switch, Diktat also records the system audio, for example from Teams, Zoom or Meet, and separates the others by voice. Live notes show topics, decisions and to-dos during the meeting. Please ask everyone beforehand."
           }
         }
       }
@@ -5259,35 +5259,35 @@
         }
       }
     },
-    "Nimmt auch den Ton des Macs auf, zum Beispiel aus Teams, Zoom oder Meet. Beim ersten Mal fragt macOS nach der Freigabe für Systemaudio.": {
+    "Nimmt auch das System-Audio auf, zum Beispiel aus Teams, Zoom oder Meet. Beim ersten Mal fragt macOS nach der Freigabe für Systemaudio.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Also records the Mac's sound, for example from Teams, Zoom or Meet. The first time, macOS asks for the permission for system audio."
+            "value": "Also records the system audio, for example from Teams, Zoom or Meet. The first time, macOS asks for the permission for system audio."
           }
         }
       }
     },
-    "Nimmt dein Mikrofon (Ich) und den Ton des Macs (die anderen) auf, etwa aus Teams, Zoom oder Meet. Mit Kopfhörern wird das Transkript am saubersten.": {
+    "Nimmt dein Mikrofon (Ich) und das System-Audio (die anderen) auf, etwa aus Teams, Zoom oder Meet. Mit Kopfhörern wird das Transkript am saubersten.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Records your microphone (Me) and the Mac's sound (the others), for example from Teams, Zoom or Meet. With headphones the transcript comes out cleanest."
+            "value": "Records your microphone (Me) and the system audio (the others), for example from Teams, Zoom or Meet. With headphones the transcript comes out cleanest."
           }
         }
       }
     },
-    "Nimmt dein Mikrofon (Ich) und den Ton des Macs (die anderen) auf. Mit Kopfhörern wird das Transkript am saubersten.": {
+    "Nimmt dein Mikrofon (Ich) und das System-Audio (die anderen) auf. Mit Kopfhörern wird das Transkript am saubersten.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Records your microphone (Me) and the Mac's sound (the others). With headphones the transcript is cleanest."
+            "value": "Records your microphone (Me) and the system audio (the others). With headphones the transcript is cleanest."
           }
         }
       }
@@ -5303,13 +5303,13 @@
         }
       }
     },
-    "Nimmt nur den Ton des Macs auf, zum Beispiel für ein Webinar oder ein Video. Dein Mikrofon bleibt aus, alle Stimmen sind Personen.": {
+    "Nimmt nur das System-Audio auf, zum Beispiel für ein Webinar oder ein Video. Dein Mikrofon bleibt aus, alle Stimmen sind Personen.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Records only the Mac's sound, for example for a webinar or a video. Your microphone stays off, and every voice is a person."
+            "value": "Records only the system audio, for example for a webinar or a video. Your microphone stays off, and every voice is a person."
           }
         }
       }
@@ -5457,13 +5457,13 @@
         }
       }
     },
-    "Nur Ton des Macs": {
+    "Nur System-Audio": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mac sound only"
+            "value": "System audio only"
           }
         }
       }
@@ -5705,7 +5705,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Level of the Mac's sound"
+            "value": "Level of the system audio"
           }
         }
       }
@@ -5776,13 +5776,13 @@
         }
       }
     },
-    "Prüft, ob der Ton des Macs bei Diktat ankommt. Spiel dazu etwas ab, zum Beispiel das Meeting. Es wird nichts aufgenommen.": {
+    "Prüft, ob das System-Audio bei Diktat ankommt. Spiel dazu etwas ab, zum Beispiel das Meeting. Es wird nichts aufgenommen.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Checks whether the Mac's sound reaches Diktat. Play something for it, for example the meeting. Nothing is recorded."
+            "value": "Checks whether the system audio reaches Diktat. Play something for it, for example the meeting. Nothing is recorded."
           }
         }
       }
@@ -6227,6 +6227,28 @@
         }
       }
     },
+    "System-Audio": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System audio"
+          }
+        }
+      }
+    },
+    "System-Audio wird transkribiert ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribing the system audio ..."
+          }
+        }
+      }
+    },
     "Systemeinstellungen öffnen": {
       "extractionState": "manual",
       "localizations": {
@@ -6399,28 +6421,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sound off while recording"
-          }
-        }
-      }
-    },
-    "Ton des Macs": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mac sound"
-          }
-        }
-      }
-    },
-    "Ton des Macs wird transkribiert ...": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Transcribing the Mac's sound ..."
           }
         }
       }
@@ -6700,35 +6700,35 @@
         }
       }
     },
-    "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme?": {
+    "Vom System-Audio kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme?": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nothing arrived from the Mac's sound. Is the permission missing under Privacy & Security > Screen & System Audio Recording?"
+            "value": "Nothing arrived from the system audio. Is the permission missing under Privacy & Security > Screen & System Audio Recording?"
           }
         }
       }
     },
-    "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme? Ausgewertet wird nur das Mikrofon.": {
+    "Vom System-Audio kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme? Ausgewertet wird nur das Mikrofon.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nothing arrived from the Mac's sound. Is the permission missing under Privacy & Security > Screen & System Audio Recording? Only the microphone is evaluated."
+            "value": "Nothing arrived from the system audio. Is the permission missing under Privacy & Security > Screen & System Audio Recording? Only the microphone is evaluated."
           }
         }
       }
     },
-    "Von diesem Meeting ist kein Ton da. Kam vom Ton des Macs nichts an, fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme.": {
+    "Von diesem Meeting ist kein Ton da. Kam vom System-Audio nichts an, fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This meeting has no sound. If nothing arrived from the Mac's sound, the permission is missing under Privacy & Security > Screen & System Audio Recording."
+            "value": "This meeting has no sound. If nothing arrived from the system audio, the permission is missing under Privacy & Security > Screen & System Audio Recording."
           }
         }
       }
@@ -7250,24 +7250,24 @@
         }
       }
     },
-    "macOS fragt einmal nach der Freigabe für den Ton des Macs. Ohne sie kommt kein Ton an.": {
+    "macOS fragt einmal nach der Freigabe für das System-Audio. Ohne sie kommt kein Ton an.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "macOS asks once for the permission to record the Mac's sound. Without it no sound arrives."
+            "value": "macOS asks once for the permission to record the system audio. Without it no sound arrives."
           }
         }
       }
     },
-    "macOS hat noch nicht gefragt. Das passiert beim ersten Meeting mit Ton des Macs.": {
+    "macOS hat noch nicht gefragt. Das passiert beim ersten Meeting mit System-Audio.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "macOS has not asked yet. That happens at the first meeting with the Mac's sound."
+            "value": "macOS has not asked yet. That happens at the first meeting with the system audio."
           }
         }
       }

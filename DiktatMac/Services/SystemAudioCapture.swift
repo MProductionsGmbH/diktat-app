@@ -1,5 +1,6 @@
 import AVFoundation
 import CoreAudio
+import os
 
 /// Records what the Mac plays, e.g. the other side of an online call, through a Core
 /// Audio tap. macOS asks for "System Audio Recording" the first time; without that
@@ -43,6 +44,15 @@ final class SystemAudioCapture {
     private var procID: AudioDeviceIOProcID?
     private var watchdog: DispatchSourceTimer?
     private var restartFailed = false
+    /// The output device as the tap was last started on it. When it changes (a Bluetooth headset
+    /// switching to its call mode, for example), the tap is rebuilt: left alone it can keep
+    /// running on the old setup and deliver nothing but silence.
+    private var output: CoreAudioProperty.Output?
+    private var settleRestartAt: Date?
+    private static let log = Logger(subsystem: "app.diktat", category: "system-audio")
+    /// A microphone that opens next to the tap can switch a Bluetooth headset to its call mode a
+    /// moment later. The tap restarts once after this time, on the then settled device.
+    static let settleTime: TimeInterval = 3
 
     // Touched only on `queue`, where Core Audio delivers the sound.
     private var file: AVAudioFile?
@@ -69,7 +79,7 @@ final class SystemAudioCapture {
     /// Taps everything the Mac plays except Diktat itself, or only `processes`.
     /// `outputUID` is the device that clocks the tap; by default the current output.
     /// Without `url` nothing is written: the level only shows whether sound arrives.
-    func start(writingTo url: URL?, processes: [AudioObjectID] = [], outputUID: String? = nil) throws {
+    func start(writingTo url: URL?, processes: [AudioObjectID] = [], outputUID: String? = nil, restartOnceSettled: Bool = false) throws {
         dispatchPrecondition(condition: .onQueue(.main))
         let description = processes.isEmpty
             ? CATapDescription(stereoGlobalTapButExcludeProcesses: AudioProcesses.own.map { [$0] } ?? [])
@@ -96,11 +106,14 @@ final class SystemAudioCapture {
         // until the first sound becomes silence, so this track starts with the microphone.
         startedAt = Date()
         fillsGap = true
+        output = CoreAudioProperty.defaultOutput()
+        settleRestartAt = restartOnceSettled ? Date().addingTimeInterval(Self.settleTime) : nil
         try startDevice(outputUID: outputUID ?? CoreAudioProperty.defaultOutputUID())
         queue.sync { lastDelivery = Date() }
+        Self.log.info("start: output \(self.output?.uid ?? "?", privacy: .public) at \(self.output?.rate ?? 0) Hz, tap \(format.sampleRate) Hz")
 
         let watchdog = DispatchSource.makeTimerSource(queue: .main)
-        watchdog.schedule(deadline: .now() + 1, repeating: 1)
+        watchdog.schedule(deadline: .now() + 0.5, repeating: 0.5)
         watchdog.setEventHandler { [weak self] in self?.checkDelivery() }
         watchdog.resume()
         self.watchdog = watchdog
@@ -128,6 +141,7 @@ final class SystemAudioCapture {
         if tapID != kAudioObjectUnknown { AudioHardwareDestroyProcessTap(tapID) }
         tapID = AudioObjectID(kAudioObjectUnknown)
         queue.sync { file = nil }
+        Self.log.info("stop: peak \(self.peak)")
     }
 
     #if DEBUG
@@ -183,21 +197,38 @@ final class SystemAudioCapture {
     }
 
     /// Core Audio calls even when nothing plays, with silence; no call at all means the
-    /// device stopped.
+    /// device stopped. A changed output device (or sample rate) means the tap must be rebuilt
+    /// even though calls keep coming.
     private func checkDelivery() {
+        guard tapID != kAudioObjectUnknown else { return }
         let silentFor = queue.sync { Date().timeIntervalSince(lastDelivery) }
-        guard silentFor > Self.silenceBeforeRestart, tapID != kAudioObjectUnknown else { return }
+        let now = CoreAudioProperty.defaultOutput()
+        var reason: String?
+        if silentFor > Self.silenceBeforeRestart {
+            reason = "no sound for \(Int(silentFor)) s"
+        } else if let now, now != output {
+            reason = "output changed to \(now.uid) at \(now.rate) Hz"
+        } else if let due = settleRestartAt, Date() >= due {
+            reason = "settle restart"
+        }
+        if let due = settleRestartAt, Date() >= due { settleRestartAt = nil }
+        guard let reason else { return }
+        Self.log.info("restart: \(reason, privacy: .public)")
         stopDevice()
         queue.sync { fillsGap = true }
         do {
+            output = now ?? CoreAudioProperty.defaultOutput()
             try startDevice(outputUID: CoreAudioProperty.defaultOutputUID())
             restartFailed = false
             report(nil)
         } catch {
             stopDevice()
+            Self.log.error("restart failed: \(error.localizedDescription, privacy: .public)")
             // Once per loss; the next tries are quiet.
             if !restartFailed { report(error) }
             restartFailed = true
+            // Try again with a fresh look at the device.
+            output = nil
         }
         queue.sync { lastDelivery = Date() }
     }
@@ -352,6 +383,21 @@ enum CoreAudioProperty {
         var objects = [AudioObjectID](repeating: 0, count: Int(size) / MemoryLayout<AudioObjectID>.size)
         guard AudioObjectGetPropertyData(object, &address, 0, nil, &size, &objects) == noErr else { return [] }
         return objects
+    }
+
+    /// The default output device as far as the tap depends on it.
+    struct Output: Equatable {
+        let uid: String
+        let rate: Double
+    }
+
+    static func defaultOutput() -> Output? {
+        var device = AudioObjectID(kAudioObjectUnknown)
+        guard read(AudioObjectID(kAudioObjectSystemObject), kAudioHardwarePropertyDefaultOutputDevice, into: &device) == noErr,
+              let uid = string(device, kAudioDevicePropertyDeviceUID) else { return nil }
+        var rate: Float64 = 0
+        _ = read(device, kAudioDevicePropertyNominalSampleRate, into: &rate)
+        return Output(uid: uid, rate: rate)
     }
 
     static func defaultOutputUID() throws -> String {

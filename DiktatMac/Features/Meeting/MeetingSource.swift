@@ -22,14 +22,14 @@ enum MeetingSource: String, CaseIterable, Identifiable {
         switch self {
         case .room: return String(localized: "Im Raum")
         case .online: return String(localized: "Online-Meeting")
-        case .systemOnly: return String(localized: "Nur Ton des Macs")
+        case .systemOnly: return String(localized: "Nur System-Audio")
         }
     }
 
     var subtitle: String {
         switch self {
         case .room: return String(localized: "Mikrofon")
-        case .online: return String(localized: "Mikrofon + Ton des Macs")
+        case .online: return String(localized: "Mikrofon + System-Audio")
         case .systemOnly: return String(localized: "Ohne Mikrofon")
         }
     }
@@ -39,9 +39,9 @@ enum MeetingSource: String, CaseIterable, Identifiable {
         case .room:
             return String(localized: "Nimmt nur das Mikrofon auf, gedacht f\u{00FC}r Meetings im Raum.")
         case .online:
-            return String(localized: "Nimmt dein Mikrofon (Ich) und den Ton des Macs (die anderen) auf, etwa aus Teams, Zoom oder Meet. Mit Kopfh\u{00F6}rern wird das Transkript am saubersten.")
+            return String(localized: "Nimmt dein Mikrofon (Ich) und das System-Audio (die anderen) auf, etwa aus Teams, Zoom oder Meet. Mit Kopfh\u{00F6}rern wird das Transkript am saubersten.")
         case .systemOnly:
-            return String(localized: "Nimmt nur den Ton des Macs auf, zum Beispiel f\u{00FC}r ein Webinar oder ein Video. Dein Mikrofon bleibt aus, alle Stimmen sind Personen.")
+            return String(localized: "Nimmt nur das System-Audio auf, zum Beispiel f\u{00FC}r ein Webinar oder ein Video. Dein Mikrofon bleibt aus, alle Stimmen sind Personen.")
         }
     }
 
