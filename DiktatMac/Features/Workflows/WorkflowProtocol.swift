@@ -180,6 +180,8 @@ struct AppSettings: Codable {
     /// Write the summary right after a meeting. Off: transcript by person only, faster;
     /// the summary can still be created later.
     var summarizesMeetings: Bool = true
+    /// A notification offers to record the meeting when a call app opens the microphone.
+    var suggestsMeetingOnCall: Bool = true
 
     init(
         hotkeyMode: HotkeyMode = .hold,
@@ -222,6 +224,7 @@ struct AppSettings: Codable {
         case showsHistoryStatistics
         case microphoneUID
         case summarizesMeetings
+        case suggestsMeetingOnCall
     }
 
     init(from decoder: Decoder) throws {
@@ -260,6 +263,7 @@ struct AppSettings: Codable {
         showsHistoryStatistics = try container.decodeIfPresent(Bool.self, forKey: .showsHistoryStatistics) ?? true
         microphoneUID = try? container.decodeIfPresent(String.self, forKey: .microphoneUID)
         summarizesMeetings = try container.decodeIfPresent(Bool.self, forKey: .summarizesMeetings) ?? true
+        suggestsMeetingOnCall = try container.decodeIfPresent(Bool.self, forKey: .suggestsMeetingOnCall) ?? true
     }
 
     func customHotkey(for type: WorkflowType) -> KeyCombo? {

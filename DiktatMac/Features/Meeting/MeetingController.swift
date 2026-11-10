@@ -82,6 +82,11 @@ final class MeetingController {
         return false
     }
 
+    /// Something is recording: the microphone, the Mac's sound, or both.
+    private var isCapturing: Bool {
+        recorder != nil || micCapture != nil || systemCapture != nil
+    }
+
     var isProcessing: Bool {
         if case .processing = phase { return true }
         return false
@@ -98,7 +103,8 @@ final class MeetingController {
 
     // MARK: - Recording
 
-    func start(includingSystemAudio: Bool = false, liveNotes wantsLiveNotes: Bool = false) {
+    func start(source: MeetingSource = .room, liveNotes wantsLiveNotes: Bool = false) {
+        let includingSystemAudio = source.usesSystemAudio && Self.canRecordSystemAudio
         switch phase {
         case .idle, .showing, .failed: break
         case .recording, .processing: return
@@ -126,19 +132,21 @@ final class MeetingController {
         ]
         do {
             try FileManager.default.createDirectory(at: MeetingStore.directoryURL, withIntermediateDirectories: true)
-            if let capture = startPickedMicrophone(writingTo: record.audioURL) {
-                micCapture = capture
-            } else {
-                let recorder = try AVAudioRecorder(url: record.audioURL, settings: settings)
-                let observer = RecorderObserver { [weak self] in self?.recordingInterrupted() }
-                recorder.delegate = observer
-                recorder.isMeteringEnabled = true
-                guard recorder.record() else {
-                    phase = .failed(String(localized: "Die Aufnahme lie\u{00DF} sich nicht starten. Darf Diktat das Mikrofon nutzen?"), meetingID: nil)
-                    return
+            if source.usesMicrophone {
+                if let capture = startPickedMicrophone(writingTo: record.audioURL) {
+                    micCapture = capture
+                } else {
+                    let recorder = try AVAudioRecorder(url: record.audioURL, settings: settings)
+                    let observer = RecorderObserver { [weak self] in self?.recordingInterrupted() }
+                    recorder.delegate = observer
+                    recorder.isMeteringEnabled = true
+                    guard recorder.record() else {
+                        phase = .failed(String(localized: "Die Aufnahme lie\u{00DF} sich nicht starten. Darf Diktat das Mikrofon nutzen?"), meetingID: nil)
+                        return
+                    }
+                    self.recorder = recorder
+                    recorderObserver = observer
                 }
-                self.recorder = recorder
-                recorderObserver = observer
             }
             recordingID = record.id
             store.upsert(record)
@@ -149,7 +157,17 @@ final class MeetingController {
             )
             let withLiveNotes = wantsLiveNotes && LiveNotesController.isAvailable
             let liveBuffer = withLiveNotes && includingSystemAudio ? LiveAudioBuffer() : nil
-            if includingSystemAudio { startSystemAudio(for: record, liveBuffer: liveBuffer) }
+            if includingSystemAudio, let error = startSystemAudio(for: record, liveBuffer: liveBuffer) {
+                if source.usesMicrophone {
+                    notice = String(localized: "Der Ton des Macs l\u{00E4}sst sich nicht aufnehmen, es l\u{00E4}uft nur das Mikrofon. (\(error.localizedDescription))")
+                } else {
+                    // Without the microphone the Mac's sound is the whole meeting.
+                    endRecording()
+                    store.delete(id: record.id)
+                    phase = .failed(String(localized: "Der Ton des Macs l\u{00E4}sst sich nicht aufnehmen. (\(error.localizedDescription))"), meetingID: nil)
+                    return
+                }
+            }
             if withLiveNotes {
                 let settings = settingsProvider()
                 let live = LiveNotesController(
@@ -189,8 +207,9 @@ final class MeetingController {
         return capture
     }
 
-    private func startSystemAudio(for record: MeetingRecord, liveBuffer: LiveAudioBuffer?) {
-        guard #available(macOS 14.2, *) else { return }
+    /// Starts recording the Mac's sound. Returns why it failed, nil when it runs.
+    private func startSystemAudio(for record: MeetingRecord, liveBuffer: LiveAudioBuffer?) -> Error? {
+        guard #available(macOS 14.2, *) else { return nil }
         let capture = SystemAudioCapture()
         capture.liveBuffer = liveBuffer
         capture.onOutputChange = { [weak self] error in
@@ -200,10 +219,11 @@ final class MeetingController {
             try capture.start(writingTo: record.systemAudioURL)
             systemCapture = capture
             isRecordingSystemAudio = true
+            return nil
         } catch {
             capture.stop()
             try? FileManager.default.removeItem(at: record.systemAudioURL)
-            notice = String(localized: "Der Ton des Macs l\u{00E4}sst sich nicht aufnehmen, es l\u{00E4}uft nur das Mikrofon. (\(error.localizedDescription))")
+            return error
         }
     }
 
@@ -225,14 +245,16 @@ final class MeetingController {
         capture.stop()
         if capture.peak == 0 {
             try? FileManager.default.removeItem(at: record.systemAudioURL)
-            notice = String(localized: "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme? Ausgewertet wird nur das Mikrofon.")
+            notice = FileManager.default.fileExists(atPath: record.audioURL.path)
+                ? String(localized: "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme? Ausgewertet wird nur das Mikrofon.")
+                : String(localized: "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme?")
         }
     }
 
     /// Stops recording for a while, e.g. while the call is in breakout rooms. Both tracks
     /// skip the pause, so they stay in step.
     func pause() {
-        guard case .recording = phase, pausedAt == nil, recorder != nil || micCapture != nil else { return }
+        guard case .recording = phase, pausedAt == nil, isCapturing else { return }
         recorder?.pause()
         micCapture?.setPaused(true)
         if #available(macOS 14.2, *) { (systemCapture as? SystemAudioCapture)?.setPaused(true) }
@@ -241,7 +263,7 @@ final class MeetingController {
     }
 
     func resume() {
-        guard case .recording(let startedAt) = phase, let pausedAt, recorder != nil || micCapture != nil else { return }
+        guard case .recording(let startedAt) = phase, let pausedAt, isCapturing else { return }
         if let recorder {
             guard recorder.record() else {
                 recordingInterrupted()
@@ -289,14 +311,14 @@ final class MeetingController {
 
     /// Stops the recorder and stores the duration. Returns the meeting's ID.
     private func finishRecording() -> UUID? {
-        guard recorder != nil || micCapture != nil, let id = recordingID else { return nil }
+        guard isCapturing, let id = recordingID else { return nil }
         let duration = recorder?.currentTime ?? micCapture?.duration ?? 0
         recorder?.stop()
         micCapture?.stop()
         if let record = store.meeting(id: id) { stopSystemAudio(for: record) }
         endRecording()
         if var record = store.meeting(id: id) {
-            record.duration = max(duration, Self.duration(of: record.audioURL) ?? 0)
+            record.duration = max(duration, Self.duration(of: record.audioURL) ?? 0, Self.duration(of: record.systemAudioURL) ?? 0)
             store.upsert(record)
         }
         return id
@@ -335,7 +357,13 @@ final class MeetingController {
                     self.audioLevel = capture.currentLevel
                     return
                 }
-                guard let recorder = self.recorder else { return }
+                guard let recorder = self.recorder else {
+                    // Only the Mac's sound records.
+                    if #available(macOS 14.2, *), let capture = self.systemCapture as? SystemAudioCapture {
+                        self.audioLevel = capture.currentLevel
+                    }
+                    return
+                }
                 // A recorder that stopped on its own would otherwise look like silence.
                 guard recorder.isRecording else {
                     self.recordingInterrupted()
@@ -386,14 +414,27 @@ final class MeetingController {
 
             // A recording cut off by a crash still says zero bytes in its header.
             if WAVRecovery.repairIfNeeded(record.audioURL) || record.duration == 0 {
-                record.duration = Self.duration(of: record.audioURL) ?? record.duration
+                record.duration = Self.duration(of: record.audioURL) ?? Self.duration(of: record.systemAudioURL) ?? record.duration
+            }
+
+            // "Nur Ton des Macs" has no microphone file, and nothing may have arrived at all.
+            let hasMicrophone = FileManager.default.fileExists(atPath: record.audioURL.path)
+            guard hasMicrophone || FileManager.default.fileExists(atPath: record.systemAudioURL.path) else {
+                store.upsert(record)
+                update(.failed(
+                    String(localized: "Von diesem Meeting ist kein Ton da. Kam vom Ton des Macs nichts an, fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme."),
+                    meetingID: record.id
+                ))
+                return
             }
 
             do {
-                let words = try await MeetingTranscriber.words(
-                    audioURL: record.audioURL,
-                    language: settings.language
-                )
+                let words: [TimedWord]
+                if hasMicrophone {
+                    words = try await MeetingTranscriber.words(audioURL: record.audioURL, language: settings.language)
+                } else {
+                    words = []
+                }
                 try Task.checkCancellation()
 
                 let paragraphs: [SpeakerAlignment.Paragraph]
@@ -413,6 +454,11 @@ final class MeetingController {
                     try Task.checkCancellation()
                 }
                 defer { if let system { try? FileManager.default.removeItem(at: system.wav) } }
+                if !hasMicrophone, system == nil {
+                    store.upsert(record)
+                    update(.failed(String(localized: "In der Aufnahme wurde keine Sprache erkannt."), meetingID: record.id))
+                    return
+                }
 
                 update(.processing(String(localized: "Stimmen werden erkannt ...")))
                 do {
@@ -435,8 +481,10 @@ final class MeetingController {
 
                 if let system {
                     // The microphone is "Ich", without what it heard from the speakers.
-                    let own = SpeakerAlignment.paragraphs(words: EchoFilter.removeEcho(from: words, heard: system.words), turns: [])
-                        .map { SpeakerAlignment.Paragraph(speaker: 0, start: $0.start, text: $0.text) }
+                    let own = hasMicrophone
+                        ? SpeakerAlignment.paragraphs(words: EchoFilter.removeEcho(from: words, heard: system.words), turns: [])
+                            .map { SpeakerAlignment.Paragraph(speaker: 0, start: $0.start, text: $0.text) }
+                        : []
                     let others = SpeakerAlignment.paragraphs(words: system.words, turns: turns, breaks: own.map(\.start))
                     paragraphs = (others + own).sorted { $0.start < $1.start }
                 } else {

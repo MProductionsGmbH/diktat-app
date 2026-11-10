@@ -1,6 +1,7 @@
 import AVFoundation
 import NaturalLanguage
 import SwiftUI
+import UserNotifications
 import UniformTypeIdentifiers
 #if DEBUG
 import WhisperKit
@@ -18,7 +19,7 @@ struct DiktatMacApp: App {
 }
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNUserNotificationCenterDelegate {
     private var statusItem: NSStatusItem!
     private var popover: NSPopover!
     private let menuBarStatusController = MenuBarStatusController()
@@ -135,6 +136,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             }
             return
         }
+        if let path = UserDefaults.standard.string(forKey: "DiktatSystemSoundCheck") {
+            // A permission question needs an app that may show windows.
+            NSApp.setActivationPolicy(.accessory)
+            Task {
+                await MacSystemSoundCheck.run(playing: URL(fileURLWithPath: path))
+                NSApp.terminate(nil)
+            }
+            return
+        }
         if let path = UserDefaults.standard.string(forKey: "DiktatTranscribeCheck") {
             NSApp.setActivationPolicy(.prohibited)
             Task {
@@ -244,6 +254,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         menuBarStatusController.showsNewBadge = appState.hasUnseenWhatsNew
         appState.hotkeyService.start()
         appState.appUpdateService.startIfConfigured()
+        UNUserNotificationCenter.current().delegate = self
 
         // Listen for popover dismiss requests (from auto-paste)
         NotificationCenter.default.addObserver(
@@ -293,6 +304,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
+
+    // MARK: - Notifications
+
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter, willPresent notification: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        [.banner, .sound]
+    }
+
+    /// A click on "Soll Diktat das Meeting aufnehmen?" opens the meeting page, set to an online meeting.
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse
+    ) async {
+        guard response.notification.request.content.userInfo["diktatAction"] as? String == MeetingNotifier.prepareAction else { return }
+        await MainActor.run {
+            UserDefaults.standard.set(MeetingSource.online.rawValue, forKey: MeetingSource.storageKey)
+            appState.mainWindowPage = .meetings
+            openMainWindow(.meetings)
+        }
+    }
 
     /// Starting Diktat again from Finder or Spotlight while it runs in the menu bar opens the window.
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -540,8 +571,14 @@ enum MacMeetingCheck {
                 duration: wav.duration, status: .pending
             )
             try FileManager.default.createDirectory(at: MeetingStore.directoryURL, withIntermediateDirectories: true)
-            try FileManager.default.moveItem(at: wav.url, to: record.audioURL)
-            audioURL = record.audioURL
+            if UserDefaults.standard.bool(forKey: "DiktatMeetingSystemOnly") {
+                // `-DiktatMeetingSystemOnly YES`: the file is the Mac's sound, there is no microphone track.
+                try FileManager.default.moveItem(at: wav.url, to: record.systemAudioURL)
+                systemAudioURL = record.systemAudioURL
+            } else {
+                try FileManager.default.moveItem(at: wav.url, to: record.audioURL)
+                audioURL = record.audioURL
+            }
             // `-DiktatMeetingSystemTrack /path` evaluates it as an online meeting.
             if let system = UserDefaults.standard.string(forKey: "DiktatMeetingSystemTrack") {
                 try? FileManager.default.removeItem(at: record.systemAudioURL)
@@ -1289,6 +1326,44 @@ enum MacTranscribeCheck {
         } catch {
             print("check failed: \(error)")
         }
+    }
+}
+#endif
+
+#if DEBUG
+/// Checks the Mac-sound path on its own: asks the permission system, listens with the level test
+/// while `afplay` plays a file, and says what arrived. `-DiktatSystemSoundCheck file.wav`.
+enum MacSystemSoundCheck {
+    @MainActor
+    static func run(playing file: URL) async {
+        print("Permission before: \(SystemAudioPermission.status), raw answer \(String(describing: SystemAudioPermission.rawAnswer))")
+        guard #available(macOS 14.2, *) else { return print("macOS too old") }
+        if SystemAudioPermission.status == .notDetermined {
+            print("Asking macOS ...")
+            let granted = await withCheckedContinuation { continuation in
+                SystemAudioPermission.request { continuation.resume(returning: $0) }
+            }
+            print("Answer: \(granted), status now: \(SystemAudioPermission.status)")
+        }
+        let test = SystemSoundTest()
+        test.start()
+        if let problem = test.problem { return print("Test could not start: \(problem)") }
+        let player = Process()
+        player.executableURL = URL(fileURLWithPath: "/usr/bin/afplay")
+        player.arguments = [file.path]
+        try? player.run()
+        var maxLevel: Float = 0
+        var heardSound = false
+        let started = Date()
+        while Date().timeIntervalSince(started) < 6 {
+            try? await Task.sleep(for: .milliseconds(200))
+            maxLevel = max(maxLevel, test.level)
+            heardSound = heardSound || test.isHearingSound
+        }
+        player.terminate()
+        test.stop()
+        print("Max level: \(maxLevel), heard sound: \(heardSound)")
+        print("Permission after: \(SystemAudioPermission.status)")
     }
 }
 #endif

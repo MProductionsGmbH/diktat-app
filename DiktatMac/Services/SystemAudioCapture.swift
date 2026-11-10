@@ -27,6 +27,8 @@ final class SystemAudioCapture {
 
     /// Loudest sample so far, 0...1.
     private(set) var peak: Float = 0
+    /// Loudest sample since the last `currentLevel`, for a level meter.
+    private var recentPeak: Float = 0
     private(set) var format: AVAudioFormat?
     /// Also receives the sound for live notes. Set before `start`.
     var liveBuffer: LiveAudioBuffer?
@@ -54,9 +56,20 @@ final class SystemAudioCapture {
     private var fillsGap = false
     private let queue = DispatchQueue(label: "app.diktat.system-audio")
 
+    /// How loud the Mac plays right now, 0...1 on a decibel scale like the microphone's
+    /// level. Reading it starts the next stretch.
+    var currentLevel: Float {
+        queue.sync {
+            let power = 20 * log10(max(recentPeak, 0.000_01))
+            recentPeak = 0
+            return max(0, min(1, (power + 50) / 50))
+        }
+    }
+
     /// Taps everything the Mac plays except Diktat itself, or only `processes`.
     /// `outputUID` is the device that clocks the tap; by default the current output.
-    func start(writingTo url: URL, processes: [AudioObjectID] = [], outputUID: String? = nil) throws {
+    /// Without `url` nothing is written: the level only shows whether sound arrives.
+    func start(writingTo url: URL?, processes: [AudioObjectID] = [], outputUID: String? = nil) throws {
         dispatchPrecondition(condition: .onQueue(.main))
         let description = processes.isEmpty
             ? CATapDescription(stereoGlobalTapButExcludeProcesses: AudioProcesses.own.map { [$0] } ?? [])
@@ -71,12 +84,14 @@ final class SystemAudioCapture {
         let format = try tapFormat()
         self.format = format
         // The device is not running yet, so nothing else touches these now.
-        file = try AVAudioFile(
-            forWriting: url,
-            settings: format.settings,
-            commonFormat: format.commonFormat,
-            interleaved: format.isInterleaved
-        )
+        file = try url.map {
+            try AVAudioFile(
+                forWriting: $0,
+                settings: format.settings,
+                commonFormat: format.commonFormat,
+                interleaved: format.isInterleaved
+            )
+        }
         // The first time, macOS holds the start until the permission is answered; the gap
         // until the first sound becomes silence, so this track starts with the microphone.
         startedAt = Date()
@@ -195,14 +210,17 @@ final class SystemAudioCapture {
 
     private func deliver(_ input: UnsafePointer<AudioBufferList>, format: AVAudioFormat) {
         lastDelivery = Date()
-        guard !isPaused, let file,
+        guard !isPaused,
               let buffer = AVAudioPCMBuffer(pcmFormat: format, bufferListNoCopy: input, deallocator: nil),
               buffer.frameLength > 0 else { return }
         if let samples = buffer.floatChannelData?[0] {
             let count = Int(buffer.frameLength) * (format.isInterleaved ? Int(format.channelCount) : 1)
-            for index in 0..<count { peak = max(peak, abs(samples[index])) }
+            for index in 0..<count {
+                peak = max(peak, abs(samples[index]))
+                recentPeak = max(recentPeak, abs(samples[index]))
+            }
         }
-        guard let output = converted(buffer, to: file.processingFormat) else { return }
+        guard let file, let output = converted(buffer, to: file.processingFormat) else { return }
         if fillsGap {
             fillsGap = false
             writeSilence(before: output.frameLength, to: file)

@@ -15,6 +15,35 @@ enum MeetingNotifier {
         post(title: String(localized: "Meeting ausgewertet"), body: String(localized: "\(duration(record.duration)), \(people). Im Diktat-Men\u{00FC} unter Meeting."))
     }
 
+    /// Clicking this notification opens the meeting page with the online source picked.
+    static let prepareAction = "prepareOnlineMeeting"
+
+    /// A call app has the microphone open: offers to record it. Asks for the notification
+    /// permission the first time, since it is only needed now.
+    static func suggestRecording(app: String) {
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+            case .notDetermined:
+                center.requestAuthorization(options: [.alert, .sound]) { granted, _ in
+                    if granted { postSuggestion(app: app) }
+                }
+            case .authorized, .provisional:
+                postSuggestion(app: app)
+            default:
+                break
+            }
+        }
+    }
+
+    private static func postSuggestion(app: String) {
+        let content = UNMutableNotificationContent()
+        content.title = app == "Browser" ? String(localized: "Ein Anruf im Browser l\u{00E4}uft") : String(localized: "\(app) l\u{00E4}uft")
+        content.body = String(localized: "Soll Diktat das Meeting aufnehmen? Ein Klick \u{00F6}ffnet die Meeting-Seite. Bitte vorher alle um Einverst\u{00E4}ndnis bitten.")
+        content.userInfo = ["diktatAction": prepareAction]
+        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: "call-\(app)", content: content, trigger: nil))
+    }
+
     static func failed(_ message: String) {
         post(title: String(localized: "Meeting-Auswertung fehlgeschlagen"), body: message)
     }

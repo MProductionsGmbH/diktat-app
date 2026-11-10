@@ -19,7 +19,7 @@ struct SettingsContentView: View {
     var body: some View {
         VStack(spacing: 0) {
             SegmentedToggle(
-                options: SettingsPane.allCases,
+                options: SettingsPane.available(inWindow: inWindow),
                 selection: $activePane,
                 label: { $0.title }
             )
@@ -51,8 +51,14 @@ enum SettingsPane: Int, CaseIterable, Identifiable {
     case models
     case workflows
     case dictionary
+    case meetings
 
     var id: Int { rawValue }
+
+    /// The popover is narrow and has the meeting page itself, so "Meetings" is a tab of the window only.
+    static func available(inWindow: Bool) -> [SettingsPane] {
+        allCases.filter { inWindow || $0 != .meetings }
+    }
 
     var title: String {
         switch self {
@@ -60,6 +66,7 @@ enum SettingsPane: Int, CaseIterable, Identifiable {
         case .models: return String(localized: "Modelle")
         case .workflows: return String(localized: "Stil")
         case .dictionary: return String(localized: "W\u{00F6}rterbuch")
+        case .meetings: return String(localized: "Meetings")
         }
     }
 }
@@ -887,6 +894,10 @@ struct CustomizeSettingsView: View {
             }
 
             AppModeRulesSection(appState: appState)
+            }
+
+            if pane == .meetings {
+                MeetingSettingsPane(appState: appState)
             }
 
             if pane == .dictionary {

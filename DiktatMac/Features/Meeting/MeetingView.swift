@@ -14,7 +14,10 @@ struct MeetingView: View {
     @State private var isResummarizing = false
     @State private var copied: CopyTarget?
     @State private var confirmDelete = false
-    @AppStorage("DiktatMeetingSystemAudio") private var includesSystemAudio = false
+    @AppStorage(MeetingSource.storageKey) private var storedSource = ""
+    @AppStorage(MeetingSource.legacyStorageKey) private var legacySystemAudio = false
+    @State private var permission = SystemAudioPermission.status
+    @State private var soundTest = SystemSoundTest()
     @AppStorage("DiktatMeetingLiveNotes") private var wantsLiveNotes = true
     @State private var copiedChatNote = false
 
@@ -67,6 +70,12 @@ struct MeetingView: View {
             }
         }
         .frame(height: embedded ? nil : height)
+        .onAppear { permission = SystemAudioPermission.status }
+        .onDisappear { soundTest.stop() }
+        // Back from the system settings, where the permission may have been given.
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            permission = SystemAudioPermission.status
+        }
         .alert("Person umbenennen", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
             TextField("Name", text: $newName)
             Button("Sichern") { saveName() }
@@ -105,7 +114,7 @@ struct MeetingView: View {
             )
 
             if MeetingController.canRecordSystemAudio {
-                onlineMeeting
+                sourcePicker
             }
 
             Toggle(isOn: $wantsLiveNotes) {
@@ -159,17 +168,15 @@ struct MeetingView: View {
             }
 
             Button {
-                meeting.start(includingSystemAudio: recordsSystemAudio, liveNotes: wantsLiveNotes)
+                startMeeting()
             } label: {
                 Text("Alle sind einverstanden, starten")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.filledAction)
-            .disabled(MeetingController.blocker != nil)
+            .disabled(MeetingController.blocker != nil || (source.usesSystemAudio && permission == .denied))
 
-            Text(recordsSystemAudio
-                 ? "Nimmt dein Mikrofon (Ich) und den Ton des Macs (die anderen) auf. Mit Kopfh\u{00F6}rern wird das Transkript am saubersten."
-                 : "Nimmt nur das Mikrofon auf, gedacht f\u{00FC}r Meetings im Raum.")
+            Text(source.explanation)
                 .font(.ui(11))
                 .foregroundStyle(.tertiary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -185,31 +192,57 @@ struct MeetingView: View {
         return meeting.isRecordingSystemAudio ? String(localized: "Aufnahme l\u{00E4}uft, mit Ton des Macs") : String(localized: "Aufnahme l\u{00E4}uft")
     }
 
-    private var recordsSystemAudio: Bool {
-        includesSystemAudio && MeetingController.canRecordSystemAudio
+    private var source: MeetingSource {
+        get {
+            MeetingSource.resolve(
+                stored: storedSource,
+                legacySystemAudio: legacySystemAudio,
+                canRecordSystemAudio: MeetingController.canRecordSystemAudio
+            )
+        }
+        nonmutating set { storedSource = newValue.rawValue }
+    }
+
+    /// A refused permission for the Mac's sound shows up before the meeting and not after it.
+    private func startMeeting() {
+        soundTest.stop()
+        let chosen = source
+        guard chosen.usesSystemAudio else {
+            meeting.start(source: chosen, liveNotes: wantsLiveNotes)
+            return
+        }
+        permission = SystemAudioPermission.status
+        // Only a refusal stops the start. Not asked yet: starting the recording makes macOS ask,
+        // as it always did, and a refusal then shows after the meeting.
+        guard permission != .denied else { return }
+        meeting.start(source: chosen, liveNotes: wantsLiveNotes)
     }
 
     /// Asked in the call's chat before starting, so everyone can agree in writing.
     static let chatNote = String(localized: "Ich w\u{00FC}rde dieses Meeting gern mit Diktat aufnehmen und auf meinem Mac transkribieren und zusammenfassen lassen. Ton und Text bleiben auf meinem Mac, die Aufnahme wird nach der Auswertung gel\u{00F6}scht. Ist das f\u{00FC}r alle in Ordnung?")
 
-    private var onlineMeeting: some View {
+    /// Three sources side by side, then what the chosen one needs: the macOS permission, a test
+    /// of the sound and, for calls, the question for the chat.
+    private var sourcePicker: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Toggle(isOn: $includesSystemAudio) {
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 6) {
-                        Text("Online-Meeting")
-                            .font(.ui(12.5, .medium))
-                        BetaBadge()
-                    }
-                    Text("Nimmt auch den Ton des Macs auf, zum Beispiel aus Teams, Zoom oder Meet. Beim ersten Mal fragt macOS nach der Freigabe f\u{00FC}r Systemaudio.")
-                        .font(.ui(11))
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
+            HStack(spacing: 6) {
+                Text("Quelle")
+                    .font(.ui(12.5, .medium))
+                BetaBadge()
+            }
+
+            HStack(spacing: 8) {
+                ForEach(MeetingSource.allCases) { option in
+                    sourceCard(option)
                 }
             }
-            .toggleStyle(.trailingSwitch)
 
-            if includesSystemAudio {
+            if source.usesSystemAudio {
+                permissionRow
+                soundTestRow
+            }
+
+            if source == .online {
                 Button {
                     NSPasteboard.general.clearContents()
                     NSPasteboard.general.setString(Self.chatNote, forType: .string)
@@ -222,6 +255,117 @@ struct MeetingView: View {
         }
         .padding(14)
         .glassPanel()
+    }
+
+    private func sourceCard(_ option: MeetingSource) -> some View {
+        let isSelected = source == option
+        return Button {
+            soundTest.stop()
+            source = option
+        } label: {
+            VStack(spacing: 6) {
+                Image(systemName: option.icon)
+                    .font(.ui(17, .semibold))
+                    .frame(height: 22)
+                Text(option.title)
+                    .font(.ui(12, .semibold))
+                    .multilineTextAlignment(.center)
+                Text(option.subtitle)
+                    .font(.ui(10.5))
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity, minHeight: 84)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 8)
+            .foregroundStyle(isSelected ? DiktatTheme.onTonal : Color.primary)
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(isSelected ? DiktatTheme.accent.opacity(0.14) : Color.primary.opacity(0.04))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .strokeBorder(isSelected ? DiktatTheme.accent : Color.primary.opacity(0.08), lineWidth: isSelected ? 1.5 : 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("\(option.title), \(option.subtitle)")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+
+    @ViewBuilder
+    private var permissionRow: some View {
+        switch permission {
+        case .authorized:
+            Label("Freigabe f\u{00FC}r den Ton des Macs ist erteilt.", systemImage: "checkmark.circle.fill")
+                .font(.ui(11.5))
+                .foregroundStyle(DiktatTheme.ready)
+        case .notDetermined:
+            VStack(alignment: .leading, spacing: 6) {
+                Text("macOS fragt einmal nach der Freigabe f\u{00FC}r den Ton des Macs. Ohne sie kommt kein Ton an.")
+                    .font(.ui(11))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button {
+                    SystemAudioPermission.request { _ in permission = SystemAudioPermission.status }
+                } label: {
+                    Label("Jetzt freigeben", systemImage: "lock.open")
+                }
+                .buttonStyle(.subtle)
+            }
+        case .denied:
+            NoticeRow(
+                icon: "exclamationmark.triangle.fill",
+                title: String(localized: "Die Freigabe f\u{00FC}r den Ton des Macs fehlt. Erlaube Diktat unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme."),
+                tint: DiktatTheme.danger,
+                actionTitle: String(localized: "Einstellungen \u{00F6}ffnen"),
+                action: { NSWorkspace.shared.open(SystemAudioPermission.settingsURL) }
+            )
+        case .unavailable:
+            EmptyView()
+        }
+    }
+
+    private var soundTestRow: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 10) {
+                Button {
+                    if soundTest.isRunning {
+                        soundTest.stop()
+                    } else {
+                        soundTest.start()
+                        permission = SystemAudioPermission.status
+                    }
+                } label: {
+                    Label(soundTest.isRunning ? "Test beenden" : "Ton testen", systemImage: soundTest.isRunning ? "stop.fill" : "waveform")
+                }
+                .buttonStyle(.subtle)
+                .disabled(permission == .denied)
+
+                if soundTest.isRunning {
+                    LevelBar(level: soundTest.level)
+                        .frame(height: 6)
+                        .accessibilityLabel("Pegel des Tons vom Mac")
+                }
+            }
+            if soundTest.isRunning {
+                Text(soundTest.isHearingSound
+                     ? "Der Ton des Macs kommt an."
+                     : "Noch kein Ton. Spiel etwas ab, zum Beispiel das Meeting oder ein Video.")
+                    .font(.ui(11))
+                    .foregroundStyle(soundTest.isHearingSound ? DiktatTheme.ready : Color.secondary)
+            } else if let problem = soundTest.problem {
+                Text(problem)
+                    .font(.ui(11))
+                    .foregroundStyle(DiktatTheme.danger)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Text("Pr\u{00FC}ft, ob der Ton des Macs bei Diktat ankommt. Spiel dazu etwas ab, zum Beispiel das Meeting. Es wird nichts aufgenommen.")
+                    .font(.ui(11))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
     }
 
     private var storedMeetings: [MeetingRecord] {
@@ -581,5 +725,22 @@ struct MeetingView: View {
         return hours > 0
             ? String(format: "%d:%02d:%02d", hours, minutes, rest)
             : String(format: "%d:%02d", minutes, rest)
+    }
+}
+
+/// A thin bar that fills with the level, 0...1.
+private struct LevelBar: View {
+    let level: Float
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack(alignment: .leading) {
+                Capsule().fill(Color.primary.opacity(0.1))
+                Capsule()
+                    .fill(DiktatTheme.accent)
+                    .frame(width: max(4, proxy.size.width * CGFloat(min(1, max(0, level)))))
+                    .animation(.linear(duration: 0.1), value: level)
+            }
+        }
     }
 }

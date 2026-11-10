@@ -111,6 +111,7 @@ final class AppState {
     let appUpdateService = AppUpdateService()
     let history: TranscriptHistoryStore
     let audioFile = AudioFileController()
+    let callDetector = CallDetector()
     @ObservationIgnored private(set) lazy var meeting = MeetingController(store: MeetingStore(persistent: !Self.isToolRun)) { [unowned self] in
         MeetingController.Settings(
             language: self.transcriptionSettings.language,
@@ -181,6 +182,7 @@ final class AppState {
         #if DEBUG
         UserDefaults.standard.string(forKey: "DiktatSnapshotDir") != nil
             || UserDefaults.standard.string(forKey: "DiktatMeetingCheck") != nil
+            || UserDefaults.standard.string(forKey: "DiktatSystemSoundCheck") != nil
         #else
         false
         #endif
@@ -206,6 +208,11 @@ final class AppState {
             case .failure(let failure): MeetingNotifier.failed(failure.message)
             }
         }
+        callDetector.onCall = { [unowned self] app in
+            guard self.appSettings.suggestsMeetingOnCall, !self.meeting.isRecording, !self.meeting.isProcessing else { return }
+            MeetingNotifier.suggestRecording(app: app)
+        }
+        callDetector.start()
         hotkeyService.updateCustomHotkeys(appSettings.resolvedCustomHotkeys)
         applyFnAloneSetting()
         refreshAccessibilityPermission()

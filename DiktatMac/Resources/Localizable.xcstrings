@@ -221,6 +221,17 @@
         }
       }
     },
+    "%@ läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is running"
+          }
+        }
+      }
+    },
     "%@ läuft, hat aber noch kein Modell. In %@ ein Modell laden und erneut suchen.": {
       "extractionState": "manual",
       "localizations": {
@@ -1090,6 +1101,17 @@
         }
       }
     },
+    "Aufnahmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordings"
+          }
+        }
+      }
+    },
     "Aufnehmen braucht das Mikrofon": {
       "extractionState": "manual",
       "localizations": {
@@ -1229,6 +1251,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stop and evaluate"
+          }
+        }
+      }
+    },
+    "Bei Anrufen eine Aufnahme vorschlagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggest recording during calls"
           }
         }
       }
@@ -1662,6 +1695,17 @@
         }
       }
     },
+    "Der Ton des Macs kommt an.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mac's sound is arriving."
+          }
+        }
+      }
+    },
     "Der Ton des Macs ließ sich nicht auswerten, ausgewertet wird nur das Mikrofon. (%@)": {
       "extractionState": "manual",
       "localizations": {
@@ -1680,6 +1724,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The Mac's sound cannot be recorded, only the microphone is running. (%@)"
+          }
+        }
+      }
+    },
+    "Der Ton des Macs lässt sich nicht aufnehmen. (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mac's sound cannot be recorded. (%@)"
           }
         }
       }
@@ -1812,6 +1867,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "The file is transcribed on this Mac and not changed."
+          }
+        }
+      }
+    },
+    "Die Freigabe fehlt. Ohne sie kommt kein Ton an.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The permission is missing. Without it no sound arrives."
+          }
+        }
+      }
+    },
+    "Die Freigabe für den Ton des Macs fehlt. Erlaube Diktat unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The permission for the Mac's sound is missing. Allow Diktat under Privacy & Security > Screen & System Audio Recording."
+          }
+        }
+      }
+    },
+    "Die Freigabe ist erteilt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The permission is granted."
+          }
+        }
+      }
+    },
+    "Die Modelle ließen sich nicht laden. Das geht nur mit Internet. (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The models could not be loaded. That needs internet. (%@)"
           }
         }
       }
@@ -2289,6 +2388,17 @@
         }
       }
     },
+    "Diktat schreibt nach dem Meeting eine Zusammenfassung mit Entscheidungen und To-dos. Ausgeschaltet bekommst du nur das Transkript mit den Personen, die Zusammenfassung kannst du später starten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After the meeting Diktat writes a summary with decisions and to-dos. Switched off, you get only the transcript with the people, and you can start the summary later."
+          }
+        }
+      }
+    },
     "Diktat schreibt nach dem Meeting eine Zusammenfassung mit Entscheidungen und To-dos. Das dauert etwas länger.": {
       "extractionState": "manual",
       "localizations": {
@@ -2630,6 +2740,17 @@
         }
       }
     },
+    "Ein Anruf im Browser läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A call is running in the browser"
+          }
+        }
+      }
+    },
     "Ein Meeting im Raum aufnehmen: Transkript mit Personen und auf Wunsch Zusammenfassung": {
       "extractionState": "manual",
       "localizations": {
@@ -2791,6 +2912,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings"
+          }
+        }
+      }
+    },
+    "Einstellungen öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
           }
         }
       }
@@ -3136,6 +3268,17 @@
         }
       }
     },
+    "Freigabe für den Ton des Macs ist erteilt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The permission for the Mac's sound is granted."
+          }
+        }
+      }
+    },
     "Freigabe zurücksetzen": {
       "extractionState": "manual",
       "localizations": {
@@ -3220,6 +3363,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "For meetings Diktat needs a language model. Please download one in the settings under Language model."
+          }
+        }
+      }
+    },
+    "Für Online-Meetings nimmt Diktat den Ton auf, den dein Mac abspielt, zum Beispiel die Stimmen aus Teams, Zoom oder Meet. Dazu braucht Diktat die Freigabe „Systemaudio-Aufnahme“ von macOS.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For online meetings Diktat records the sound your Mac plays, for example the voices from Teams, Zoom or Meet. For this Diktat needs the macOS permission “System Audio Recording”."
           }
         }
       }
@@ -3587,6 +3741,17 @@
         }
       }
     },
+    "Im Raum": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the room"
+          }
+        }
+      }
+    },
     "Immer Modell-Anbieter": {
       "extractionState": "manual",
       "localizations": {
@@ -3697,6 +3862,17 @@
         }
       }
     },
+    "Installiert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Installed"
+          }
+        }
+      }
+    },
     "Jeder Modus hat sein eigenes Kürzel. Du hältst es, sprichst, und Diktat schreibt den Text so, wie der Modus es verlangt. Ein Klick startet einen Modus auch ohne Kürzel.": {
       "extractionState": "manual",
       "localizations": {
@@ -3726,6 +3902,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clean up now"
+          }
+        }
+      }
+    },
+    "Jetzt freigeben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow now"
+          }
+        }
+      }
+    },
+    "Jetzt laden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load now"
           }
         }
       }
@@ -4533,6 +4731,17 @@
         }
       }
     },
+    "Meetings öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Meetings"
+          }
+        }
+      }
+    },
     "Mikrofon": {
       "extractionState": "manual",
       "localizations": {
@@ -4540,6 +4749,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Microphone"
+          }
+        }
+      }
+    },
+    "Mikrofon + Ton des Macs": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone + Mac sound"
           }
         }
       }
@@ -5017,6 +5237,17 @@
         }
       }
     },
+    "Nicht installiert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not installed"
+          }
+        }
+      }
+    },
     "Nichts gefunden": {
       "extractionState": "manual",
       "localizations": {
@@ -5039,6 +5270,17 @@
         }
       }
     },
+    "Nimmt dein Mikrofon (Ich) und den Ton des Macs (die anderen) auf, etwa aus Teams, Zoom oder Meet. Mit Kopfhörern wird das Transkript am saubersten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Records your microphone (Me) and the Mac's sound (the others), for example from Teams, Zoom or Meet. With headphones the transcript comes out cleanest."
+          }
+        }
+      }
+    },
     "Nimmt dein Mikrofon (Ich) und den Ton des Macs (die anderen) auf. Mit Kopfhörern wird das Transkript am saubersten.": {
       "extractionState": "manual",
       "localizations": {
@@ -5057,6 +5299,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Records the microphone only, meant for meetings in the room."
+          }
+        }
+      }
+    },
+    "Nimmt nur den Ton des Macs auf, zum Beispiel für ein Webinar oder ein Video. Dein Mikrofon bleibt aus, alle Stimmen sind Personen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Records only the Mac's sound, for example for a webinar or a video. Your microphone stays off, and every voice is a person."
           }
         }
       }
@@ -5101,6 +5354,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Still to be allowed in System Settings."
+          }
+        }
+      }
+    },
+    "Noch kein Ton. Spiel etwas ab, zum Beispiel das Meeting oder ein Video.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No sound yet. Play something, for example the meeting or a video."
           }
         }
       }
@@ -5193,6 +5457,17 @@
         }
       }
     },
+    "Nur Ton des Macs": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac sound only"
+          }
+        }
+      }
+    },
     "Nur auf diesem Mac aus dem Verlauf berechnet. Abschaltbar unter Einstellungen.": {
       "extractionState": "manual",
       "localizations": {
@@ -5226,6 +5501,17 @@
         }
       }
     },
+    "Ob die Freigabe erteilt ist, lässt sich nicht prüfen. Fehlt sie, zeigt Diktat es nach dem Meeting.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whether the permission is granted cannot be checked. If it is missing, Diktat tells you after the meeting."
+          }
+        }
+      }
+    },
     "Ohne Apple Intelligence brauchen KI-Schreibstil, WTF und :-) einen eigenen API-Key.": {
       "extractionState": "manual",
       "localizations": {
@@ -5233,6 +5519,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Without Apple Intelligence, AI writing style, WTF and :-) need an API key of their own."
+          }
+        }
+      }
+    },
+    "Ohne Mikrofon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No microphone"
           }
         }
       }
@@ -5402,6 +5699,17 @@
         }
       }
     },
+    "Pegel des Tons vom Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level of the Mac's sound"
+          }
+        }
+      }
+    },
     "Person umbenennen": {
       "extractionState": "manual",
       "localizations": {
@@ -5464,6 +5772,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Check"
+          }
+        }
+      }
+    },
+    "Prüft, ob der Ton des Macs bei Diktat ankommt. Spiel dazu etwas ab, zum Beispiel das Meeting. Es wird nichts aufgenommen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checks whether the Mac's sound reaches Diktat. Play something for it, for example the meeting. Nothing is recorded."
+          }
+        }
+      }
+    },
+    "Quelle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source"
           }
         }
       }
@@ -5585,6 +5915,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "This is how Diktat starts reliably with the Mac, and the permissions are kept."
+          }
+        }
+      }
+    },
+    "Soll Diktat das Meeting aufnehmen? Ein Klick öffnet die Meeting-Seite. Bitte vorher alle um Einverständnis bitten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Should Diktat record the meeting? Click to open the meeting page. Please ask everyone for their consent first."
           }
         }
       }
@@ -5721,6 +6062,17 @@
         }
       }
     },
+    "Sprecher-Erkennung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speaker detection"
+          }
+        }
+      }
+    },
     "Später": {
       "extractionState": "manual",
       "localizations": {
@@ -5772,6 +6124,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Default shortcut, only on Apple keyboards"
+          }
+        }
+      }
+    },
+    "Standardquelle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default source"
           }
         }
       }
@@ -5963,6 +6326,17 @@
         }
       }
     },
+    "Test beenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop test"
+          }
+        }
+      }
+    },
     "Text landet am richtigen Ort": {
       "extractionState": "manual",
       "localizations": {
@@ -6029,6 +6403,17 @@
         }
       }
     },
+    "Ton des Macs": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac sound"
+          }
+        }
+      }
+    },
     "Ton des Macs wird transkribiert ...": {
       "extractionState": "manual",
       "localizations": {
@@ -6047,6 +6432,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tone in"
+          }
+        }
+      }
+    },
+    "Ton testen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test sound"
           }
         }
       }
@@ -6084,6 +6480,17 @@
         }
       }
     },
+    "Transkript und Zusammenfassung bleiben verschlüsselt auf diesem Mac. Die Aufnahme selbst wird nach der Auswertung gelöscht. Bitte frag alle, bevor du aufnimmst.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcript and summary stay encrypted on this Mac. The recording itself is deleted after the evaluation. Please ask everyone before you record."
+          }
+        }
+      }
+    },
     "Umformulieren läuft über den Modell-Anbieter unten.": {
       "extractionState": "manual",
       "localizations": {
@@ -6113,6 +6520,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "You can download Gemma 4 under Settings > Models. It summarizes long meetings more precisely than Apple Intelligence, entirely on this Mac. Diktat shows which size fits your Mac."
+          }
+        }
+      }
+    },
+    "Unterscheidet in Meetings die Stimmen (Person 1, Person 2 …). Die Modelle sind rund 20 MB groß und laufen auf diesem Mac.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tells the voices apart in meetings (Person 1, Person 2 …). The models are about 20 MB and run on this Mac."
           }
         }
       }
@@ -6282,6 +6700,17 @@
         }
       }
     },
+    "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing arrived from the Mac's sound. Is the permission missing under Privacy & Security > Screen & System Audio Recording?"
+          }
+        }
+      }
+    },
     "Vom Ton des Macs kam nichts an. Fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme? Ausgewertet wird nur das Mikrofon.": {
       "extractionState": "manual",
       "localizations": {
@@ -6289,6 +6718,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nothing arrived from the Mac's sound. Is the permission missing under Privacy & Security > Screen & System Audio Recording? Only the microphone is evaluated."
+          }
+        }
+      }
+    },
+    "Von diesem Meeting ist kein Ton da. Kam vom Ton des Macs nichts an, fehlt die Freigabe unter Datenschutz & Sicherheit > Bildschirm- und Systemaudioaufnahme.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This meeting has no sound. If nothing arrived from the Mac's sound, the permission is missing under Privacy & Security > Screen & System Audio Recording."
           }
         }
       }
@@ -6443,6 +6883,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "We'll meet on Wednesday, no, Thursday at ten."
+          }
+        }
+      }
+    },
+    "Wird geladen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading …"
           }
         }
       }
@@ -6799,6 +7250,28 @@
         }
       }
     },
+    "macOS fragt einmal nach der Freigabe für den Ton des Macs. Ohne sie kommt kein Ton an.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS asks once for the permission to record the Mac's sound. Without it no sound arrives."
+          }
+        }
+      }
+    },
+    "macOS hat noch nicht gefragt. Das passiert beim ersten Meeting mit Ton des Macs.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "macOS has not asked yet. That happens at the first meeting with the Mac's sound."
+          }
+        }
+      }
+    },
     "unter 1 Min.": {
       "extractionState": "manual",
       "localizations": {
@@ -6883,6 +7356,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open"
+          }
+        }
+      }
+    },
+    "Öffnet Teams, Zoom, Meet oder eine andere Anruf-App das Mikrofon, zeigt Diktat eine Mitteilung. Dazu sieht Diktat nur, welche Apps Ton nutzen, nie was gesprochen wird. Aufgenommen wird erst, wenn du es startest.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When Teams, Zoom, Meet or another call app opens the microphone, Diktat shows a notification. For this Diktat only sees which apps use sound, never what is said. Nothing is recorded until you start it."
           }
         }
       }
