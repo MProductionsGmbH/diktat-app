@@ -136,6 +136,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
             }
             return
         }
+        if let path = UserDefaults.standard.string(forKey: "DiktatMicRestartCheck") {
+            // A permission question needs an app that may show windows.
+            NSApp.setActivationPolicy(.accessory)
+            Task {
+                await MacMicRestartCheck.run(writingTo: URL(fileURLWithPath: path))
+                NSApp.terminate(nil)
+            }
+            return
+        }
         if let path = UserDefaults.standard.string(forKey: "DiktatSystemSoundCheck") {
             // A permission question needs an app that may show windows.
             NSApp.setActivationPolicy(.accessory)
@@ -250,6 +259,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
         appState.onWhatsNewChange = { [weak self] unseen in
             self?.menuBarStatusController.showsNewBadge = unseen
         }
+        appState.onMeetingProblemChange = { [weak self] problem in
+            self?.menuBarStatusController.meetingProblem = problem
+        }
         menuBarStatusController.levelProvider = { [appState] in appState.activeWorkflow?.audioLevel ?? 0 }
         menuBarStatusController.showsNewBadge = appState.hasUnseenWhatsNew
         appState.hotkeyService.start()
@@ -320,6 +332,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
         guard response.notification.request.content.userInfo["diktatAction"] as? String == MeetingNotifier.prepareAction else { return }
         await MainActor.run {
             UserDefaults.standard.set(MeetingSource.online.rawValue, forKey: MeetingSource.storageKey)
+            // An earlier meeting may still be open; the click is for the start page.
+            appState.meeting.close()
             appState.mainWindowPage = .meetings
             openMainWindow(.meetings)
         }
@@ -455,6 +469,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
 
         switch mode {
         case .hold:
+            // The previous dictation is still being transcribed: starting now would cancel it.
+            // It finishes first, as in "Drücken".
+            if let active = appState.activeWorkflow, case .running = active.phase, !active.isRecording {
+                return
+            }
             // Hold mode: start recording on key down
             appState.startWorkflow(type, source: .hotkeyBackground)
 
@@ -479,8 +498,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
         // Hold mode: stop recording on key release
         if let active = appState.activeWorkflow,
            active.type == type {
-            // Only stop if currently recording (running phase)
-            if case .running = active.phase {
+            // Only a recording stops on release; a release during the transcription (after the
+            // pill or Escape ended the recording) would cancel its result.
+            if active.isRecording {
                 appState.stopCurrentWorkflow()
             }
         }
@@ -1219,6 +1239,9 @@ enum MacSnapshots {
                 .padding(20)
                 .background(DiktatTheme.page)
             capture(meetingPill, appearance: appearance, to: folder.appendingPathComponent("\(mode)-pill-meeting.png"))
+            // The same meeting with a silent microphone: the pill warns instead of counting.
+            appState.meeting.preview(.recording(startedAt: Date().addingTimeInterval(-754)), problem: .microphoneSilent)
+            capture(meetingPill, appearance: appearance, to: folder.appendingPathComponent("\(mode)-pill-meeting-problem.png"))
             appState.meeting.preview(.idle)
         }
         appState.page = .main
@@ -1236,8 +1259,11 @@ enum MacSnapshots {
             (.showing(sampleMeeting.id), "result"),
         ]
         appState.page = .meeting
+        // A recording with a problem: the banner has to stand out.
+        meeting.preview(.recording(startedAt: Date().addingTimeInterval(-754)), problem: .microphoneSilent, microphone: "MacBook Pro-Mikrofon")
+        capture(MenuBarView(appState: appState), appearance: appearance, to: folder.appendingPathComponent("\(mode)-meeting-recording-problem.png"))
         for (phase, label) in phases {
-            meeting.preview(phase)
+            meeting.preview(phase, microphone: label == "recording" ? "MacBook Pro-Mikrofon" : nil)
             capture(MenuBarView(appState: appState), appearance: appearance, to: folder.appendingPathComponent("\(mode)-meeting-\(label).png"))
             // The whole result, beyond the popover height.
             if case .showing = phase {
@@ -1245,6 +1271,10 @@ enum MacSnapshots {
                     .frame(width: MenuBarView.width)
                     .background(DiktatTheme.page)
                 capture(full, appearance: appearance, to: folder.appendingPathComponent("\(mode)-meeting-result-full.png"))
+                // In the window, where "Alle Meetings" leads back to the list.
+                appState.mainWindowPage = .meetings
+                let window = MainWindowView(appState: appState).frame(width: 1040, height: 700)
+                capture(window, appearance: appearance, to: folder.appendingPathComponent("\(mode)-window-meeting-result.png"))
             }
         }
         meeting.preview(.idle)
@@ -1331,6 +1361,45 @@ enum MacTranscribeCheck {
 #endif
 
 #if DEBUG
+/// Checks that a meeting's microphone capture survives a change of the audio setup:
+/// `-DiktatMicRestartCheck /path/out.wav` records nine seconds and stops the engine behind the
+/// capture's back after three and after six, as a monitor being connected does. The file must
+/// still be about nine seconds long.
+enum MacMicRestartCheck {
+    @MainActor
+    static func run(writingTo url: URL) async {
+        try? FileManager.default.removeItem(at: url)
+        let capture = EngineCapture()
+        var changes: [String] = []
+        capture.onDeviceChange = { error in changes.append(error.map { "lost: \($0.localizedDescription)" } ?? "recording again") }
+        do {
+            try capture.start(
+                device: AudioInputDevices.preferredDeviceID(), writingTo: url,
+                settings: EngineCapture.meetingSettings, survivingDeviceChanges: true
+            )
+        } catch {
+            return print("Could not start: \(error.localizedDescription)")
+        }
+        print("Microphone: \(AudioInputDevices.activeDevice()?.name ?? "?")")
+        let started = Date()
+        for second in 1...9 {
+            try? await Task.sleep(for: .seconds(1))
+            if second == 3 || second == 6 {
+                capture.simulateDeviceLoss()
+                print("\(second) s: engine stopped behind the capture's back")
+            }
+        }
+        let wall = Date().timeIntervalSince(started)
+        let recorded = capture.duration
+        let peak = capture.peakPowerDB
+        capture.stop()
+        let file = try? AVAudioFile(forReading: url)
+        let seconds = file.map { Double($0.length) / $0.fileFormat.sampleRate } ?? 0
+        print("Restarts: \(capture.restarts), reports: \(changes)")
+        print(String(format: "Clock %.1f s, capture says %.1f s, file holds %.1f s, peak %.0f dB", wall, recorded, seconds, peak))
+    }
+}
+
 /// Checks the Mac-sound path on its own: asks the permission system, listens with the level test
 /// while `afplay` plays a file, and says what arrived. `-DiktatSystemSoundCheck file.wav`.
 enum MacSystemSoundCheck {

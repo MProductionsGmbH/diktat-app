@@ -41,19 +41,33 @@ final class MeetingController {
     private(set) var liveNotes: LiveNotesController?
     /// Something the user should know about the current meeting, e.g. an interrupted recording.
     private(set) var notice: String?
+    /// What is wrong with the running recording right now, the most urgent when there are several.
+    /// Unlike `notice` this is shown large and everywhere: what is not recorded is lost.
+    private(set) var problem: MeetingProblem? {
+        didSet {
+            guard oldValue != problem else { return }
+            onProblemChange?(problem)
+        }
+    }
+    /// The microphone the recording runs on, nil without one.
+    private(set) var microphoneName: String?
     /// The meeting being recorded. It is stored as pending from the start, so a quit or crash
     /// keeps the audio for a later evaluation.
     private(set) var recordingID: UUID?
     let store: MeetingStore
     /// Lets the menu bar show that a meeting is being recorded.
     @ObservationIgnored var onPhaseChange: (() -> Void)?
+    /// A problem with the running recording appeared, changed or went away.
+    @ObservationIgnored var onProblemChange: ((MeetingProblem?) -> Void)?
     /// An evaluation ended: the finished meeting, or the reason it failed.
     @ObservationIgnored var onEvaluationEnd: ((Result<MeetingRecord, MeetingEvaluationFailure>) -> Void)?
 
     @ObservationIgnored private let settingsProvider: () -> Settings
     @ObservationIgnored private var recorder: AVAudioRecorder?
-    /// Records instead of `recorder` when a microphone other than the Mac's default input is picked.
+    /// Records the microphone. `recorder` only steps in when this does not open it.
     @ObservationIgnored private var micCapture: EngineCapture?
+    @ObservationIgnored private var activeProblems: Set<MeetingProblem> = []
+    @ObservationIgnored private var silence = MicrophoneSilenceTracker()
     /// A `SystemAudioCapture` (macOS 14.2 and later) during an online meeting.
     @ObservationIgnored private var systemCapture: Any?
     /// The live notes free their model; the evaluation waits for that.
@@ -72,10 +86,21 @@ final class MeetingController {
 
     #if DEBUG
     /// Shows a state without recording, for snapshots.
-    func preview(_ phase: Phase) {
+    func preview(_ phase: Phase, problem: MeetingProblem? = nil, microphone: String? = nil) {
         self.phase = phase
+        self.problem = problem
+        microphoneName = microphone
     }
     #endif
+
+    private func setProblem(_ kind: MeetingProblem, _ isActive: Bool) {
+        if isActive {
+            guard activeProblems.insert(kind).inserted else { return }
+        } else {
+            guard activeProblems.remove(kind) != nil else { return }
+        }
+        problem = activeProblems.min()
+    }
 
     var isRecording: Bool {
         if case .recording = phase { return true }
@@ -133,9 +158,12 @@ final class MeetingController {
         do {
             try FileManager.default.createDirectory(at: MeetingStore.directoryURL, withIntermediateDirectories: true)
             if source.usesMicrophone {
-                if let capture = startPickedMicrophone(writingTo: record.audioURL) {
+                if let capture = startMicrophone(writingTo: record.audioURL) {
                     micCapture = capture
+                    microphoneName = AudioInputDevices.activeDevice()?.name
                 } else {
+                    // The engine did not open the microphone: the system recorder, which ends
+                    // the recording when the audio setup changes.
                     let recorder = try AVAudioRecorder(url: record.audioURL, settings: settings)
                     let observer = RecorderObserver { [weak self] in self?.recordingInterrupted() }
                     recorder.delegate = observer
@@ -146,6 +174,7 @@ final class MeetingController {
                     }
                     self.recorder = recorder
                     recorderObserver = observer
+                    microphoneName = AudioInputDevices.activeDevice()?.name
                 }
             }
             recordingID = record.id
@@ -190,21 +219,41 @@ final class MeetingController {
         }
     }
 
-    /// The microphone picked in the settings. Nil when none is picked, it is not connected or it
-    /// does not open: then the Mac's default input records, as without a choice.
-    private func startPickedMicrophone(writingTo url: URL) -> EngineCapture? {
-        guard let device = AudioInputDevices.preferredDeviceID() else { return nil }
+    /// The microphone picked in the settings or, when none is picked or it is not connected, the
+    /// Mac's default input. The capture survives a change of the audio setup (a monitor connected
+    /// for the presentation, a microphone unplugged): it goes on with what is there. Nil when the
+    /// microphone does not open.
+    private func startMicrophone(writingTo url: URL) -> EngineCapture? {
         let capture = EngineCapture()
-        capture.onInterruption = { [weak self] in
-            MainActor.assumeIsolated { self?.recordingInterrupted() }
+        capture.onDeviceChange = { [weak self] error in
+            MainActor.assumeIsolated { self?.microphoneChanged(error) }
         }
         do {
-            try capture.start(device: device, writingTo: url, settings: EngineCapture.meetingSettings)
+            try capture.start(
+                device: AudioInputDevices.preferredDeviceID(),
+                writingTo: url,
+                settings: EngineCapture.meetingSettings,
+                survivingDeviceChanges: true
+            )
         } catch {
+            capture.stop()
             try? FileManager.default.removeItem(at: url)
             return nil
         }
         return capture
+    }
+
+    /// The audio setup changed under the recording and the capture started again, or could not yet.
+    private func microphoneChanged(_ error: Error?) {
+        guard case .recording = phase else { return }
+        setProblem(.microphoneLost, error != nil)
+        guard error == nil else { return }
+        let name = AudioInputDevices.activeDevice()?.name
+        if let name, name != microphoneName {
+            // Said once, so nobody wonders why the far end of the table got quiet.
+            notice = String(localized: "Das Mikrofon hat gewechselt. Die Aufnahme l\u{00E4}uft mit \u{201E}\(name)\u{201C} weiter.")
+        }
+        microphoneName = name ?? microphoneName
     }
 
     /// Starts recording the Mac's sound. Returns why it failed, nil when it runs.
@@ -227,15 +276,10 @@ final class MeetingController {
         }
     }
 
-    private static let outputLostNotice = String(localized: "Das Ausgabeger\u{00E4}t ist weg, das System-Audio l\u{00E4}sst sich gerade nicht aufnehmen. Diktat versucht es weiter, das Mikrofon l\u{00E4}uft.")
-
     /// Headphones unplugged or Bluetooth gone: the capture moves to the current output by itself.
     private func outputChanged(_ error: Error?) {
-        if error != nil {
-            notice = Self.outputLostNotice
-        } else if notice == Self.outputLostNotice {
-            notice = nil
-        }
+        guard case .recording = phase else { return }
+        setProblem(.systemAudioLost, error != nil)
     }
 
     /// Stops the system sound. Without the permission macOS delivers only silence; then the
@@ -260,6 +304,9 @@ final class MeetingController {
         if #available(macOS 14.2, *) { (systemCapture as? SystemAudioCapture)?.setPaused(true) }
         pausedAt = Date()
         audioLevel = 0
+        // A paused microphone is silent on purpose.
+        silence.reset()
+        setProblem(.microphoneSilent, false)
     }
 
     func resume() {
@@ -327,6 +374,10 @@ final class MeetingController {
     private func endRecording() {
         recorder = nil
         micCapture = nil
+        microphoneName = nil
+        activeProblems = []
+        problem = nil
+        silence.reset()
         pausedAt = nil
         if let liveNotes {
             liveNotesShutdown = Task { await liveNotes.stop() }
@@ -350,11 +401,9 @@ final class MeetingController {
             Task { @MainActor [weak self] in
                 guard let self, self.pausedAt == nil else { return }
                 if let capture = self.micCapture {
-                    guard capture.isRunning else {
-                        self.recordingInterrupted()
-                        return
-                    }
+                    // A stopped engine is the capture's own business: it starts again by itself.
                     self.audioLevel = capture.currentLevel
+                    self.setProblem(.microphoneSilent, self.silence.isSilentTooLong(powerDB: capture.currentPowerDB))
                     return
                 }
                 guard let recorder = self.recorder else {
@@ -372,6 +421,7 @@ final class MeetingController {
                 recorder.updateMeters()
                 let power = recorder.averagePower(forChannel: 0)
                 self.audioLevel = max(0, min(1, (power + 50) / 50))
+                self.setProblem(.microphoneSilent, self.silence.isSilentTooLong(powerDB: power))
             }
         }
     }
@@ -576,7 +626,18 @@ final class MeetingController {
             do {
                 try await model.load()
                 let backend = MeetingSummarizer.Backend(characterLimit: Self.localModelCharacterLimit) { instruction, text in
-                    try await model.complete(instruction: instruction, text: text, maxTokens: 1_500)
+                    // An answer cut at the limit would be stored as if complete, and the to-dos
+                    // come last. More room once; cut again (a model repeating itself), it fails
+                    // and the next model is tried.
+                    do {
+                        return try await model.complete(
+                            instruction: instruction, text: text, maxTokens: Self.summaryTokens, failsWhenCutOff: true
+                        )
+                    } catch LocalLanguageModel.Failure.cutOff {
+                        return try await model.complete(
+                            instruction: instruction, text: text, maxTokens: Self.summaryTokens * 3, failsWhenCutOff: true
+                        )
+                    }
                 }
                 record.summary = try await MeetingSummarizer.summarize(transcript, engine: .automatic, backend: backend)
                 record.summaryNote = nil
@@ -638,6 +699,9 @@ final class MeetingController {
         NSFullUserName().split(separator: " ").first.map(String.init).flatMap { $0.isEmpty ? nil : $0 }
     }
 
+    /// Tokens a local model may write per answer: a summary with a long list of to-dos fits
+    /// comfortably; an answer that still reaches it gets three times as many once.
+    static let summaryTokens = 1_500
     /// Characters per request for a local model: about 11,000 tokens of German, which keeps
     /// the memory for the context small while a two-hour meeting needs only a few parts.
     static let localModelCharacterLimit = 40_000

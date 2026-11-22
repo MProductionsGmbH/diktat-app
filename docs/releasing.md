@@ -1,22 +1,59 @@
 # Releasing a new version
 
-A release is a tag. GitHub builds the app, packs it and publishes it; people who already have
-Diktat get it through the update check in the app once the update feed is switched on.
+A release is built on the maintainer's Mac and uploaded to GitHub. GitHub stores the result (the
+tag, the release and its files) and builds nothing: its Mac runners were rarely free, and a release
+waited for hours. People who already have Diktat get the new version through the update check in
+the app.
 
 ## Every release
 
-A release happens by itself once the version is raised.
-
-1. In `DiktatMac/project.yml` raise `MARKETING_VERSION` (for example `0.1.3`) and
+1. In `DiktatMac/project.yml` raise `MARKETING_VERSION` (for example `0.1.15`) and
    `CURRENT_PROJECT_VERSION` (a whole number that grows with every release).
 2. Commit and push to `main`.
-3. The **Release** workflow notices that there is no release for this version yet. It builds the
-   app, creates the tag (`v0.1.3`) and publishes `Diktat.dmg`, `Diktat.zip`, `SHA256SUMS.txt` and,
-   when the update key is stored, `appcast.xml`.
+3. Run `scripts/release.sh`.
 
-A push that does not change the version starts nothing: the quick first step sees that the release
-exists and stops. If a build fails or is cancelled, re-run it in the Actions tab; it builds the same
-version again. Pushing a tag such as `v0.1.3` by hand works as well.
+The script stops at the first thing that is not right. In this order it:
+
+- checks that `main` is clean and equal to GitHub's, that the version has no release yet and that
+  the build number is greater than the one of the newest release (the update check compares the
+  build number; one that did not grow is never offered),
+- checks that the Developer ID certificate and the notarization credentials are there,
+- runs the tests,
+- builds the universal app and signs it with the hardened runtime (`build.sh --release`),
+- checks that the update key in the keychain is the one `SPARKLE_PUBLIC_ED_KEY` names,
+- sends the app to Apple, waits for the result and staples the ticket,
+- packs `Diktat.dmg` and `Diktat.zip`, signs the zip for the update check and writes `appcast.xml`,
+- creates the tag (`v0.1.15`) on the built commit and publishes the release with
+  `Diktat.dmg`, `Diktat.zip`, `SHA256SUMS.txt` and `appcast.xml`.
+
+`scripts/release.sh --check` runs only the checks. `scripts/release.sh --no-publish` does everything
+but the upload and leaves the files in `dist/`.
+
+### Once per Mac
+
+| What | How |
+|---|---|
+| Certificate "Developer ID Application" | In the login keychain, with its private key. Xcode > Settings > Accounts > Manage Certificates creates it, or import the `.p12`. |
+| Notarization credentials | `xcrun notarytool store-credentials diktat-notary --apple-id <Apple ID> --team-id <team id>`. It asks for an app-specific password made at appleid.apple.com (Sign-In and Security) and keeps it in the keychain. |
+| Update key | Sparkle's private key in the login keychain (made by `generate_keys`, or imported with `generate_keys -f <file>`). |
+| `gh` | Signed in (`gh auth login`) with write access to the repository. |
+| XcodeGen | `brew install xcodegen` |
+
+The first time, macOS asks whether `codesign` and Sparkle's tools may use the keys in the keychain.
+Choose "Always Allow".
+
+If the keychain does not accept the password in that dialog (its password can differ from the
+login password after a reset), put the update key into a file instead:
+`generate_keys -x ~/.config/diktat/sparkle-update-key`, then `chmod 600` the file. The script uses
+that file when it exists and first checks that it belongs to `SPARKLE_PUBLIC_ED_KEY`. Anyone who
+can read the file can sign updates for every installed app, so it stays on this Mac, out of
+backups to shared places, and never in the repository.
+
+### Fallback: building on GitHub
+
+The **Release** workflow still exists for a day the Mac is not at hand. It no longer starts by
+itself: start it in the Actions tab (Release > Run workflow). It builds the version in
+`project.yml` if there is no release for it yet, and needs the repository secrets named below.
 
 ## Updates inside the app (Sparkle)
 
@@ -25,9 +62,9 @@ Updates are signed, so nobody can slip in a fake one.
 
 - **Public key:** `SPARKLE_PUBLIC_ED_KEY` in `project.yml`. It is already set.
 - **Private key:** made once with Sparkle's `generate_keys`. It never goes into the repository.
-  Store it as the repository secret **`SPARKLE_PRIVATE_KEY`** (Settings > Secrets and variables >
-  Actions) and keep a second copy in a password manager. Lose it, and installed apps can no longer
-  be updated; they would need a fresh download.
+  It lives in the login keychain of the Mac that releases; keep a second copy in a password
+  manager. Lose it, and installed apps can no longer be updated; they would need a fresh download.
+  The fallback workflow reads it from the repository secret **`SPARKLE_PRIVATE_KEY`**.
 - **Feed:** every release carries `appcast.xml`, and `SPARKLE_FEED_URL` in `project.yml` points at
   the one of the newest release. Installed apps look there; a newer version is offered in the app
   (Settings > Nach Updates suchen, and automatically in the background). The first version with the
@@ -37,11 +74,17 @@ Updates are signed, so nobody can slip in a fake one.
 
 ## Signing and notarization (no warning when opening)
 
-Without an Apple Developer ID the app is signed ad hoc. When someone opens the downloaded app,
-macOS says it cannot check it for malicious software, and after every update it asks for
-Accessibility again. A Developer ID and notarization remove both. They need a paid
-**Apple Developer Program** membership; the Release workflow does the rest once these
-repository secrets are stored (Settings > Secrets and variables > Actions):
+The app is signed with an Apple Developer ID and notarized by Apple, so macOS opens the download
+without a warning and keeps the Accessibility permission across updates. `scripts/release.sh`
+refuses to publish anything else.
+
+The first submissions of a new developer account can wait in Apple's queue for hours. Run
+`xcrun notarytool history --keychain-profile diktat-notary` to see the state of a submission;
+`xcrun notarytool log <id> --keychain-profile diktat-notary` names the files Apple objects to.
+
+### Secrets of the fallback workflow
+
+Only the workflow on GitHub needs these (Settings > Secrets and variables > Actions):
 
 | Secret | What it is |
 |---|---|
@@ -50,16 +93,4 @@ repository secrets are stored (Settings > Secrets and variables > Actions):
 | `APPLE_ID` | The Apple ID of the developer account. |
 | `APPLE_TEAM_ID` | The ten-character team id, shown in the developer account under Membership. |
 | `APPLE_APP_PASSWORD` | An app-specific password made at appleid.apple.com (Sign-In and Security). |
-
-With the secrets the workflow signs the app with the hardened runtime (`build.sh` does it when
-`DIKTAT_SIGN_IDENTITY` is set), sends it to Apple, waits for the result and staples the ticket
-to the app before it makes the DMG. Without them it still publishes, signed ad hoc.
-
-The first submissions of a new developer account can wait in Apple's queue for hours; the release job allows four hours for that. Run `xcrun notarytool history` to see the state of a submission, and `xcrun notarytool log <id>` names the files Apple objects to.
-
-## Until then: opening the app
-
-Tell people to open **System Settings > Privacy & Security**, scroll to the message about
-Diktat and press **Open Anyway** (in German: Systemeinstellungen > Datenschutz & Sicherheit >
-Trotzdem öffnen). Or install from the Terminal, which skips the check; the command is in the
-README.
+| `SPARKLE_PRIVATE_KEY` | The private update key. |

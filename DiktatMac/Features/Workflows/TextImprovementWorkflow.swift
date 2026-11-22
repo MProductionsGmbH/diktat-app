@@ -12,6 +12,7 @@ final class TextImprovementWorkflow: Workflow {
     var onOutput: WorkflowOutputHandler?
     var onPhaseChange: WorkflowPhaseChangeHandler?
     private(set) var transcript: String?
+    private(set) var rewriteFailure: String?
 
     private let recorder = AudioRecorder()
     private let settings: TextImprovementSettings
@@ -128,16 +129,32 @@ final class TextImprovementWorkflow: Workflow {
                 phase = .running(String(localized: "Text wird verbessert ..."))
 
                 let promptLanguage = PromptLanguage.resolve(setting: language, text: processedRawText)
-                let improved = try await TextRewriter.rewrite(
-                    processedRawText,
-                    instruction: ModePrompts.withFieldContext(ModePrompts.textImprovement(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),
-                    engine: rewriteEngine,
-                    language: promptLanguage
-                )
+                let improved: String
+                do {
+                    improved = try await TextRewriter.rewrite(
+                        processedRawText,
+                        instruction: ModePrompts.withFieldContext(ModePrompts.textImprovement(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),
+                        engine: rewriteEngine,
+                        language: promptLanguage
+                    )
+                    try Task.checkCancellation()
+                } catch is CancellationError {
+                    throw CancellationError()
+                } catch {
+                    try Task.checkCancellation()
+                    // What was said is there; only the AI step failed. Hand it over instead of
+                    // losing the dictation.
+                    rewriteFailure = error.localizedDescription
+                    phase = .done(processedRawText)
+                    onOutput?(processedRawText)
+                    return
+                }
 
                 let cleanedImproved = TranscriptionQualityService.cleanedTranscript(improved)
                 phase = .done(cleanedImproved)
                 onOutput?(cleanedImproved)
+            } catch is CancellationError {
+                // Cancelled on purpose (Escape, a new dictation): not an error to show.
             } catch {
                 phase = .error(error.localizedDescription)
             }

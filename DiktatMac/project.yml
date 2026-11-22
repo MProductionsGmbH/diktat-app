@@ -15,10 +15,10 @@ settings:
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     MACOSX_DEPLOYMENT_TARGET: "14.0"
     ONLY_ACTIVE_ARCH: NO
-    # A raised version here, pushed to main, starts the release workflow (docs/releasing.md); a new
-    # build of the same version starts it too as long as that version has no release yet.
-    MARKETING_VERSION: "0.1.14"
-    CURRENT_PROJECT_VERSION: "15"
+    # Raise both for a release, push to main, then run scripts/release.sh (docs/releasing.md).
+    # The build number must grow every time: the update check compares it.
+    MARKETING_VERSION: "0.1.15"
+    CURRENT_PROJECT_VERSION: "16"
     # In-app updates (Sparkle) run when the feed and the key are set: the app reads the appcast of
     # the newest release (each release carries one, see docs/releasing.md) and checks its
     # signature against the public key. Forks use the appcast and key of their own releases.
@@ -119,6 +119,7 @@ targets:
       - path: ../DiktatShared/Transcription/HallucinationFilter.swift
       - path: ../DiktatShared/Transcription/SpokenEmailAddress.swift
       - path: Services/ShortcutModifiers.swift
+      - path: Services/KeyCombo.swift
       - path: ../DiktatShared/AI/InventedDeadlineFilter.swift
       - path: ../DiktatShared/AI/DecisionTodoFilter.swift
       - path: ../DiktatShared/AI/AIClient.swift
@@ -144,6 +145,8 @@ targets:
       - path: Features/MainWindow/HistoryOverview.swift
       - path: Features/Meeting/MeetingSource.swift
       - path: Features/Meeting/CallDetection.swift
+      - path: Services/TapBufferSelection.swift
+      - path: Features/Meeting/MeetingProblem.swift
       - path: Views/VoiceBarMotion.swift
       - path: ../DiktatShared/AI/ModePrompts.swift
       - path: ../DiktatShared/AI/PromptLanguage.swift

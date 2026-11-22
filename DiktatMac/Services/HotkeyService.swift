@@ -83,16 +83,19 @@ final class HotkeyService {
         // popover makes Diktat frontmost (Drücken mode) through the local one.
         keyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
             Task { @MainActor in
-                if event.keyCode == 53 { // Escape
+                // A held Escape repeats; the repeat would cancel the dictation the first press ended.
+                if event.keyCode == 53, !event.isARepeat { // Escape
                     self?.handleEscape()
                 }
             }
         }
         localKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             guard event.keyCode == 53 else { return event }
+            let isRepeat = event.isARepeat
             let handled: Bool = MainActor.assumeIsolated {
                 guard let self, self.isWorkflowRunning?() == true else { return false }
-                self.handleEscape()
+                // A held Escape repeats; the repeat is swallowed but stops nothing more.
+                if !isRepeat { self.handleEscape() }
                 return true
             }
             return handled ? nil : event

@@ -241,8 +241,17 @@ final class SystemAudioCapture {
 
     private func deliver(_ input: UnsafePointer<AudioBufferList>, format: AVAudioFormat) {
         lastDelivery = Date()
-        guard !isPaused,
-              let buffer = AVAudioPCMBuffer(pcmFormat: format, bufferListNoCopy: input, deallocator: nil),
+        guard !isPaused else { return }
+        // An output device with an input of its own (a headset, "Microsoft Teams Audio") puts
+        // that input in front of the tap. Only the tap's buffers are the Mac's sound.
+        let delivered = UnsafeMutableAudioBufferListPointer(UnsafeMutablePointer(mutating: input))
+        guard let range = TapBufferSelection.range(
+            bufferCount: delivered.count, isInterleaved: format.isInterleaved, channelCount: Int(format.channelCount)
+        ) else { return }
+        let tapBuffers = AudioBufferList.allocate(maximumBuffers: range.count)
+        defer { free(tapBuffers.unsafeMutablePointer) }
+        for (offset, index) in range.enumerated() { tapBuffers[offset] = delivered[index] }
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, bufferListNoCopy: tapBuffers.unsafePointer, deallocator: nil),
               buffer.frameLength > 0 else { return }
         if let samples = buffer.floatChannelData?[0] {
             let count = Int(buffer.frameLength) * (format.isInterleaved ? Int(format.channelCount) : 1)

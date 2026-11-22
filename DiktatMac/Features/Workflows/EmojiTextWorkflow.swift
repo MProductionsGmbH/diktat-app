@@ -12,6 +12,7 @@ final class EmojiTextWorkflow: Workflow {
     var onOutput: WorkflowOutputHandler?
     var onPhaseChange: WorkflowPhaseChangeHandler?
     private(set) var transcript: String?
+    private(set) var rewriteFailure: String?
 
     private let recorder = AudioRecorder()
     private let settings: EmojiTextSettings
@@ -128,12 +129,26 @@ final class EmojiTextWorkflow: Workflow {
                 phase = .running(String(localized: "Emojis werden eingef\u{00FC}gt ..."))
 
                 let promptLanguage = PromptLanguage.resolve(setting: language, text: processedRawText)
-                let result = try await TextRewriter.rewrite(
-                    processedRawText,
-                    instruction: ModePrompts.withFieldContext(ModePrompts.emoji(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),
-                    engine: rewriteEngine,
-                    language: promptLanguage
-                )
+                let result: String
+                do {
+                    result = try await TextRewriter.rewrite(
+                        processedRawText,
+                        instruction: ModePrompts.withFieldContext(ModePrompts.emoji(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),
+                        engine: rewriteEngine,
+                        language: promptLanguage
+                    )
+                    try Task.checkCancellation()
+                } catch is CancellationError {
+                    throw CancellationError()
+                } catch {
+                    try Task.checkCancellation()
+                    // What was said is there; only the AI step failed. Hand it over instead of
+                    // losing the dictation.
+                    rewriteFailure = error.localizedDescription
+                    phase = .done(processedRawText)
+                    onOutput?(processedRawText)
+                    return
+                }
                 let cleanedResult = TranscriptionQualityService.cleanedTranscript(result)
                 guard cleanedResult != ModePrompts.nothingRecognizedMarker else {
                     phase = .error(String(localized: "Keine Aufnahme erkannt."))
@@ -141,6 +156,8 @@ final class EmojiTextWorkflow: Workflow {
                 }
                 phase = .done(cleanedResult)
                 onOutput?(cleanedResult)
+            } catch is CancellationError {
+                // Cancelled on purpose (Escape, a new dictation): not an error to show.
             } catch {
                 phase = .error(error.localizedDescription)
             }

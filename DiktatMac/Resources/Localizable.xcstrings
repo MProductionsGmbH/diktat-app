@@ -562,6 +562,17 @@
         }
       }
     },
+    "Alle Meetings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All meetings"
+          }
+        }
+      }
+    },
     "Alle sind einverstanden, starten": {
       "extractionState": "manual",
       "localizations": {
@@ -1134,6 +1145,17 @@
         }
       }
     },
+    "Ausgeschaltet fehlt im Transkript, was du selbst sagst. Gedacht für Webinare und Videos.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Switched off, the transcript misses what you say yourself. Meant for webinars and videos."
+          }
+        }
+      }
+    },
     "Ausschneiden": {
       "extractionState": "manual",
       "localizations": {
@@ -1299,6 +1321,17 @@
         }
       }
     },
+    "Belegt, anderes wählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taken, pick another"
+          }
+        }
+      }
+    },
     "Berechtigungen": {
       "extractionState": "manual",
       "localizations": {
@@ -1453,13 +1486,13 @@
         }
       }
     },
-    "Das Ausgabegerät ist weg, das System-Audio lässt sich gerade nicht aufnehmen. Diktat versucht es weiter, das Mikrofon läuft.": {
+    "Das Ausgabegerät ist weg. Diktat versucht es weiter. Bis dahin fehlen im Transkript die anderen.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The output device is gone, so the system audio cannot be recorded right now. Diktat keeps trying, the microphone is running."
+            "value": "The output device is gone. Diktat keeps trying. Until then the transcript misses the others."
           }
         }
       }
@@ -1497,6 +1530,39 @@
         }
       }
     },
+    "Das Mikrofon hat gewechselt. Die Aufnahme läuft mit „%@“ weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The microphone changed. The recording goes on with “%@”."
+          }
+        }
+      }
+    },
+    "Das Mikrofon ist nicht erreichbar": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The microphone cannot be reached"
+          }
+        }
+      }
+    },
+    "Das Mikrofon liefert keinen Ton": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The microphone delivers no sound"
+          }
+        }
+      }
+    },
     "Das Mikrofon liefert nur Stille. Ist das MacBook zugeklappt? Dann nimmt das eingebaute Mikrofon nichts auf: Wähle unter Mikrofon ein anderes oder klappe den Deckel auf.": {
       "extractionState": "manual",
       "localizations": {
@@ -1504,6 +1570,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "The microphone only delivers silence. Is the MacBook closed? Then the built-in microphone records nothing: choose another one under Microphone or open the lid."
+          }
+        }
+      }
+    },
+    "Das System-Audio enthält nur die anderen. Dein Mikrofon bringt dazu, was du selbst sagst.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The system audio holds only the others. Your microphone adds what you say yourself."
+          }
+        }
+      }
+    },
+    "Das System-Audio ist nicht erreichbar": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The system audio cannot be reached"
           }
         }
       }
@@ -1691,6 +1779,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The install location could not be determined reliably."
+          }
+        }
+      }
+    },
+    "Der KI-Schritt ist fehlgeschlagen (%@). Dein wortgenauer Text liegt in der Zwischenablage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The AI step failed (%@). Your word-for-word text is on the clipboard."
           }
         }
       }
@@ -1981,6 +2080,17 @@
         }
       }
     },
+    "Die anderen kommen über das System-Audio (was dein Mac abspielt, etwa aus Teams, Zoom oder Meet), du über dein Mikrofon. Im Transkript bist du „Ich“. Mit Kopfhörern wird es am saubersten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The others come through the system audio (what your Mac plays, for example from Teams, Zoom or Meet), you through your microphone. In the transcript you are “Me”. With headphones it comes out cleanest."
+          }
+        }
+      }
+    },
     "Die ersten Notizen kommen nach etwa zweieinhalb Minuten.": {
       "extractionState": "manual",
       "localizations": {
@@ -2212,6 +2322,17 @@
         }
       }
     },
+    "Diktat findet gerade kein Mikrofon und versucht es weiter. Bis dahin fehlt im Transkript, was gesagt wird. Ist das Mikrofon angeschlossen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat cannot find a microphone right now and keeps trying. Until then the transcript misses what is said. Is the microphone connected?"
+          }
+        }
+      }
+    },
     "Diktat hat kein Konto und kein Backend. Audio, Text und Verlauf bleiben auf diesem Mac. Das Internet erreichen nur der Download der Sprachmodelle (Hugging Face), der Update-Check (GitHub, abschaltbar) und, wenn du einen eigenen Anbieter einträgst, der erkannte Text.": {
       "extractionState": "manual",
       "localizations": {
@@ -2355,17 +2476,6 @@
         }
       }
     },
-    "Diktat nimmt das Gespräch im Raum über das Mikrofon auf, erkennt, wer spricht, und schreibt auf Wunsch eine Zusammenfassung mit To-dos. Alles läuft auf diesem Mac, die Aufnahme wird nach der Auswertung gelöscht.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diktat records the conversation in the room through the microphone, recognizes who is speaking and, if you like, writes a summary with to-dos. Everything runs on this Mac, the recording is deleted after the evaluation."
-          }
-        }
-      }
-    },
     "Diktat nimmt ein Meeting auf": {
       "extractionState": "manual",
       "localizations": {
@@ -2373,6 +2483,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diktat is recording a meeting"
+          }
+        }
+      }
+    },
+    "Diktat nimmt ein Meeting auf, im Raum oder online, erkennt, wer spricht, und schreibt auf Wunsch eine Zusammenfassung mit To-dos. Alles läuft auf diesem Mac, die Aufnahme wird nach der Auswertung gelöscht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat records a meeting, in the room or online, tells who is speaking and, if you like, writes a summary with to-dos. Everything runs on this Mac, and the recording is deleted after the evaluation."
           }
         }
       }
@@ -4687,6 +4808,28 @@
         }
       }
     },
+    "Meeting: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting: %@"
+          }
+        }
+      }
+    },
+    "Meeting: %@. Klicken öffnet die Meeting-Seite.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting: %@. Click to open the meeting page."
+          }
+        }
+      }
+    },
     "Meeting: Aufnahme läuft": {
       "extractionState": "manual",
       "localizations": {
@@ -4742,6 +4885,17 @@
         }
       }
     },
+    "Mein Mikrofon mit aufnehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Record my microphone too"
+          }
+        }
+      }
+    },
     "Mikrofon": {
       "extractionState": "manual",
       "localizations": {
@@ -4753,13 +4907,13 @@
         }
       }
     },
-    "Mikrofon + System-Audio": {
+    "Mikrofon des Computers": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Microphone + system audio"
+            "value": "The computer's microphone"
           }
         }
       }
@@ -4771,6 +4925,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allow microphone"
+          }
+        }
+      }
+    },
+    "Mikrofon prüfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check microphone"
           }
         }
       }
@@ -5259,57 +5424,24 @@
         }
       }
     },
-    "Nimmt auch das System-Audio auf, zum Beispiel aus Teams, Zoom oder Meet. Beim ersten Mal fragt macOS nach der Freigabe für Systemaudio.": {
+    "Nimmt das Mikrofon des Computers auf, gedacht für Meetings im Raum.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Also records the system audio, for example from Teams, Zoom or Meet. The first time, macOS asks for the permission for system audio."
+            "value": "Records the computer's microphone, meant for meetings in the room."
           }
         }
       }
     },
-    "Nimmt dein Mikrofon (Ich) und das System-Audio (die anderen) auf, etwa aus Teams, Zoom oder Meet. Mit Kopfhörern wird das Transkript am saubersten.": {
+    "Nimmt nur das System-Audio auf, also was dein Mac abspielt. Was du selbst sagst, fehlt im Transkript. Gedacht für Webinare und Videos.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Records your microphone (Me) and the system audio (the others), for example from Teams, Zoom or Meet. With headphones the transcript comes out cleanest."
-          }
-        }
-      }
-    },
-    "Nimmt dein Mikrofon (Ich) und das System-Audio (die anderen) auf. Mit Kopfhörern wird das Transkript am saubersten.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Records your microphone (Me) and the system audio (the others). With headphones the transcript is cleanest."
-          }
-        }
-      }
-    },
-    "Nimmt nur das Mikrofon auf, gedacht für Meetings im Raum.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Records the microphone only, meant for meetings in the room."
-          }
-        }
-      }
-    },
-    "Nimmt nur das System-Audio auf, zum Beispiel für ein Webinar oder ein Video. Dein Mikrofon bleibt aus, alle Stimmen sind Personen.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Records only the system audio, for example for a webinar or a video. Your microphone stays off, and every voice is a person."
+            "value": "Records only the system audio, that is what your Mac plays. What you say yourself is missing from the transcript. Meant for webinars and videos."
           }
         }
       }
@@ -5523,17 +5655,6 @@
         }
       }
     },
-    "Ohne Mikrofon": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No microphone"
-          }
-        }
-      }
-    },
     "Ohne Punkt am Ende, mit KI-Schreibstil ungezwungen formuliert": {
       "extractionState": "manual",
       "localizations": {
@@ -5552,6 +5673,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ollama or LM Studio"
+          }
+        }
+      }
+    },
+    "Online ohne Mikrofon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online without microphone"
           }
         }
       }
@@ -5761,6 +5893,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Position"
+          }
+        }
+      }
+    },
+    "Problem mit der Aufnahme": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problem with the recording"
           }
         }
       }
@@ -6238,6 +6381,17 @@
         }
       }
     },
+    "System-Audio + Mikrofon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System audio + microphone"
+          }
+        }
+      }
+    },
     "System-Audio wird transkribiert ...": {
       "extractionState": "manual",
       "localizations": {
@@ -6432,6 +6586,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tone in"
+          }
+        }
+      }
+    },
+    "Ton prüfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check sound"
           }
         }
       }
@@ -6696,6 +6861,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lots"
+          }
+        }
+      }
+    },
+    "Vom Mikrofon kommt nur Stille. Bis es wieder Ton liefert, fehlt im Transkript, was gesagt wird. Ist es stumm geschaltet oder das MacBook zugeklappt?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The microphone delivers only silence. Until it delivers sound again, the transcript misses what is said. Is it muted, or is the MacBook closed?"
           }
         }
       }

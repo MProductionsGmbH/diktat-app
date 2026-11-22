@@ -138,6 +138,8 @@ final class TranscriptionWorkflow: Workflow {
                 )
                 phase = .done(processed)
                 onOutput?(processed)
+            } catch is CancellationError {
+                // Cancelled on purpose (Escape, a new dictation): not an error to show.
             } catch {
                 tapTalkLogger.error(
                     "TapTalk failed after \(elapsedMilliseconds(since: stopTime)) ms: \(error.localizedDescription, privacy: .public)"

@@ -74,4 +74,27 @@ final class EnglishFrameTests: XCTestCase {
         XCTAssertTrue(style.hasPrefix("Rewrite this transcript"))
         XCTAssertTrue(medium.hasPrefix("Clean up this transcript"))
     }
+
+    // MARK: "um" is a German word
+
+    /// Short German sentences with an English word are often taken for Portuguese or
+    /// Icelandic. That used to count as English, where "um" is a hesitation sound.
+    func testGermanUmStaysInMixedSentences() {
+        let processor = TranscriptPostProcessor(correctCustomTerms: false, removeFillerWords: true)
+        for text in ["Zoom Call um 9", "Call um 3.", "Lunch um 12?", "Okay, um 5.", "Team Call um 10, danach Lunch."] {
+            XCTAssertEqual(processor.process(text), text)
+        }
+    }
+
+    func testFillerLanguageNeedsClearEnglish() {
+        XCTAssertEqual(PromptLanguage.fillerLanguageCode(for: "Well, um, that is a good question and I will look into it."), "en")
+        XCTAssertEqual(PromptLanguage.fillerLanguageCode(for: "Zoom Call um 9"), "de")
+        XCTAssertEqual(PromptLanguage.fillerLanguageCode(for: "Eu tenho um carro"), "de")
+        XCTAssertEqual(PromptLanguage.fillerLanguageCode(for: "Wir treffen uns um drei."), "de")
+    }
+
+    func testOtherLanguagesKeepTheirUm() {
+        let processor = TranscriptPostProcessor(correctCustomTerms: false, removeFillerWords: true)
+        XCTAssertEqual(processor.process("Eu tenho um carro."), "Eu tenho um carro.")
+    }
 }

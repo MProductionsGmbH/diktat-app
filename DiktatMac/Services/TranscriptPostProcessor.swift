@@ -35,7 +35,7 @@ struct TranscriptPostProcessor {
     func process(_ text: String) -> String {
         var result = text
         if removeFillerWords {
-            result = Self.removeFillerWords(from: result, language: language == "auto" ? PromptLanguage.detect(from: result).code : language)
+            result = Self.removeFillerWords(from: result, language: language == "auto" ? PromptLanguage.fillerLanguageCode(for: result) : language)
         }
         // Fixed rules first, so the fuzzy matcher sees the intended spelling.
         result = Self.applyReplacements(replacements, to: result)

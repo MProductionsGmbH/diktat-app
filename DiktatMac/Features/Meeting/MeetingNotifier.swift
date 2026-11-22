@@ -44,6 +44,24 @@ enum MeetingNotifier {
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: "call-\(app)", content: content, trigger: nil))
     }
 
+    private static let problemIdentifier = "meeting-problem"
+
+    /// The running recording has a problem: said with a sound, since the meeting page is rarely
+    /// on screen during a meeting. One message at a time; a new problem replaces the old one.
+    static func problem(_ problem: MeetingProblem) {
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "Meeting: \(problem.title)")
+        content.body = problem.detail
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: problemIdentifier, content: content, trigger: nil))
+    }
+
+    /// The problem is over; its message has nothing to say any more.
+    static func problemSolved() {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [problemIdentifier])
+    }
+
     static func failed(_ message: String) {
         post(title: String(localized: "Meeting-Auswertung fehlgeschlagen"), body: message)
     }

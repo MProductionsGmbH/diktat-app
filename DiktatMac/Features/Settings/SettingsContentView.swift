@@ -1135,6 +1135,14 @@ struct HotkeyRecorderButton: View {
     @State private var needsModifierHint = false
     /// fn cannot be part of a global shortcut; macOS does not report it to Carbon hotkeys.
     @State private var fnHint = false
+    /// The pressed shortcut belongs to macOS and every app, e.g. Command-V.
+    @State private var reservedHint = false
+    /// Ends a recording nobody finished: armed, it takes the next key combination pressed
+    /// anywhere, and all shortcuts of Diktat are off meanwhile.
+    @State private var timeout: Task<Void, Never>?
+
+    /// How long the recorder waits for a key combination.
+    static let recordingTimeout: Duration = .seconds(15)
 
     private var combo: KeyCombo? {
         appState.appSettings.customHotkey(for: type)
@@ -1180,10 +1188,16 @@ struct HotkeyRecorderButton: View {
             }
         }
         .onDisappear { stopRecording() }
+        // Switched to another app with the recorder armed: the next Command-V there must not
+        // become Diktat's shortcut.
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didResignActiveNotification)) { _ in
+            stopRecording()
+        }
     }
 
     private var buttonTitle: String {
         if isRecording {
+            if reservedHint { return String(localized: "Belegt, anderes w\u{00E4}hlen") }
             if fnHint { return String(localized: "fn geht nicht") }
             return needsModifierHint ? "+ \u{2303}\u{2325}\u{2318}" : String(localized: "Dr\u{00FC}cken ...")
         }
@@ -1207,7 +1221,14 @@ struct HotkeyRecorderButton: View {
         isRecording = true
         needsModifierHint = false
         fnHint = false
+        reservedHint = false
         appState.hotkeyService.setCustomHotkeysSuspended(true)
+        timeout?.cancel()
+        timeout = Task { @MainActor in
+            try? await Task.sleep(for: Self.recordingTimeout)
+            guard !Task.isCancelled else { return }
+            stopRecording()
+        }
 
         // A local monitor only sees keys while Diktat is the active app. The
         // settings live in a popover of an accessory app, so make sure it is key.
@@ -1235,8 +1256,12 @@ struct HotkeyRecorderButton: View {
         case .cancelled:
             stopRecording()
         case .needsModifier:
+            reservedHint = false
             needsModifierHint = true
             fnHint = event.modifierFlags.contains(.function)
+        case .reserved:
+            // Keeps listening: the user picks another one.
+            reservedHint = true
         }
     }
 
@@ -1249,9 +1274,15 @@ struct HotkeyRecorderButton: View {
         }
         monitor = nil
         globalMonitor = nil
+        timeout?.cancel()
+        timeout = nil
+        // Only a recording suspended the shortcuts; leaving the app must not switch them back
+        // on while another row is still recording.
+        guard isRecording else { return }
         isRecording = false
         needsModifierHint = false
         fnHint = false
+        reservedHint = false
         appState.hotkeyService.setCustomHotkeysSuspended(false)
     }
 }

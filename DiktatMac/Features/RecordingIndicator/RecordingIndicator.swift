@@ -311,6 +311,9 @@ struct RecordingPill: View {
             return String(localized: "Mikrofon: \(name)")
         case .copied:
             return String(localized: "Nicht eingef\u{00FC}gt, der Text liegt in der Zwischenablage")
+        case .meeting:
+            // What is wrong, above the pill, for as long as it is wrong.
+            return appState.meeting.problem?.title
         default:
             return nil
         }
@@ -327,7 +330,9 @@ struct RecordingPill: View {
                 .help("Klicken stoppt die Aufnahme")
         case .meeting:
             // Opens the meeting page instead of stopping: ending a meeting by a stray click would hurt.
-            Button(action: onOpenMeeting) { capsule(width: 118) { MeetingPillContent(meeting: appState.meeting) } }
+            Button(action: onOpenMeeting) {
+                capsule(width: appState.meeting.problem == nil ? 118 : 176) { MeetingPillContent(meeting: appState.meeting) }
+            }
                 .buttonStyle(.plain)
                 .help("Meeting l\u{00E4}uft. Klicken \u{00F6}ffnet die Meeting-Seite.")
         case .processing:
@@ -364,7 +369,11 @@ struct RecordingPill: View {
         case .processing: return String(localized: "Diktat schreibt")
         case .success: return String(localized: "Fertig")
         case .copied: return String(localized: "Nicht eingef\u{00FC}gt, der Text liegt in der Zwischenablage")
-        case .meeting: return String(localized: "Meeting wird aufgenommen. Klicken \u{00F6}ffnet die Meeting-Seite.")
+        case .meeting:
+            if let problem = appState.meeting.problem {
+                return String(localized: "Meeting: \(problem.title). Klicken \u{00F6}ffnet die Meeting-Seite.")
+            }
+            return String(localized: "Meeting wird aufgenommen. Klicken \u{00F6}ffnet die Meeting-Seite.")
         case .idle, .error: return ""
         }
     }
@@ -378,7 +387,23 @@ private struct MeetingPillContent: View {
 
     var body: some View {
         if case .recording(let startedAt) = meeting.phase {
-            if meeting.pausedAt != nil {
+            if let problem = meeting.problem {
+                // Nothing (or not everything) is recorded: that outranks the running time.
+                TimelineView(.periodic(from: startedAt, by: 0.6)) { context in
+                    let on = reduceMotion || Int(context.date.timeIntervalSince(startedAt) / 0.6) % 2 == 0
+                    HStack(spacing: 6) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.ui(11, .bold))
+                            .foregroundStyle(Color(nsColor: .systemYellow))
+                            .opacity(on ? 1 : 0.35)
+                        Text(problem.shortLabel)
+                            .font(.ui(11.5, .bold))
+                            .foregroundStyle(.white)
+                    }
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+                }
+            } else if meeting.pausedAt != nil {
                 HStack(spacing: 6) {
                     Image(systemName: "pause.fill")
                         .font(.ui(9, .bold))

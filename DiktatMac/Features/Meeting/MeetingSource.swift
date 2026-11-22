@@ -18,30 +18,40 @@ enum MeetingSource: String, CaseIterable, Identifiable {
     var usesMicrophone: Bool { self != .systemOnly }
     var usesSystemAudio: Bool { self != .room }
 
+    /// The two cards on the meeting page. An online meeting without the own microphone
+    /// (`systemOnly`) is the online card with its switch turned off.
+    static let cards: [MeetingSource] = [.room, .online]
+
+    /// The card this source belongs to.
+    var card: MeetingSource { self == .room ? .room : .online }
+
+    /// The source the online card stands for, with or without the own microphone.
+    static func online(withMicrophone: Bool) -> MeetingSource { withMicrophone ? .online : .systemOnly }
+
     var title: String {
         switch self {
         case .room: return String(localized: "Im Raum")
         case .online: return String(localized: "Online-Meeting")
-        case .systemOnly: return String(localized: "Nur System-Audio")
+        case .systemOnly: return String(localized: "Online ohne Mikrofon")
         }
     }
 
     var subtitle: String {
         switch self {
-        case .room: return String(localized: "Mikrofon")
-        case .online: return String(localized: "Mikrofon + System-Audio")
-        case .systemOnly: return String(localized: "Ohne Mikrofon")
+        case .room: return String(localized: "Mikrofon des Computers")
+        case .online: return String(localized: "System-Audio + Mikrofon")
+        case .systemOnly: return String(localized: "Nur System-Audio")
         }
     }
 
     var explanation: String {
         switch self {
         case .room:
-            return String(localized: "Nimmt nur das Mikrofon auf, gedacht f\u{00FC}r Meetings im Raum.")
+            return String(localized: "Nimmt das Mikrofon des Computers auf, gedacht f\u{00FC}r Meetings im Raum.")
         case .online:
-            return String(localized: "Nimmt dein Mikrofon (Ich) und das System-Audio (die anderen) auf, etwa aus Teams, Zoom oder Meet. Mit Kopfh\u{00F6}rern wird das Transkript am saubersten.")
+            return String(localized: "Die anderen kommen \u{00FC}ber das System-Audio (was dein Mac abspielt, etwa aus Teams, Zoom oder Meet), du \u{00FC}ber dein Mikrofon. Im Transkript bist du \u{201E}Ich\u{201C}. Mit Kopfh\u{00F6}rern wird es am saubersten.")
         case .systemOnly:
-            return String(localized: "Nimmt nur das System-Audio auf, zum Beispiel f\u{00FC}r ein Webinar oder ein Video. Dein Mikrofon bleibt aus, alle Stimmen sind Personen.")
+            return String(localized: "Nimmt nur das System-Audio auf, also was dein Mac abspielt. Was du selbst sagst, fehlt im Transkript. Gedacht f\u{00FC}r Webinare und Videos.")
         }
     }
 

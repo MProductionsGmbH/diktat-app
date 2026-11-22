@@ -20,6 +20,13 @@ final class MenuBarStatusController {
     private var currentStatus: MenuBarStatus = .idle
     /// The input level while recording, so the symbol follows the voice.
     var levelProvider: (() -> Float)?
+    /// What is wrong with the running meeting; the symbol then warns instead of just showing it.
+    var meetingProblem: MeetingProblem? {
+        didSet {
+            guard oldValue != meetingProblem else { return }
+            renderCurrentStatus()
+        }
+    }
     /// Small dot on the idle icon while a release note is unread.
     var showsNewBadge = false {
         didSet {
@@ -76,7 +83,10 @@ final class MenuBarStatusController {
 
     private func renderCurrentStatus() {
         guard let button else { return }
-        var image = MenuBarStatusIconRenderer.makeImage(for: currentStatus, frame: animationFrame, level: levelProvider?() ?? 0)
+        let warns = currentStatus == .meeting && meetingProblem != nil
+        var image = MenuBarStatusIconRenderer.makeImage(
+            for: currentStatus, frame: animationFrame, level: levelProvider?() ?? 0, meetingWarning: warns
+        )
         if showsNewBadge, case .idle = currentStatus {
             image = MenuBarStatusIconRenderer.withNewDot(image)
         }
@@ -85,7 +95,7 @@ final class MenuBarStatusController {
         // A running meeting turns the symbol red, so it stands out next to the microphone
         // indicator that other apps keep on as well.
         button.contentTintColor = currentStatus == .meeting ? .systemRed : nil
-        button.toolTip = tooltip(for: currentStatus)
+        button.toolTip = warns ? meetingProblem.map { String(localized: "Meeting: \($0.title)") } : tooltip(for: currentStatus)
     }
 
     private func tooltip(for status: MenuBarStatus) -> String {
@@ -131,7 +141,7 @@ private enum MenuBarStatusIconRenderer {
         }
     }
 
-    static func makeImage(for status: MenuBarStatus, frame: Int, level: Float) -> NSImage {
+    static func makeImage(for status: MenuBarStatus, frame: Int, level: Float, meetingWarning: Bool = false) -> NSImage {
         if case .idle = status, let baseImage = baseTemplateImage() {
             return baseImage
         }
@@ -164,7 +174,7 @@ private enum MenuBarStatusIconRenderer {
             case .error:
                 drawBadge(systemName: "exclamationmark", in: bounds, fillOpacity: 1.0)
             case .meeting:
-                drawBadge(systemName: "record.circle", in: bounds, fillOpacity: 1.0)
+                drawBadge(systemName: meetingWarning ? "exclamationmark.triangle.fill" : "record.circle", in: bounds, fillOpacity: 1.0)
             default:
                 break
             }

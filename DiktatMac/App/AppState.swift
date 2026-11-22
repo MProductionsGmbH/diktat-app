@@ -45,6 +45,8 @@ final class AppState {
     var onMenuBarStatusChange: ((MenuBarStatus) -> Void)?
     /// Tells the status item whether to show the "new" dot.
     var onWhatsNewChange: ((Bool) -> Void)?
+    /// A running meeting got a problem or lost it; the menu bar symbol shows it.
+    var onMeetingProblemChange: ((MeetingProblem?) -> Void)?
     private var whatsNewTask: Task<Void, Never>?
     private var activeLaunchSource: WorkflowLaunchSource = .manual
     private var activePasteTarget: PasteTarget?
@@ -183,6 +185,7 @@ final class AppState {
         UserDefaults.standard.string(forKey: "DiktatSnapshotDir") != nil
             || UserDefaults.standard.string(forKey: "DiktatMeetingCheck") != nil
             || UserDefaults.standard.string(forKey: "DiktatSystemSoundCheck") != nil
+            || UserDefaults.standard.string(forKey: "DiktatMicRestartCheck") != nil
         #else
         false
         #endif
@@ -200,6 +203,14 @@ final class AppState {
         self.history = TranscriptHistoryStore(retention: loadedAppSettings.historyRetention)
         if Self.isToolRun { return }
         meeting.onPhaseChange = { [unowned self] in self.publishMenuBarStatus() }
+        meeting.onProblemChange = { [unowned self] problem in
+            self.onMeetingProblemChange?(problem)
+            if let problem {
+                MeetingNotifier.problem(problem)
+            } else {
+                MeetingNotifier.problemSolved()
+            }
+        }
         meeting.onEvaluationEnd = { [unowned self] result in
             // With the menu open the result is on screen already.
             guard !self.isPopoverShown else { return }
@@ -365,7 +376,12 @@ final class AppState {
             return
         }
 
-        activeWorkflow?.stop()
+        // A dictation still running is given up: its text could only land with the target of
+        // the new one. (The shortcuts do not get here while one is being transcribed.)
+        if let previous = activeWorkflow {
+            activeWorkflow = nil
+            previous.reset()
+        }
         menuBarStatusResetTask?.cancel()
         workflowCleanupTask?.cancel()
         activeLaunchSource = source
@@ -494,8 +510,16 @@ final class AppState {
     /// Every way of ending a recording comes here (shortcut, Escape, pill, menu).
     func stopCurrentWorkflow() {
         guard let workflow = activeWorkflow else { return }
-        if workflow.isRecording { noteTargetField() }
-        workflow.stop()
+        if workflow.isRecording {
+            noteTargetField()
+            workflow.stop()
+        } else if case .running = workflow.phase {
+            // Stopping while it transcribes or rewrites is a cancel. The workflow alone would
+            // go idle but stay active, and the menu bar and the pill kept showing "schreibt".
+            resetCurrentWorkflow()
+        } else {
+            workflow.stop()
+        }
     }
 
     /// The text goes into the field that has the focus when the recording ends, so clicking
@@ -829,6 +853,19 @@ final class AppState {
         if let type = activeWorkflow?.type {
             history.add(text, workflow: type)
         }
+        if let failure = activeWorkflow?.rewriteFailure {
+            // The AI step failed and `text` is what was said. It goes to the clipboard and not
+            // unasked into the field: a rant meant for the WTF mode is not what belongs there.
+            copyToClipboard(text)
+            lastInsertion = nil
+            lastInsertionNotice = String(localized: "Der KI-Schritt ist fehlgeschlagen (\(failure)). Dein wortgenauer Text liegt in der Zwischenablage.")
+            menuBarStatus = .copied(activeWorkflow?.type)
+            if activeLaunchSource == .hotkeyBackground {
+                page = .main
+            }
+            scheduleWorkflowCleanup(for: activeWorkflow, after: 2.8)
+            return
+        }
         var output = text
         var transcript = activeWorkflow?.transcript
         if appSettings.fitToSurroundingText, let field = activeField {
@@ -908,8 +945,11 @@ final class AppState {
     }
 
     private func configureWorkflowHandlers<T: Workflow>(_ workflow: T) {
-        workflow.onOutput = { [weak self] text in
-            self?.handleWorkflowOutput(text)
+        workflow.onOutput = { [weak self, weak workflow] text in
+            // A dictation that was replaced or cancelled meanwhile must not be pasted with the
+            // state of the one running now.
+            guard let self, let workflow, workflow === self.activeWorkflow else { return }
+            self.handleWorkflowOutput(text)
         }
         workflow.onPhaseChange = { [weak self, weak workflow] phase in
             guard let self, let workflow else { return }
@@ -918,10 +958,12 @@ final class AppState {
     }
 
     private func handleWorkflowPhaseChange(_ phase: WorkflowPhase, workflow: any Workflow) {
+        // A late phase of a replaced or cancelled workflow belongs to nobody any more: its
+        // error must not end the dictation running now, nor unmute its recording.
+        guard workflow === activeWorkflow else { return }
         menuBarStatusResetTask?.cancel()
         // Sound comes back as soon as the recording ends, not after the transcription.
-        // A late phase of a replaced workflow must not unmute the next recording.
-        if !workflow.isRecording, workflow === activeWorkflow {
+        if !workflow.isRecording {
             audioMuter.restoreIfNeeded()
         }
 

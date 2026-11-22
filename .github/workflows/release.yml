@@ -1,21 +1,17 @@
 name: Release
 
-# A release happens by itself: raise MARKETING_VERSION and CURRENT_PROJECT_VERSION in
-# DiktatMac/project.yml and push to main. If there is no release for that version yet, this
-# builds the app, creates the tag vX.Y.Z and publishes the release. Pushing a tag by hand works too.
-# Re-running a failed run builds the same version again.
+# Releases are built on the maintainer's Mac with scripts/release.sh and only uploaded here
+# (docs/releasing.md): GitHub's Mac runners were rarely free, and a release waited for hours.
+#
+# This workflow is the fallback for a day that Mac is not at hand. It runs only when started by
+# hand (Actions > Release > Run workflow) and builds the version in DiktatMac/project.yml, if
+# there is no release for it yet.
 # The files have fixed names (Diktat.dmg, Diktat.zip), so the link
 # https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.dmg
 # always gives the newest version.
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - DiktatMac/project.yml
-    tags:
-      - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: write

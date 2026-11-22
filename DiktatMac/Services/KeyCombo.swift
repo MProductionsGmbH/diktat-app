@@ -40,6 +40,25 @@ struct KeyCombo: Codable, Hashable {
         case combo(KeyCombo)
         case cancelled
         case needsModifier
+        /// A shortcut every app relies on, e.g. Command-V. As a global shortcut of Diktat it
+        /// would stop working everywhere else.
+        case reserved
+    }
+
+    /// Command (with or without Shift) plus one of these keys: copy, paste, cut, undo, select
+    /// all, save, quit, close, hide, minimize, new, open, print, find, tab, space, and the
+    /// comma of "Settings".
+    private static let reservedCommandKeys: Set<Int> = [
+        kVK_ANSI_C, kVK_ANSI_V, kVK_ANSI_X, kVK_ANSI_Z, kVK_ANSI_A, kVK_ANSI_S, kVK_ANSI_Q, kVK_ANSI_W,
+        kVK_ANSI_H, kVK_ANSI_M, kVK_ANSI_N, kVK_ANSI_O, kVK_ANSI_P, kVK_ANSI_F, kVK_ANSI_T, kVK_Tab, kVK_Space,
+        kVK_ANSI_Comma,
+    ]
+
+    /// True for the shortcuts macOS and nearly every app use themselves.
+    var isReserved: Bool {
+        let flags = modifiers
+        guard flags == [.command] || flags == [.command, .shift] else { return false }
+        return Self.reservedCommandKeys.contains(Int(keyCode))
     }
 
     /// Builds a combo from a key-down event captured in the settings.
@@ -56,13 +75,12 @@ struct KeyCombo: Codable, Hashable {
             return .needsModifier
         }
 
-        return .combo(
-            KeyCombo(
-                keyCode: keyCode,
-                modifierFlags: modifiers.rawValue,
-                keyLabel: label(for: event)
-            )
+        let combo = KeyCombo(
+            keyCode: keyCode,
+            modifierFlags: modifiers.rawValue,
+            keyLabel: label(for: event)
         )
+        return combo.isReserved ? .reserved : .combo(combo)
     }
 
     private static func label(for event: NSEvent) -> String {

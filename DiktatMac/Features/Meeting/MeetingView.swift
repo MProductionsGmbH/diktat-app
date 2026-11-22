@@ -36,8 +36,12 @@ struct MeetingView: View {
         VStack(spacing: 0) {
             if !embedded {
                 PageHeader(title: "Meeting", onBack: {
-                    meeting.close()
-                    appState.page = .main
+                    // From a meeting back to the list of meetings, from the list back to the menu.
+                    if showsMeeting {
+                        meeting.close()
+                    } else {
+                        appState.page = .main
+                    }
                 })
 
                 Divider().opacity(0.16)
@@ -90,6 +94,14 @@ struct MeetingView: View {
         return false
     }
 
+    /// One meeting (or its failure) is open, so "back" leads to the list of meetings.
+    private var showsMeeting: Bool {
+        switch meeting.phase {
+        case .showing, .failed: return true
+        case .idle, .recording, .processing: return false
+        }
+    }
+
     // MARK: - Start
 
     private var start: some View {
@@ -98,7 +110,7 @@ struct MeetingView: View {
                 Label("Meeting aufnehmen", systemImage: "person.2.wave.2.fill")
                     .font(.ui(15, .semibold))
                     .foregroundStyle(DiktatTheme.accent)
-                Text("Diktat nimmt das Gespr\u{00E4}ch im Raum \u{00FC}ber das Mikrofon auf, erkennt, wer spricht, und schreibt auf Wunsch eine Zusammenfassung mit To-dos. Alles l\u{00E4}uft auf diesem Mac, die Aufnahme wird nach der Auswertung gel\u{00F6}scht.")
+                Text("Diktat nimmt ein Meeting auf, im Raum oder online, erkennt, wer spricht, und schreibt auf Wunsch eine Zusammenfassung mit To-dos. Alles l\u{00E4}uft auf diesem Mac, die Aufnahme wird nach der Auswertung gel\u{00F6}scht.")
                     .font(.ui(12.5))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -163,7 +175,14 @@ struct MeetingView: View {
                     title: blocker,
                     tint: DiktatTheme.danger,
                     actionTitle: ParakeetTranscriber.isSupported ? String(localized: "Einstellungen") : nil,
-                    action: ParakeetTranscriber.isSupported ? { appState.page = .settings } : nil
+                    action: ParakeetTranscriber.isSupported ? {
+                        // The window has its own pages; `page` is the popover's.
+                        if embedded {
+                            appState.mainWindowPage = .settings
+                        } else {
+                            appState.page = .settings
+                        }
+                    } : nil
                 )
             }
 
@@ -221,8 +240,8 @@ struct MeetingView: View {
     /// Asked in the call's chat before starting, so everyone can agree in writing.
     static let chatNote = String(localized: "Ich w\u{00FC}rde dieses Meeting gern mit Diktat aufnehmen und auf meinem Mac transkribieren und zusammenfassen lassen. Ton und Text bleiben auf meinem Mac, die Aufnahme wird nach der Auswertung gel\u{00F6}scht. Ist das f\u{00FC}r alle in Ordnung?")
 
-    /// Three sources side by side, then what the chosen one needs: the macOS permission, a test
-    /// of the sound and, for calls, the question for the chat.
+    /// Two sources side by side, then what the chosen one needs: for an online meeting the switch
+    /// for the own microphone, the macOS permission, a test of the sound and the question for the chat.
     private var sourcePicker: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 6) {
@@ -232,12 +251,29 @@ struct MeetingView: View {
             }
 
             HStack(spacing: 8) {
-                ForEach(MeetingSource.allCases) { option in
+                ForEach(MeetingSource.cards) { option in
                     sourceCard(option)
                 }
             }
 
             if source.usesSystemAudio {
+                Toggle(isOn: Binding(
+                    get: { source.usesMicrophone },
+                    set: { source = .online(withMicrophone: $0) }
+                )) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Mein Mikrofon mit aufnehmen")
+                            .font(.ui(12.5, .medium))
+                        Text(source.usesMicrophone
+                             ? "Das System-Audio enth\u{00E4}lt nur die anderen. Dein Mikrofon bringt dazu, was du selbst sagst."
+                             : "Ausgeschaltet fehlt im Transkript, was du selbst sagst. Gedacht f\u{00FC}r Webinare und Videos.")
+                            .font(.ui(11))
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .toggleStyle(.trailingSwitch)
+
                 permissionRow
                 soundTestRow
             }
@@ -258,10 +294,11 @@ struct MeetingView: View {
     }
 
     private func sourceCard(_ option: MeetingSource) -> some View {
-        let isSelected = source == option
+        let isSelected = source.card == option
         return Button {
             soundTest.stop()
-            source = option
+            // The online card keeps the choice of its microphone switch.
+            if source.card != option { source = option }
         } label: {
             VStack(spacing: 6) {
                 Image(systemName: option.icon)
@@ -270,7 +307,7 @@ struct MeetingView: View {
                 Text(option.title)
                     .font(.ui(12, .semibold))
                     .multilineTextAlignment(.center)
-                Text(option.subtitle)
+                Text(isSelected ? source.subtitle : option.subtitle)
                     .font(.ui(10.5))
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -289,7 +326,7 @@ struct MeetingView: View {
             )
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(option.title), \(option.subtitle)")
+        .accessibilityLabel("\(option.title), \(isSelected ? source.subtitle : option.subtitle)")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
@@ -421,6 +458,10 @@ struct MeetingView: View {
 
     private func recording(since startedAt: Date) -> some View {
         VStack(alignment: .leading, spacing: 14) {
+            if let problem = meeting.problem {
+                ProblemBanner(problem: problem)
+            }
+
             VStack(spacing: 14) {
                 HStack(spacing: 8) {
                     Circle()
@@ -445,9 +486,21 @@ struct MeetingView: View {
                 WaveformView(audioLevel: meeting.audioLevel, isRecording: true, accentColor: DiktatTheme.accent)
                     .frame(height: 36)
                     .frame(maxWidth: .infinity)
+
+                if let name = meeting.microphoneName {
+                    // Which microphone hears the room, so a wrong one is noticed at the start.
+                    Label(String(localized: "Mikrofon: \(name)"), systemImage: "mic.fill")
+                        .font(.ui(11))
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
             .padding(14)
             .glassPanel()
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(DiktatTheme.danger, lineWidth: meeting.problem == nil ? 0 : 2)
+            )
 
             if let live = meeting.liveNotes {
                 LiveNotesCard(live: live)
@@ -535,6 +588,17 @@ struct MeetingView: View {
 
     private func result(_ record: MeetingRecord) -> some View {
         VStack(alignment: .leading, spacing: 16) {
+            // The window has no back header; without this there is no way to the other meetings.
+            if embedded {
+                Button {
+                    meeting.close()
+                } label: {
+                    Label("Alle Meetings", systemImage: "chevron.left")
+                }
+                .buttonStyle(.glassAction)
+                .keyboardShortcut(.cancelAction)
+            }
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(record.title)
                     .font(.ui(15, .semibold))
@@ -725,6 +789,41 @@ struct MeetingView: View {
         return hours > 0
             ? String(format: "%d:%02d:%02d", hours, minutes, rest)
             : String(format: "%d:%02d", minutes, rest)
+    }
+}
+
+/// A problem with the running recording, as large as the page allows: whoever runs the meeting
+/// has to see it at a glance, because what is not recorded is lost.
+private struct ProblemBanner: View {
+    let problem: MeetingProblem
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var pulses = false
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.ui(22, .bold))
+                .opacity(pulses ? 0.45 : 1)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(problem.title)
+                    .font(.ui(15, .bold))
+                Text(problem.detail)
+                    .font(.ui(12.5))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
+        }
+        .foregroundStyle(.white)
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Color(nsColor: .systemRed)))
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 0.7).repeatForever(autoreverses: true)) { pulses = true }
+        }
     }
 }
 

@@ -73,8 +73,13 @@ struct MainWindowView: View {
                     SidebarItem(
                         page: page,
                         isSelected: appState.mainWindowPage == page,
-                        badge: page == .meetings && (appState.meeting.isRecording || appState.meeting.isProcessing)
+                        badge: page == .meetings && (appState.meeting.isRecording || appState.meeting.isProcessing),
+                        warning: page == .meetings && appState.meeting.problem != nil
                     ) {
+                        // "Meetings" again while one is open: back to the list.
+                        if page == .meetings, appState.mainWindowPage == .meetings {
+                            appState.meeting.close()
+                        }
                         appState.mainWindowPage = page
                     }
                 }
@@ -117,6 +122,8 @@ private struct SidebarItem: View {
     let page: MainWindowPage
     let isSelected: Bool
     let badge: Bool
+    /// The running meeting has a problem: outranks the plain recording dot.
+    var warning = false
     let action: () -> Void
 
     @State private var isHovered = false
@@ -130,7 +137,12 @@ private struct SidebarItem: View {
                 Text(page.title)
                     .font(.ui(13.5, isSelected ? .semibold : .regular))
                 Spacer(minLength: 0)
-                if badge {
+                if warning {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.ui(12, .bold))
+                        .foregroundStyle(Color(nsColor: .systemRed))
+                        .accessibilityLabel("Problem mit der Aufnahme")
+                } else if badge {
                     Circle().fill(DiktatTheme.danger).frame(width: 8, height: 8)
                 }
             }

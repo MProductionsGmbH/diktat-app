@@ -12,6 +12,7 @@ final class DampfAblassenWorkflow: Workflow {
     var onOutput: WorkflowOutputHandler?
     var onPhaseChange: WorkflowPhaseChangeHandler?
     private(set) var transcript: String?
+    private(set) var rewriteFailure: String?
 
     private let recorder = AudioRecorder()
     private let settings: DampfAblassenSettings
@@ -128,12 +129,26 @@ final class DampfAblassenWorkflow: Workflow {
                 phase = .running(String(localized: "Wird umformuliert ..."))
 
                 let promptLanguage = PromptLanguage.resolve(setting: language, text: processedRawText)
-                let answer = try await TextRewriter.rewrite(
-                    processedRawText,
-                    instruction: ModePrompts.withFieldContext(ModePrompts.dampfAblassen(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),
-                    engine: rewriteEngine,
-                    language: promptLanguage
-                )
+                let answer: String
+                do {
+                    answer = try await TextRewriter.rewrite(
+                        processedRawText,
+                        instruction: ModePrompts.withFieldContext(ModePrompts.dampfAblassen(settings, language: promptLanguage), context: fieldContext(), language: promptLanguage),
+                        engine: rewriteEngine,
+                        language: promptLanguage
+                    )
+                    try Task.checkCancellation()
+                } catch is CancellationError {
+                    throw CancellationError()
+                } catch {
+                    try Task.checkCancellation()
+                    // What was said is there; only the AI step failed. Hand it over instead of
+                    // losing the dictation.
+                    rewriteFailure = error.localizedDescription
+                    phase = .done(processedRawText)
+                    onOutput?(processedRawText)
+                    return
+                }
                 let cleanedAnswer = TranscriptionQualityService.cleanedTranscript(answer)
                 guard cleanedAnswer != ModePrompts.nothingRecognizedMarker else {
                     phase = .error(String(localized: "Keine Aufnahme erkannt."))
@@ -141,6 +156,8 @@ final class DampfAblassenWorkflow: Workflow {
                 }
                 phase = .done(cleanedAnswer)
                 onOutput?(cleanedAnswer)
+            } catch is CancellationError {
+                // Cancelled on purpose (Escape, a new dictation): not an error to show.
             } catch {
                 phase = .error(error.localizedDescription)
             }

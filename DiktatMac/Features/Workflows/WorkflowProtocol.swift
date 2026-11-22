@@ -115,6 +115,9 @@ protocol Workflow: AnyObject, Observable {
     var onPhaseChange: WorkflowPhaseChangeHandler? { get set }
     /// What was said, word for word, before an AI mode rewrote it; nil for plain dictation.
     var transcript: String? { get }
+    /// Why the AI step of this dictation failed. The workflow then hands over the transcript
+    /// instead of the rewritten text, so what was said is not lost.
+    var rewriteFailure: String? { get }
 
     func start()
     func stop()
@@ -125,6 +128,8 @@ extension Workflow {
     var noSignal: Bool { false }
 
     var transcript: String? { nil }
+
+    var rewriteFailure: String? { nil }
 }
 
 // MARK: - App Settings

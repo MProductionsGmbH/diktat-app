@@ -24,6 +24,21 @@ enum PromptLanguage: Equatable {
         }
     }
 
+    /// How sure the recognizer must be that a text is English before English hesitation
+    /// sounds are removed from it.
+    static let fillerConfidence = 0.6
+
+    /// The language whose hesitation sounds may be removed from `text`: "en" only when the text
+    /// clearly is English, otherwise "de" (the sounds every language shares). A short German
+    /// sentence with an English word ("Zoom Call um 9") is often taken for Portuguese or
+    /// Icelandic; treating that as English removed the preposition "um".
+    static func fillerLanguageCode(for text: String) -> String {
+        let recognizer = NLLanguageRecognizer()
+        recognizer.processString(text)
+        let english = recognizer.languageHypotheses(withMaximum: 3)[.english] ?? 0
+        return recognizer.dominantLanguage == .english && english >= fillerConfidence ? "en" : "de"
+    }
+
     /// The code the filler-word list and the sentence tokenizer know.
     var code: String {
         switch self {
