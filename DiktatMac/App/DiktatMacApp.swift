@@ -154,6 +154,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
             }
             return
         }
+        if let name = UserDefaults.standard.string(forKey: "DiktatInstallModel") {
+            NSApp.setActivationPolicy(.prohibited)
+            Task {
+                do {
+                    let url = try await LocalTranscriptionService.shared.downloadAndInstall(modelName: name) { fraction in
+                        if Int(fraction * 100) % 10 == 0 { print("download \(Int(fraction * 100)) %") }
+                    }
+                    print("installed: \(url.lastPathComponent)")
+                } catch {
+                    print("install failed: \(error.localizedDescription)")
+                }
+                NSApp.terminate(nil)
+            }
+            return
+        }
         if let path = UserDefaults.standard.string(forKey: "DiktatTranscribeCheck") {
             NSApp.setActivationPolicy(.prohibited)
             Task {
@@ -289,7 +304,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(chooseAudioFile),
+            selector: #selector(chooseAudioFile(_:)),
             name: .chooseAudioFile,
             object: nil
         )
@@ -329,7 +344,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
     nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse
     ) async {
-        guard response.notification.request.content.userInfo["diktatAction"] as? String == MeetingNotifier.prepareAction else { return }
+        let info = response.notification.request.content.userInfo
+        if info["diktatAction"] as? String == MeetingNotifier.showAction {
+            let id = (info["meeting"] as? String).flatMap(UUID.init(uuidString:))
+            await MainActor.run {
+                // The evaluated meeting, or the meeting page when it is gone or one is running.
+                if let id, appState.meeting.store.meeting(id: id) != nil { appState.meeting.show(id) }
+                openMainWindow(.meetings)
+            }
+            return
+        }
+        guard info["diktatAction"] as? String == MeetingNotifier.prepareAction else { return }
         await MainActor.run {
             UserDefaults.standard.set(MeetingSource.online.rawValue, forKey: MeetingSource.storageKey)
             // An earlier meeting may still be open; the click is for the start page.
@@ -366,7 +391,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
         transcribeAudioFile(url)
     }
 
-    @objc private func chooseAudioFile() {
+    @objc private func chooseAudioFile(_ notification: Notification) {
+        let fromWindow = notification.object as? String == AudioFileRequest.window
         // A transient popover would close under the panel anyway; reopen it with the result.
         popover.performClose(nil)
         appState.isPopoverShown = false
@@ -381,6 +407,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
         panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
         panel.canChooseDirectories = false
         guard panel.runModal() == .OK, let url = panel.url else { return }
+        if fromWindow {
+            // Asked from the window: the result belongs there, not in the menu.
+            appState.audioFile.transcribe(url, appState: appState)
+            return
+        }
         transcribeAudioFile(url)
     }
 
@@ -1340,6 +1371,19 @@ enum MacTranscribeCheck {
             let url = padded ?? file
             let samples = try AudioProcessor.loadAudioAsFloatArray(fromPath: url.path)
             print("samples: \(samples.count) (\(Double(samples.count) / 16_000) s), voiced: \(HallucinationFilter.voicedSeconds(samples)) s, model \(model)")
+            // `-DiktatLanguageProbe YES`: what the model takes each half minute for, and stop.
+            if UserDefaults.standard.bool(forKey: "DiktatLanguageProbe") {
+                var start = 0
+                while start < samples.count {
+                    let window = Array(samples[start..<min(samples.count, start + 30 * 16_000)])
+                    if let detected = try? await pipeline.detectLangauge(audioArray: window) {
+                        let top = detected.langProbs.sorted { $0.value > $1.value }.prefix(4).map { "\($0.key) \(String(format: "%.2f", $0.value))" }
+                        print("PROBE \(start / 16_000) s: \(detected.language) | \(detected.langProbs.count) entries | \(top.joined(separator: ", "))")
+                    }
+                    start += 30 * 16_000
+                }
+                return
+            }
             let options = DecodingOptions(task: .transcribe, language: nil, detectLanguage: true)
             let results = try await pipeline.transcribe(audioArray: samples, decodeOptions: options)
             for result in results {
@@ -1350,7 +1394,11 @@ enum MacTranscribeCheck {
                     print(String(format: "[%.2f-%.2f] voiced %.2f s  %@", segment.start, segment.end, voiced, segment.text))
                 }
             }
-            let final = try await WhisperDictation.transcribe(pipeline, audioPath: url.path, language: nil)
+            // `-DiktatCheckLanguage de` fixes the language, as the setting "Diktiersprache" does.
+            let language = UserDefaults.standard.string(forKey: "DiktatCheckLanguage")
+            let started = Date()
+            let final = try await WhisperDictation.transcribe(pipeline, audioPath: url.path, language: language)
+            print(String(format: "SECONDS: %.1f for %.1f s of audio", Date().timeIntervalSince(started), Double(samples.count) / 16_000))
             print("FINAL: \(final)")
             if let padded { try? FileManager.default.removeItem(at: padded) }
         } catch {

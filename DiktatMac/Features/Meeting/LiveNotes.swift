@@ -189,7 +189,7 @@ final class LiveNotesController {
                 let german = MeetingSummarizer.isGermanMeeting(text)
                 let answer = try await backend.complete(german ? Self.catchUpInstruction : Self.englishCatchUpInstruction, text)
                 try Task.checkCancellation()
-                catchUp = answer
+                catchUp = SwissSpelling.ifEnabled(answer)
             } catch is CancellationError {
             } catch {
                 catchUp = String(localized: "Gerade nicht m\u{00F6}glich: \(error.localizedDescription)")

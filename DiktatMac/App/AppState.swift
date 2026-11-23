@@ -68,6 +68,7 @@ final class AppState {
     // Persisted settings
     var appSettings: AppSettings {
         didSet {
+            SwissSpelling.isEnabled = appSettings.swissSpelling
             saveSettings()
             prewarmLocalTranscriptionIfNeeded()
             if oldValue.customHotkeys != appSettings.customHotkeys {
@@ -131,7 +132,14 @@ final class AppState {
 
     /// The provider connected with the user's own API key, nil for on-device only.
     var aiProvider: AIProviderConfig? = AIProviderStore.config {
-        didSet { AIProviderStore.config = aiProvider }
+        didSet {
+            AIProviderStore.config = aiProvider
+            // A key saved for one server of "Eigene Adresse" is not sent to another one.
+            if aiProvider?.movesCustomServer(from: oldValue) == true, APIKeyStore.key(for: .custom) != nil {
+                APIKeyStore.delete(for: .custom)
+                aiKeyRevision += 1
+            }
+        }
     }
     /// Bumped when a key is saved or removed; the Keychain itself is not observable.
     var aiKeyRevision = 0
@@ -196,6 +204,7 @@ final class AppState {
         self.appSettings = loadedAppSettings
         AudioInputDevices.preferredUID = loadedAppSettings.microphoneUID
         MeetingTranscriber.preferredModelName = loadedAppSettings.selectedLocalTranscriptionModelName
+        SwissSpelling.isEnabled = loadedAppSettings.swissSpelling
         self.transcriptionSettings = Self.loadTranscriptionSettings()
         self.textImprovementSettings = Self.loadTextImprovementSettings()
         self.dampfAblassenSettings = Self.loadDampfAblassenSettings()
@@ -347,9 +356,8 @@ final class AppState {
 
     var selectedLocalModelName: String {
         let name = LocalTranscriptionService.normalizedModelName(appSettings.selectedLocalTranscriptionModelName)
-        // Both turbo builds are one entry in the list; resolve to the build this Mac uses.
-        guard LocalTranscriptionService.turboModelNames.contains(name) else { return name }
-        return LocalTranscriptionService.turboModelName(selected: name)
+        // A model with two builds is one entry in the list; resolve to the build this Mac uses.
+        return LocalTranscriptionService.buildOnThisMac(for: name)
     }
 
     var selectedLocalModelIsInstalled: Bool {
@@ -707,6 +715,10 @@ final class AppState {
 
     func showWhatsNewAgain() {
         page = .whatsNew
+        // The note is a page of the menu; from the window it opens there.
+        if !isPopoverShown {
+            NotificationCenter.default.post(name: .showPopover, object: nil)
+        }
     }
 
     /// People who only dictate via shortcut never open the popover. Show the note once,
@@ -730,6 +742,7 @@ final class AppState {
     }()
 
     private func saveSettings() {
+        guard !DiktatCleanupService.didRemoveUserData else { return }
         let container = SettingsContainer(
             app: appSettings,
             transcription: transcriptionSettings,
@@ -845,7 +858,8 @@ final class AppState {
     }
 
     private func handleWorkflowOutput(_ dictated: String) {
-        var text = dictated
+        // The AI modes write on their own; the Swiss spelling applies to them as well.
+        var text = SwissSpelling.ifEnabled(dictated)
         // The AI modes shape their own paragraphs; word-for-word dictation gets them here.
         if appSettings.automaticParagraphs, let type = activeWorkflow?.type, type == .tapTalk || type == .localTapTalk {
             text = TranscriptParagraphService.format(text, language: transcriptionSettings.language)
@@ -1015,7 +1029,9 @@ final class AppState {
             self.activeWorkflow = nil
             self.activePasteTarget = nil
             self.activeLaunchSource = .manual
-            if !self.isPopoverShown {
+            // The workflow page has nothing to show without a workflow; an open popover on it
+            // would be empty and without a way back.
+            if !self.isPopoverShown || self.page == .workflow {
                 self.page = .main
             }
             self.menuBarStatus = .idle

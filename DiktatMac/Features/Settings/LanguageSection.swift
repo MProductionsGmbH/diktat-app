@@ -55,6 +55,19 @@ struct LanguageSection: View {
             case .english:
                 note(String(localized: "Diktat hört nur auf Englisch. Sprichst du Deutsch, wird daraus englischer Text."))
             }
+
+            Toggle(isOn: $appState.appSettings.swissSpelling) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Schweizer Schreibweise")
+                        .font(.ui(12, .semibold))
+                    Text("Schreibt ss statt \u{00DF}, zum Beispiel \u{201E}Strasse\u{201C} und \u{201E}gross\u{201C}: in Diktaten, in den Texten der KI-Modi und in Meetings.")
+                        .font(.ui(11.5))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .toggleStyle(.trailingSwitch)
+            .padding(.top, 4)
         }
     }
 

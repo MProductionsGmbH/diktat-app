@@ -42,6 +42,14 @@ struct LocalTranscriptionModel: Identifiable, Hashable {
         if modelName.contains("tiny") {
             return "Whisper Tiny"
         }
+        // The two large models at full precision carry their size, to tell them from the
+        // compact turbo.
+        if LocalTranscriptionService.turboFullModelNames.contains(modelName) {
+            return String(localized: "Whisper Large v3 Turbo (1,6 GB)")
+        }
+        if LocalTranscriptionService.largeModelNames.contains(modelName) {
+            return String(localized: "Whisper Large v3 (3 GB)")
+        }
         // OpenAI's large-v3-turbo, released 2024-09-30; Argmax ships it in two builds.
         if modelName.contains("large-v3-v20240930") {
             return "Whisper Large v3 Turbo"
@@ -91,6 +99,22 @@ struct LocalModelRating: Equatable {
                 languages: String(localized: "Erkennt die Sprache selbst: Deutsch, Englisch und 23 weitere europäische Sprachen.")
             )
         }
+        // Full precision. Accuracy from the same sources as above without the point for the
+        // compression (turbo 5.8 %, large-v3 about 5 % German FLEURS). Speed from Diktat's own
+        // run with a four-minute recording on an M5 Max: the full turbo as fast as the compact
+        // one (about 20x real time), large-v3 about 4x; set relative to the compact turbo's bar.
+        if LocalTranscriptionService.turboFullModelNames.contains(modelName) {
+            return LocalModelRating(
+                speed: 0.52, accuracy: 0.77, sizeLabel: "1,6 GB",
+                languages: String(localized: "Erkennt die Sprache selbst, rund 100 Sprachen. Kommt mit Mundart, etwa Schweizerdeutsch, klar besser zurecht als die kompakte Fassung.")
+            )
+        }
+        if LocalTranscriptionService.largeModelNames.contains(modelName) {
+            return LocalModelRating(
+                speed: 0.26, accuracy: 0.80, sizeLabel: "3,1 GB",
+                languages: String(localized: "Erkennt die Sprache selbst, rund 100 Sprachen. Das genaueste Whisper, auch bei Mundart, daf\u{00FC}r langsamer und gr\u{00F6}\u{00DF}er.")
+            )
+        }
         if modelName.contains("large-v3-v20240930_turbo") {
             return LocalModelRating(speed: 0.52, accuracy: 0.73, sizeLabel: "632 MB")
         }
@@ -138,8 +162,39 @@ actor LocalTranscriptionService {
     /// support it on M1, so M1 and Intel Macs get the plain build.
     static let turboModelNames = [fastModelName, defaultModelName]
 
+    /// The same turbo at full precision, about 1.6 GB instead of 0.6. The 4-bit compression
+    /// costs about a point on Standard German but far more on dialect: in Diktat's comparison
+    /// with a Swiss German recording the compact build got eleven of eleven hard spots wrong,
+    /// this one three. Again two builds, the streaming one first.
+    static let turboFullModelNames = ["openai_whisper-large-v3-v20240930_turbo", "openai_whisper-large-v3-v20240930"]
+    /// OpenAI's full large-v3, about 3 GB: the most accurate Whisper, slower.
+    static let largeModelNames = ["openai_whisper-large-v3_turbo", "openai_whisper-large-v3"]
+
+    /// Models that come in two builds, the streaming build first. The app lists each as one.
+    static let buildGroups = [turboModelNames, turboFullModelNames, largeModelNames]
+
     static var preferredTurboModelName: String {
         hasFastTurboSupport ? fastModelName : defaultModelName
+    }
+
+    /// The build of a two-build model for this Mac: the one already selected and on disk, else
+    /// a downloaded one, else the streaming build where Argmax supports it.
+    static func build(of group: [String], selected: String) -> String {
+        if group.contains(selected), isModelInstalled(selected) {
+            return selected
+        }
+        let preferred = hasFastTurboSupport ? group[0] : group[1]
+        if isModelInstalled(preferred) {
+            return preferred
+        }
+        return group.first(where: { isModelInstalled($0) }) ?? preferred
+    }
+
+    /// A model name as it is used on this Mac: for a model with two builds the build this Mac
+    /// has or should load, any other name unchanged.
+    static func buildOnThisMac(for modelName: String) -> String {
+        guard let group = buildGroups.first(where: { $0.contains(modelName) }) else { return modelName }
+        return build(of: group, selected: modelName)
     }
 
     private static let hasFastTurboSupport: Bool = {
@@ -154,19 +209,15 @@ actor LocalTranscriptionService {
     /// The one turbo entry: the build already selected and on disk, else a downloaded one,
     /// else the build for this Mac.
     static func turboModelName(selected: String) -> String {
-        if turboModelNames.contains(selected), isModelInstalled(selected) {
-            return selected
-        }
-        if isModelInstalled(preferredTurboModelName) {
-            return preferredTurboModelName
-        }
-        return turboModelNames.first(where: { isModelInstalled($0) }) ?? preferredTurboModelName
+        build(of: turboModelNames, selected: selected)
     }
 
     static func supportedModelNames(selected: String) -> [String] {
         (ParakeetTranscriber.isSupported ? [ParakeetTranscriber.modelName] : []) + [
             recommendedFastModelName,
-            turboModelName(selected: selected)
+            turboModelName(selected: selected),
+            build(of: turboFullModelNames, selected: selected),
+            build(of: largeModelNames, selected: selected),
         ]
     }
     static let modelPageURL = URL(
@@ -253,7 +304,7 @@ actor LocalTranscriptionService {
         let installed = installedModels()
         let installedByID = Dictionary(uniqueKeysWithValues: installed.map { ($0.id, $0) })
         let orderedIDs = supportedModelNames(selected: normalizedModelName(selected))
-            + installed.map(\.id).filter { !turboModelNames.contains($0) }
+            + installed.map(\.id).filter { id in !buildGroups.contains { $0.contains(id) } }
 
         return orderedIDs.compactMap { modelName in
             let normalizedName = normalizedModelName(modelName)

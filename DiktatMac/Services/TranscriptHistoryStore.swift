@@ -66,6 +66,7 @@ final class TranscriptHistoryStore {
 
     func clear() {
         entries = []
+        guard !DiktatCleanupService.didRemoveUserData else { return }
         try? FileManager.default.removeItem(at: AppSupportPaths.historyURL)
     }
 
@@ -89,6 +90,7 @@ final class TranscriptHistoryStore {
     }
 
     private func save() {
+        guard !DiktatCleanupService.didRemoveUserData else { return }
         guard !entries.isEmpty else {
             try? FileManager.default.removeItem(at: AppSupportPaths.historyURL)
             return

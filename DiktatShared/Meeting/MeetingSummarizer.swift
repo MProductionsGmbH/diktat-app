@@ -115,7 +115,9 @@ enum MeetingSummarizer {
     }
 
     /// Small models sometimes echo parts of the instruction or leave placeholder bullets.
-    static func cleaned(_ summary: String) -> String {
+    static func cleaned(_ answer: String) -> String {
+        // "**To-dos**" and "## Themen" become plain lines, also for copying.
+        let summary = ListDisplay.plain(answer)
         let echoes = [
             "Erfinde nichts dazu", "Keine weiteren Abschnitte", "Spiegelstriche im Format", "Drei bis fünf klare Sätze", "lass die Klammer weg",
             "Spiegelstriche mit „- “:",
@@ -131,6 +133,7 @@ enum MeetingSummarizer {
             .joined(separator: "\n")
             .replacingOccurrences(of: "\n\n\n", with: "\n\n")
             .trimmingCharacters(in: .whitespacesAndNewlines)
+            .swissIfEnabled
     }
 
     /// Splits at paragraph boundaries (speaker turns) so no turn is cut in half.
@@ -159,4 +162,8 @@ enum MeetingSummarizer {
         if !current.isEmpty { result.append(current) }
         return result
     }
+}
+
+private extension String {
+    var swissIfEnabled: String { SwissSpelling.ifEnabled(self) }
 }

@@ -29,6 +29,16 @@ The script stops at the first thing that is not right. In this order it:
 `scripts/release.sh --check` runs only the checks. `scripts/release.sh --no-publish` does everything
 but the upload and leaves the files in `dist/`.
 
+### Package versions
+
+`DiktatMac/Package.resolved` writes down the exact version of every Swift package, also of the
+ones the direct packages bring along. Every build (`build.sh`, the release script, CI) uses these
+and fails when they do not fit `project.yml`, so a release never picks up a package version nobody
+looked at. To update packages: raise the versions in `DiktatMac/project.yml`, run
+`xcodegen generate` in `DiktatMac`, then `xcodebuild -resolvePackageDependencies`, then
+`scripts/pin-packages.sh --save`, and commit the file together with a refreshed
+`DiktatShared/Licenses/Licenses.txt` (`scripts/collect-licenses.sh`).
+
 ### Once per Mac
 
 | What | How |

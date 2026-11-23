@@ -60,9 +60,11 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         if let interfaceCode {
             wanted = interfaceCode
         } else {
-            // The app only has German and English; any other system language falls back to German.
-            let first = systemCodes.first?.lowercased().prefix(2).description ?? "de"
-            wanted = first == "en" ? "en" : "de"
+            // macOS takes the first of the user's languages the app has, German or English, and
+            // German (the language the app is written in) when none of them is one of the two.
+            wanted = systemCodes.lazy
+                .map { $0.lowercased().prefix(2).description }
+                .first { $0 == "de" || $0 == "en" } ?? "de"
         }
         return wanted != runningCode
     }

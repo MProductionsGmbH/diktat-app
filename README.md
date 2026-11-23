@@ -28,10 +28,10 @@ Hold a shortcut, speak, let go. Diktat turns your speech into text and pastes it
 ## Install
 
 1. **[Download Diktat.dmg](https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.dmg)**, open it and drag Diktat onto the Applications folder.
-2. Open Diktat. macOS warns that it cannot check the app, because this version is not notarized yet. Press **Done** (not "Move to Trash"), then open **System Settings > Privacy & Security** and press **Open Anyway** next to Diktat.
+2. Open Diktat. It is signed and notarized by Apple, so macOS opens it without a warning.
 3. Allow the microphone and Accessibility, then load a speech model.
 
-Or in the Terminal, without the macOS warning:
+Or in the Terminal:
 
 ```bash
 curl -fsSL -o /tmp/Diktat.zip https://github.com/MProductionsGmbH/diktat-app/releases/latest/download/Diktat.zip && ditto -x -k /tmp/Diktat.zip /Applications && open /Applications/Diktat.app
@@ -77,15 +77,13 @@ curl -fsSL -o /tmp/Diktat.zip https://github.com/MProductionsGmbH/diktat-app/rel
 - **Text lands in the right place:** if you click into another field while a writing mode still works, the text goes to the clipboard instead of the wrong field. After a writing mode, "Wortgenau statt ..." in the menu swaps in what you actually said.
 - **Voice memos and WhatsApp voice messages:** drop an audio file on Diktat and get the text, optionally with paragraphs.
 - **Dictionary:** names and terms spelled your way, fixed replacements ("n acht n" becomes "n8n").
-- **History:** recent results, encrypted and stored only on your Mac.
+- **History:** recent results, stored only on your Mac and encrypted with a key bound to it.
 - **Updates in the app:** Diktat offers new versions from this repository's releases, signed and notarized by Apple.
 - **Feedback:** "Feedback senden" in the settings prepares a mail to the team with version and setup. You see everything before it goes out.
 
-The app is in German for now.
+The app is in German and English.
 
-## Install
-
-There is no signed release yet. Build the app yourself, see [Build It Yourself](#build-it-yourself). Then:
+## First Steps
 
 1. Open Diktat. It lives in the menu bar.
 2. Allow **Microphone** and **Accessibility** (needed to paste into other apps).

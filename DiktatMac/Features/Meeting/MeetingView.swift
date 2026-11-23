@@ -14,6 +14,11 @@ struct MeetingView: View {
     @State private var isResummarizing = false
     @State private var copied: CopyTarget?
     @State private var confirmDelete = false
+    @State private var confirmDiscard = false
+    /// A meeting in the list, or the failed one, about to be deleted.
+    @State private var deleting: UUID?
+    @State private var renamingTitle = false
+    @State private var newTitle = ""
     @AppStorage(MeetingSource.storageKey) private var storedSource = ""
     @AppStorage(MeetingSource.legacyStorageKey) private var legacySystemAudio = false
     @State private var permission = SystemAudioPermission.status
@@ -411,7 +416,7 @@ struct MeetingView: View {
 
     private var earlierMeetings: some View {
         VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(title: String(localized: "Meetings (Rechtsklick zum L\u{00F6}schen)"))
+            SectionHeader(title: String(localized: "Meetings"))
             VStack(spacing: 0) {
                 ForEach(Array(storedMeetings.enumerated()), id: \.element.id) { index, record in
                     if index > 0 {
@@ -430,7 +435,7 @@ struct MeetingView: View {
                                     .font(.ui(12.5, .medium))
                                     .foregroundStyle(.primary)
                                     .lineLimit(1)
-                                Text(record.status == .done ? summaryLine(record) : String(localized: "Noch nicht ausgewertet, klicken zum Auswerten"))
+                                Text(record.status == .done ? summaryLine(record) : String(localized: "Noch nicht ausgewertet, die Aufnahme liegt auf diesem Mac. Klicken zum Auswerten."))
                                     .font(.ui(11))
                                     .foregroundStyle(.secondary)
                             }
@@ -444,13 +449,42 @@ struct MeetingView: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                    .overlay(alignment: .trailing) {
+                        // Visible, so nobody has to know about the right click.
+                        Button {
+                            deleting = record.id
+                        } label: {
+                            Image(systemName: "trash")
+                                .font(.ui(11, .medium))
+                                .foregroundStyle(.secondary)
+                                .frame(width: 26, height: 26)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .help("Meeting l\u{00F6}schen")
+                        .accessibilityLabel(String(localized: "\(record.title) l\u{00F6}schen"))
+                        .padding(.trailing, 30)
+                    }
                     .contextMenu {
-                        Button("L\u{00F6}schen", role: .destructive) { meeting.delete(record.id) }
+                        Button("L\u{00F6}schen", role: .destructive) { deleting = record.id }
                     }
                 }
             }
             .padding(.vertical, 2)
             .glassPanel()
+        }
+        .confirmationDialog(
+            "Meeting l\u{00F6}schen?",
+            isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }),
+            titleVisibility: .visible
+        ) {
+            Button("L\u{00F6}schen", role: .destructive) {
+                if let deleting { meeting.delete(deleting) }
+                deleting = nil
+            }
+            Button("Abbrechen", role: .cancel) { deleting = nil }
+        } message: {
+            Text("Transkript, Zusammenfassung und eine noch nicht ausgewertete Aufnahme werden gel\u{00F6}scht.")
         }
     }
 
@@ -528,10 +562,16 @@ struct MeetingView: View {
             .buttonStyle(.subtle)
 
             Button("Verwerfen", role: .destructive) {
-                meeting.discard()
+                confirmDiscard = true
             }
             .buttonStyle(.subtle)
             .frame(maxWidth: .infinity)
+            .confirmationDialog("Aufnahme verwerfen?", isPresented: $confirmDiscard, titleVisibility: .visible) {
+                Button("Verwerfen", role: .destructive) { meeting.discard() }
+                Button("Weiter aufnehmen", role: .cancel) {}
+            } message: {
+                Text("Die Aufnahme wird gel\u{00F6}scht und nicht ausgewertet. Das l\u{00E4}sst sich nicht r\u{00FC}ckg\u{00E4}ngig machen.")
+            }
         }
     }
 
@@ -562,6 +602,15 @@ struct MeetingView: View {
                 .padding(14)
                 .glassPanel()
 
+            if let meetingID, meeting.store.meeting(id: meetingID)?.status == .pending {
+                // The promise "deleted after the evaluation" holds once it succeeds; until then
+                // the recording is still here, and that is said.
+                Text("Die Aufnahme bleibt auf diesem Mac, bis du sie auswertest oder l\u{00F6}schst.")
+                    .font(.ui(11.5))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
             HStack(spacing: 8) {
                 if let meetingID, meeting.store.meeting(id: meetingID)?.status == .pending {
                     Button("Erneut auswerten") { meeting.process(meetingID) }
@@ -572,13 +621,18 @@ struct MeetingView: View {
                 Spacer()
                 if let meetingID, meeting.store.meeting(id: meetingID) != nil {
                     Button(role: .destructive) {
-                        meeting.delete(meetingID)
+                        confirmDelete = true
                     } label: {
                         Text("L\u{00F6}schen")
                             .lineLimit(1)
                             .fixedSize()
                     }
                     .buttonStyle(.subtle)
+                    .confirmationDialog("Meeting l\u{00F6}schen?", isPresented: $confirmDelete, titleVisibility: .visible) {
+                        Button("L\u{00F6}schen", role: .destructive) { meeting.delete(meetingID) }
+                    } message: {
+                        Text("Die Aufnahme wird gel\u{00F6}scht und kann nicht mehr ausgewertet werden.")
+                    }
                 }
             }
         }
@@ -600,11 +654,31 @@ struct MeetingView: View {
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(record.title)
-                    .font(.ui(15, .semibold))
+                Button {
+                    newTitle = record.title
+                    renamingTitle = true
+                } label: {
+                    HStack(spacing: 6) {
+                        Text(record.title)
+                            .font(.ui(15, .semibold))
+                            .multilineTextAlignment(.leading)
+                        Image(systemName: "pencil")
+                            .font(.ui(10, .semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .help("Meeting umbenennen")
+                .accessibilityLabel(String(localized: "\(record.title), umbenennen"))
                 Text(summaryLine(record))
                     .font(.ui(11.5))
                     .foregroundStyle(.secondary)
+            }
+            .alert("Meeting umbenennen", isPresented: $renamingTitle) {
+                TextField("Titel", text: $newTitle)
+                Button("Sichern") { meeting.rename(record.id, to: newTitle) }
+                Button("Abbrechen", role: .cancel) {}
             }
 
             // At the top: a long meeting would put them far below the transcript.
@@ -699,11 +773,8 @@ struct MeetingView: View {
             }
 
             if let summary = record.summary {
-                Text(ListDisplay.bullets(summary))
-                    .font(.ui(12.5))
-                    .textSelection(.enabled)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                // The card is titled "Zusammenfassung" already.
+                SummaryText(text: summary, title: summary.contains("Summary") ? "Summary" : "Zusammenfassung")
 
                 if let note = record.summaryNote {
                     Text(note)
@@ -717,7 +788,7 @@ struct MeetingView: View {
                     .foregroundStyle(.secondary)
 
                 HStack(spacing: 8) {
-                    copyButton(String(localized: "Kopieren"), target: .summary, text: summary)
+                    copyButton(String(localized: "Kopieren"), target: .summary, text: ListDisplay.plain(summary))
                     Button {
                         resummarize(record.id)
                     } label: {

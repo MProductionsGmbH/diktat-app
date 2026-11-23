@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HistoryListView: View {
     @Bindable var appState: AppState
+    @State private var confirmClear = false
 
     private static let relativeFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()
@@ -54,13 +55,17 @@ struct HistoryListView: View {
                         .foregroundStyle(.tertiary)
                     Spacer()
                     Button("Alles l\u{00F6}schen") {
-                        withAnimation(.easeOut(duration: 0.15)) {
-                            appState.history.clear()
-                        }
+                        confirmClear = true
                     }
                     .font(.ui(10.5, .medium))
                     .foregroundStyle(.secondary)
                     .buttonStyle(SubtleButtonStyle())
+                    .confirmationDialog("Den ganzen Verlauf l\u{00F6}schen?", isPresented: $confirmClear, titleVisibility: .visible) {
+                        Button("Alles l\u{00F6}schen", role: .destructive) {
+                            withAnimation(.easeOut(duration: 0.15)) { appState.history.clear() }
+                        }
+                        Button("Abbrechen", role: .cancel) {}
+                    }
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 4)

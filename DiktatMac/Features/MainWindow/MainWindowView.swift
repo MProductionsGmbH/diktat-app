@@ -6,6 +6,7 @@ enum MainWindowPage: String, CaseIterable, Identifiable {
     case history
     case modes
     case meetings
+    case audioFile
     case settings
 
     var id: String { rawValue }
@@ -15,6 +16,7 @@ enum MainWindowPage: String, CaseIterable, Identifiable {
         case .history: return String(localized: "Verlauf")
         case .modes: return String(localized: "Modi")
         case .meetings: return String(localized: "Meetings")
+        case .audioFile: return String(localized: "Audiodatei")
         case .settings: return String(localized: "Einstellungen")
         }
     }
@@ -24,6 +26,7 @@ enum MainWindowPage: String, CaseIterable, Identifiable {
         case .history: return "clock"
         case .modes: return "slider.horizontal.3"
         case .meetings: return "person.2.wave.2"
+        case .audioFile: return "waveform"
         case .settings: return "gearshape"
         }
     }
@@ -49,6 +52,8 @@ struct MainWindowView: View {
                     MainModesPage(appState: appState)
                 case .meetings:
                     MainMeetingsPage(appState: appState)
+                case .audioFile:
+                    MainAudioFilePage(appState: appState)
                 case .settings:
                     MainSettingsPage(appState: appState)
                 }
@@ -87,18 +92,35 @@ struct MainWindowView: View {
 
             Spacer(minLength: 12)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Label("Alles auf diesem Mac", systemImage: "lock.fill")
-                    .font(.ui(12, .semibold))
-                    .foregroundStyle(DiktatTheme.ready)
-                Text("Kein Konto, keine Telemetrie. Audio wird nach dem Diktat gelöscht.")
-                    .font(.ui(11.5))
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+            if let provider = appState.providerInUse {
+                // The AI modes send the recognized text to a provider: "everything on this Mac"
+                // would not be true.
+                VStack(alignment: .leading, spacing: 4) {
+                    Label("Sprache auf diesem Mac", systemImage: "lock.open.fill")
+                        .font(.ui(12, .semibold))
+                        .foregroundStyle(DiktatTheme.accent)
+                    Text("Die KI-Modi senden den erkannten Text an \(provider). Kein Konto, keine Telemetrie. Audio wird nach dem Diktat gelöscht.")
+                        .font(.ui(11.5))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(DiktatTheme.accent.opacity(0.10)))
+            } else {
+                VStack(alignment: .leading, spacing: 4) {
+                    Label("Alles auf diesem Mac", systemImage: "lock.fill")
+                        .font(.ui(12, .semibold))
+                        .foregroundStyle(DiktatTheme.ready)
+                    Text("Kein Konto, keine Telemetrie. Audio wird nach dem Diktat gelöscht.")
+                        .font(.ui(11.5))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(DiktatTheme.ready.opacity(0.12)))
             }
-            .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(DiktatTheme.ready.opacity(0.12)))
 
             Text(MainWindowView.versionText)
                 .font(.ui(11))
@@ -192,6 +214,7 @@ struct MainPage<Trailing: View, Content: View>: View {
 struct MainHistoryPage: View {
     @Bindable var appState: AppState
     @State private var query = ""
+    @State private var confirmClear = false
 
     private static let timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -216,11 +239,17 @@ struct MainHistoryPage: View {
         MainPage(title: String(localized: "Verlauf")) {
             if !entries.isEmpty {
                 Button("Alles löschen") {
-                    withAnimation(.easeOut(duration: 0.15)) { appState.history.clear() }
+                    confirmClear = true
                 }
                 .buttonStyle(.subtle)
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
+                .confirmationDialog("Den ganzen Verlauf l\u{00F6}schen?", isPresented: $confirmClear, titleVisibility: .visible) {
+                    Button("Alles l\u{00F6}schen", role: .destructive) {
+                        withAnimation(.easeOut(duration: 0.15)) { appState.history.clear() }
+                    }
+                    Button("Abbrechen", role: .cancel) {}
+                }
             }
         } content: {
             if appState.appSettings.historyRetention == .off {
@@ -403,6 +432,63 @@ struct MainMeetingsPage: View {
         MeetingView(appState: appState, embedded: true)
             .frame(maxWidth: 720)
             .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - Audio file
+
+/// A voice memo or voice message as text: choose a file or drop one here.
+struct MainAudioFilePage: View {
+    @Bindable var appState: AppState
+    @State private var isDropTarget = false
+
+    private var controller: AudioFileController { appState.audioFile }
+
+    var body: some View {
+        MainPage(title: String(localized: "Audiodatei")) {
+            Button {
+                NotificationCenter.default.post(name: .chooseAudioFile, object: AudioFileRequest.window)
+            } label: {
+                Label(controller.fileName.isEmpty ? "Datei w\u{00E4}hlen ..." : "Andere Datei ...", systemImage: "folder")
+            }
+            .buttonStyle(.glassAction)
+            .disabled(controller.isWorking)
+        } content: {
+            if controller.fileName.isEmpty {
+                VStack(spacing: 10) {
+                    Image(systemName: "waveform")
+                        .font(.ui(28, .semibold))
+                        .foregroundStyle(DiktatTheme.accent)
+                    Text("Sprachmemo, WhatsApp-Sprachnachricht oder andere Audiodatei")
+                        .font(.ui(14, .semibold))
+                        .multilineTextAlignment(.center)
+                    Text("Zieh eine Datei hierher oder w\u{00E4}hle eine aus. Sie wird auf diesem Mac transkribiert und nicht ver\u{00E4}ndert.")
+                        .font(.ui(12.5))
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.vertical, 44)
+                .padding(.horizontal, 24)
+                .frame(maxWidth: .infinity)
+                .glassPanel()
+            } else {
+                AudioFileView(appState: appState, embedded: true)
+            }
+        }
+        .overlay {
+            if isDropTarget {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .strokeBorder(DiktatTheme.accent, style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
+                    .padding(12)
+                    .allowsHitTesting(false)
+            }
+        }
+        .dropDestination(for: URL.self) { urls, _ in
+            guard !controller.isWorking, let url = urls.first else { return false }
+            controller.transcribe(url, appState: appState)
+            return true
+        } isTargeted: { isDropTarget = $0 }
     }
 }
 

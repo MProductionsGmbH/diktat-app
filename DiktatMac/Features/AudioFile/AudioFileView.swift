@@ -1,12 +1,27 @@
 import SwiftUI
 
 /// Popover page for a transcribed audio file (Voice Memo, WhatsApp voice message, ...).
+/// Where a request to choose an audio file came from, so the result shows up there again.
+enum AudioFileRequest {
+    static let window = "window"
+}
+
 struct AudioFileView: View {
     @Bindable var appState: AppState
+    /// In the main window: only the content, the page around it has title and file button.
+    var embedded = false
 
     private var controller: AudioFileController { appState.audioFile }
 
     var body: some View {
+        if embedded {
+            content
+        } else {
+            popoverPage
+        }
+    }
+
+    private var popoverPage: some View {
         VStack(spacing: 0) {
             PageHeader(title: String(localized: "Audiodatei"), onBack: {
                 controller.close()
@@ -16,6 +31,30 @@ struct AudioFileView: View {
             Divider().opacity(0.16)
 
             ScrollView {
+                content
+                    .padding(16)
+            }
+
+            Divider().opacity(0.16)
+
+            HStack {
+                Spacer()
+                Button {
+                    NotificationCenter.default.post(name: .chooseAudioFile, object: nil)
+                } label: {
+                    Label("Andere Datei ...", systemImage: "folder")
+                        .font(.ui(12, .medium))
+                }
+                .buttonStyle(.glassAction)
+                .disabled(controller.isWorking)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+        }
+        .frame(height: 520)
+    }
+
+    private var content: some View {
                 VStack(alignment: .leading, spacing: 12) {
                     fileRow
 
@@ -47,26 +86,6 @@ struct AudioFileView: View {
                         .font(.ui(11))
                         .foregroundStyle(.tertiary)
                 }
-                .padding(16)
-            }
-
-            Divider().opacity(0.16)
-
-            HStack {
-                Spacer()
-                Button {
-                    NotificationCenter.default.post(name: .chooseAudioFile, object: nil)
-                } label: {
-                    Label("Andere Datei ...", systemImage: "folder")
-                        .font(.ui(12, .medium))
-                }
-                .buttonStyle(.glassAction)
-                .disabled(controller.isWorking)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-        }
-        .frame(height: 520)
     }
 
     private var fileRow: some View {

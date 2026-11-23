@@ -93,7 +93,7 @@ struct MacAIProviderSection: View {
                     .textFieldStyle(.roundedBorder)
                     .font(.ui(11.5))
             }
-            Text("OpenAI-kompatible Adresse. Ollama l\u{00E4}uft auf jedem Mac unter derselben Adresse (localhost, Port 11434), LM Studio unter Port 1234. Nur wenn du das ge\u{00E4}ndert hast oder ein anderer Rechner das Modell liefert, brauchst du eine andere.")
+            Text("OpenAI-kompatible Adresse. Ollama l\u{00E4}uft auf jedem Mac unter derselben Adresse (localhost, Port 11434), LM Studio unter Port 1234. Nur wenn du das ge\u{00E4}ndert hast oder ein anderer Rechner das Modell liefert, brauchst du eine andere. Wechselst du den Server, l\u{00F6}scht Diktat einen daf\u{00FC}r gesicherten API-Key, damit er nicht an den neuen geht.")
                 .font(.ui(12))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

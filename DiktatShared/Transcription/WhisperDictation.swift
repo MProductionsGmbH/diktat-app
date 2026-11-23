@@ -13,7 +13,9 @@ enum WhisperDictation {
         // By default no fixed language: Whisper follows a given language strictly and turns English
         // speech into German. Detection keeps every dictation in its spoken language. A language the
         // user picked in the settings is followed on purpose.
-        let options = DecodingOptions(task: .transcribe, language: language, detectLanguage: language == nil)
+        let spoken = await spokenLanguage(pipeline, samples: samples, picked: language)
+        var options = DecodingOptions(task: .transcribe, language: spoken, detectLanguage: spoken == nil)
+        options.chunkingStrategy = chunking(for: samples)
         let results = try await pipeline.transcribe(audioArray: samples, decodeOptions: options)
         var text = results
             .map(\.text)
@@ -44,12 +46,35 @@ enum WhisperDictation {
         return HallucinationFilter.removingTrailingCredits(text)
     }
 
+    /// A recording longer than one window of the model (30 seconds) is cut at pauses in the speech
+    /// and not wherever the window ends. Without that, a window the model ends early takes the
+    /// rest of its half minute along: in a four-minute dialect recording the compact turbo lost
+    /// a third of the text.
+    private static func chunking(for samples: [Float]) -> ChunkingStrategy? {
+        samples.count > 30 * 16_000 ? .vad : nil
+    }
+
+    /// The language of a recording: the one picked in the settings, else what the model takes the
+    /// start (up to 30 seconds) for. It is asked once and then holds for the whole recording.
+    ///
+    /// Leaving the detection to the transcription itself lets the model choose anew every
+    /// 30 seconds, and with dialect that goes wrong: a Swiss German recording came out partly as
+    /// an English translation, partly in Cyrillic, with a minute missing, although asked directly
+    /// the model called every stretch of it German. Nil when the model cannot say (then the
+    /// transcription detects by itself, as before).
+    private static func spokenLanguage(_ pipeline: WhisperKit, samples: [Float], picked: String?) async -> String? {
+        if let picked { return picked }
+        return try? await pipeline.detectLangauge(audioArray: samples).language
+    }
+
     /// The words of a recording with their times, for a meeting: every word is placed with a person by its time.
     /// Stretches of room noise that Whisper filled with an invented phrase are left out.
     static func words(_ pipeline: WhisperKit, audioPath: String, language: String? = nil) async throws -> [TimedWord] {
         let samples = try AudioProcessor.loadAudioAsFloatArray(fromPath: audioPath)
-        var options = DecodingOptions(task: .transcribe, language: language, detectLanguage: language == nil)
+        let spoken = await spokenLanguage(pipeline, samples: samples, picked: language)
+        var options = DecodingOptions(task: .transcribe, language: spoken, detectLanguage: spoken == nil)
         options.wordTimestamps = true
+        options.chunkingStrategy = chunking(for: samples)
         let results = try await pipeline.transcribe(audioArray: samples, decodeOptions: options)
         let segments = results.flatMap(\.segments)
         let voiced = segments.map { segment -> Double in

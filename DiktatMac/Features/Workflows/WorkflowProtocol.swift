@@ -187,6 +187,9 @@ struct AppSettings: Codable {
     var summarizesMeetings: Bool = true
     /// A notification offers to record the meeting when a call app opens the microphone.
     var suggestsMeetingOnCall: Bool = true
+    /// "ss" instead of the sharp s in everything Diktat writes. On from the start in Switzerland
+    /// and Liechtenstein.
+    var swissSpelling: Bool = SwissSpelling.isUsualHere
 
     init(
         hotkeyMode: HotkeyMode = .hold,
@@ -230,6 +233,7 @@ struct AppSettings: Codable {
         case microphoneUID
         case summarizesMeetings
         case suggestsMeetingOnCall
+        case swissSpelling
     }
 
     init(from decoder: Decoder) throws {
@@ -269,6 +273,7 @@ struct AppSettings: Codable {
         microphoneUID = try? container.decodeIfPresent(String.self, forKey: .microphoneUID)
         summarizesMeetings = try container.decodeIfPresent(Bool.self, forKey: .summarizesMeetings) ?? true
         suggestsMeetingOnCall = try container.decodeIfPresent(Bool.self, forKey: .suggestsMeetingOnCall) ?? true
+        swissSpelling = try container.decodeIfPresent(Bool.self, forKey: .swissSpelling) ?? SwissSpelling.isUsualHere
     }
 
     func customHotkey(for type: WorkflowType) -> KeyCombo? {

@@ -59,3 +59,11 @@ Headlines use Public Sans (https://github.com/uswds/public-sans), bundled from t
 ## WhisperKit and Whisper
 
 Local Whisper transcription (macOS, and optionally iOS) uses WhisperKit by Argmax (https://github.com/argmaxinc/argmax-oss-swift), licensed under the MIT License. The models are OpenAI Whisper (https://github.com/openai/whisper, MIT License), converted to Core ML by Argmax (https://huggingface.co/argmaxinc/whisperkit-coreml). The weights are downloaded on demand and not modified by Blitztext.
+
+## Sparkle
+
+Updates inside the Mac app use Sparkle (https://github.com/sparkle-project/Sparkle), Copyright (c) 2006-2013 Andy Matuschak, 2014-2025 the Sparkle Project and its contributors, licensed under the MIT License. Sparkle bundles further components under their own licenses; the full texts are in `DiktatShared/Licenses/Licenses.txt`, which the app shows under Settings > Allgemein > Lizenzen und Hinweise.
+
+## swift-transformers and the packages it brings along
+
+Tokenizers and model downloads use swift-transformers by Hugging Face (https://github.com/huggingface/swift-transformers), licensed under the Apache License 2.0. With it come swift-jinja, swift-collections, swift-argument-parser, swift-crypto, swift-asn1 and yyjson, under the Apache License 2.0 or the MIT License. Their full texts are in `DiktatShared/Licenses/Licenses.txt`.

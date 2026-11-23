@@ -31,7 +31,9 @@ Include:
 - If a user adds their own model provider, the recognized text of the writing modes is sent directly to that provider. Its API key is stored in the macOS Keychain.
 - Speech models are downloaded from Hugging Face over HTTPS.
 - Temporary audio files may exist briefly during processing.
-- Accessibility permission allows the app to paste text into the current app.
-- The app currently runs **without** the macOS App Sandbox. This is a deliberate trade-off: the menubar workflow needs Accessibility-based paste into arbitrary frontmost apps, system-wide hotkeys, and Application Support paths for local WhisperKit models, all of which are awkward or impossible inside a strict sandbox. Hardened Runtime is enabled, and the entitlements are limited to microphone input and outbound network access. Reintroducing the sandbox is on the roadmap once these flows are reworked.
+- Accessibility permission allows the app to paste text into the current app and to read the focused text field (and, for "Modus je App" with websites, the address of the frontmost browser tab).
+- For online meetings the app records what the Mac plays (permission "System Audio Recording").
+- History and meeting transcripts are encrypted with a key derived from the Mac's hardware id. That keeps a copied file unreadable elsewhere; it does not protect against software running in the same user account.
+- The app currently runs **without** the macOS App Sandbox. This is a deliberate trade-off: the menubar workflow needs Accessibility-based paste into arbitrary frontmost apps, system-wide hotkeys, and Application Support paths for local WhisperKit models, all of which are awkward or impossible inside a strict sandbox. Released builds are signed with a Developer ID, with the Hardened Runtime, and notarized by Apple; local and CI builds are signed ad hoc without it. The entitlements are limited to microphone input and outbound network access. Reintroducing the sandbox is on the roadmap once these flows are reworked.
 
 Do not use Diktat for confidential or regulated data without your own review.

@@ -41,10 +41,7 @@ struct LiveNotesCard: View {
                     .foregroundStyle(.secondary)
             } else {
                 ScrollView {
-                    Text(ListDisplay.bullets(live.notes))
-                        .font(.ui(12))
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    SummaryText(text: live.notes, size: 12)
                 }
                 .frame(maxHeight: 220)
             }

@@ -66,7 +66,7 @@ struct MeetingRecord: Codable, Equatable, Identifiable {
 
     var shareText: String {
         var parts = [title]
-        if let summary { parts.append(summary) }
+        if let summary { parts.append(ListDisplay.plain(summary)) }
         parts.append(String(localized: "Transkript") + "\n\n" + transcriptText)
         return parts.joined(separator: "\n\n")
     }
@@ -111,6 +111,8 @@ final class MeetingStore {
         if let data = Self.readStoredData(),
            let meetings = try? JSONDecoder().decode([MeetingRecord].self, from: data) {
             self.meetings = meetings
+            // Only with the list in hand is it clear which recordings belong to no meeting.
+            Self.removeOrphanedAudio(keeping: Set(meetings.map(\.id)))
         } else {
             // Never overwrite meetings that only this build cannot read (another Mac's key,
             // a later format): keep the file aside so they can still be recovered.
@@ -126,6 +128,32 @@ final class MeetingStore {
         return try? JSONDecoder().decode([MeetingRecord].self, from: data)
     }
     #endif
+
+    /// Recordings wait unencrypted until their meeting is evaluated. They stay out of backups,
+    /// so a copy of a conversation does not travel to a backup disk or a cloud.
+    nonisolated static func excludeFromBackup(_ url: URL) {
+        var url = url
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        try? url.setResourceValues(values)
+    }
+
+    /// How old a recording without a meeting must be before it is removed: nothing a running
+    /// app is about to register.
+    nonisolated static let orphanAge: TimeInterval = 24 * 60 * 60
+
+    /// A deleted meeting takes its recording along; one left behind anyway (a crash in between)
+    /// would lie on disk for good, unencrypted.
+    private static func removeOrphanedAudio(keeping ids: Set<UUID>) {
+        let manager = FileManager.default
+        guard let names = try? manager.contentsOfDirectory(atPath: directoryURL.path) else { return }
+        for name in MeetingAudioFiles.orphaned(in: names, keeping: ids) {
+            let url = directoryURL.appendingPathComponent(name)
+            let modified = (try? url.resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate
+            guard let modified, Date().timeIntervalSince(modified) > orphanAge else { continue }
+            try? manager.removeItem(at: url)
+        }
+    }
 
     private static func moveUnreadableFileAside() {
         let stamp = Int(Date().timeIntervalSince1970)
@@ -184,6 +212,10 @@ final class MeetingStore {
     @discardableResult
     private func save() -> Bool {
         guard isPersistent else { return true }
+        #if os(macOS)
+        // "Diktat von diesem Mac entfernen" ran: what was deleted is not written back.
+        guard !DiktatCleanupService.didRemoveUserData else { return false }
+        #endif
         do {
             try FileManager.default.createDirectory(at: Self.directoryURL, withIntermediateDirectories: true)
             let data = try JSONEncoder().encode(meetings)

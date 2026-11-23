@@ -112,11 +112,15 @@ else
     exit 1
 fi
 
+# Paket-Versionen aus dem Repository, auch die indirekten: jeder Build nimmt dieselben.
+"$SCRIPT_DIR/scripts/pin-packages.sh"
+
 # Bauen
 echo "🔨 Baue Diktat ..."
 xcodebuild \
     -project DiktatMac.xcodeproj \
     -scheme DiktatMac \
+    -disableAutomaticPackageResolution \
     -destination 'platform=macOS' \
     -configuration "$BUILD_CONFIGURATION" \
     -derivedDataPath "$DERIVED_DATA_PATH" \

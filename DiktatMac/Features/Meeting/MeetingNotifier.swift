@@ -12,8 +12,15 @@ enum MeetingNotifier {
 
     static func finished(_ record: MeetingRecord) {
         let people = record.speakers.count == 1 ? String(localized: "1 Person") : String(localized: "\(record.speakers.count) Personen")
-        post(title: String(localized: "Meeting ausgewertet"), body: String(localized: "\(duration(record.duration)), \(people). Im Diktat-Men\u{00FC} unter Meeting."))
+        post(
+            title: String(localized: "Meeting ausgewertet"),
+            body: String(localized: "\(duration(record.duration)), \(people). Ein Klick \u{00F6}ffnet es."),
+            userInfo: ["diktatAction": showAction, "meeting": record.id.uuidString]
+        )
     }
+
+    /// Clicking this notification opens the evaluated meeting.
+    static let showAction = "showMeeting"
 
     /// Clicking this notification opens the meeting page with the online source picked.
     static let prepareAction = "prepareOnlineMeeting"
@@ -63,7 +70,7 @@ enum MeetingNotifier {
     }
 
     static func failed(_ message: String) {
-        post(title: String(localized: "Meeting-Auswertung fehlgeschlagen"), body: message)
+        post(title: String(localized: "Meeting-Auswertung fehlgeschlagen"), body: message, userInfo: ["diktatAction": showAction])
     }
 
     /// "2 Std. 3 Min." or "45 Min."
@@ -72,11 +79,12 @@ enum MeetingNotifier {
         return minutes >= 60 ? String(localized: "\(minutes / 60) Std. \(minutes % 60) Min.") : String(localized: "\(minutes) Min.")
     }
 
-    private static func post(title: String, body: String) {
+    private static func post(title: String, body: String, userInfo: [String: String] = [:]) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = .default
+        content.userInfo = userInfo
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil))
     }
 }

@@ -125,9 +125,11 @@ fi
 # --- Tests first: a version with failing tests is not released.
 echo "🧪 Tests ..."
 (cd DiktatMac && xcodegen generate >/dev/null)
+scripts/pin-packages.sh
 TEST_LOG="$(mktemp -t diktat-tests)"
 # The same call as CI: this Mac's architecture only, as the tests need no universal build.
 if ! xcodebuild -project DiktatMac/DiktatMac.xcodeproj -scheme DiktatMac -configuration Debug \
+    -disableAutomaticPackageResolution \
     -destination 'platform=macOS,arch=arm64' ARCHS=arm64 ONLY_ACTIVE_ARCH=YES \
     CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
     -derivedDataPath "$DERIVED_DATA" test >"$TEST_LOG" 2>&1; then

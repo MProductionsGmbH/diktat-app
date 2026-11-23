@@ -4,6 +4,7 @@ import SwiftUI
 /// the Gemma variants this Mac can run, how large they are, and download, cancel or remove.
 struct LocalLanguageModelSection: View {
     @Bindable var appState: AppState
+    @State private var replacesProvider = false
     private var store: LocalModelStore { .shared }
     private let memoryGB = LocalModelVariant.installedMemoryGB
 
@@ -70,6 +71,13 @@ struct LocalLanguageModelSection: View {
             return String(localized: "Ein Modell, das auf diesem Mac schon l\u{00E4}uft, zum Beispiel Qwen \u{00FC}ber Ollama. Kein zus\u{00E4}tzlicher Download. Adresse und Modellname tr\u{00E4}gst du unten unter Modell-Anbieter ein.")
         }
         let model = config.model.isEmpty ? config.provider.defaultModel : config.model
+        guard config.isOnThisMac else {
+            // A ".local" address is another computer in the network: the text travels there, and
+            // meetings never use it.
+            return usesServer
+                ? String(localized: "\(model) auf \(config.baseURL). Gl\u{00E4}ttung und KI-Modi nutzen es: der Text geht dazu an diesen Rechner in deinem Netz. Meetings bleiben auf diesem Mac und nutzen ihn nicht.")
+                : String(localized: "\(model) auf \(config.baseURL) ist eingerichtet, ein Rechner in deinem Netz. Gl\u{00E4}ttung und KI-Modi nutzen ihn erst, wenn bei KI-Modi \u{201E}Immer Modell-Anbieter\u{201C} steht. Meetings nutzen ihn nie.")
+        }
         if usesServer {
             return String(localized: "\(model) auf \(config.baseURL). Meetings, Gl\u{00E4}ttung und KI-Modi nutzen es. Der Text verl\u{00E4}sst den Mac nicht.")
         }
@@ -79,8 +87,24 @@ struct LocalLanguageModelSection: View {
     @ViewBuilder
     private var serverAction: some View {
         if localServer == nil {
-            Button("Einrichten") { appState.aiProvider = AIProviderConfig(provider: .custom) }
-                .controlSize(.small)
+            Button("Einrichten") {
+                if appState.aiProvider == nil {
+                    appState.aiProvider = AIProviderConfig(provider: .custom)
+                } else {
+                    replacesProvider = true
+                }
+            }
+            .controlSize(.small)
+            .confirmationDialog(
+                "Den eingerichteten Modell-Anbieter ersetzen?",
+                isPresented: $replacesProvider,
+                titleVisibility: .visible
+            ) {
+                Button("Ersetzen") { appState.aiProvider = AIProviderConfig(provider: .custom) }
+                Button("Abbrechen", role: .cancel) {}
+            } message: {
+                Text("Diktat kennt einen Modell-Anbieter. Mit einem Server auf diesem Mac l\u{00F6}st du ihn ab, die KI-Modi nutzen dann den Server.")
+            }
         } else if !usesServer {
             Button("Jetzt nutzen") { appState.appSettings.rewriteEngine = .provider }
                 .controlSize(.small)

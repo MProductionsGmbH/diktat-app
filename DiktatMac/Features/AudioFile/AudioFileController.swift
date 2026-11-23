@@ -124,7 +124,8 @@ final class AudioFileController {
         phase = .idle
     }
 
-    private func finish(_ result: String, mode: WorkflowType, appState: AppState) {
+    private func finish(_ written: String, mode: WorkflowType, appState: AppState) {
+        let result = SwissSpelling.ifEnabled(written)
         text = result
         self.mode = mode
         appState.history.add(result, workflow: mode)

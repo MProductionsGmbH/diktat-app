@@ -9,11 +9,8 @@ enum MeetingTranscriber {
     /// The model a meeting uses: the picked one while it is installed, else the first installed.
     static var modelName: String {
         let name = LocalTranscriptionService.normalizedModelName(preferredModelName)
-        // Both turbo builds are one entry in the list; use the build this Mac has.
-        let picked = LocalTranscriptionService.turboModelNames.contains(name)
-            ? LocalTranscriptionService.turboModelName(selected: name)
-            : name
-        return LocalTranscriptionService.resolvedModelName(picked)
+        // A model with two builds is one entry in the list; use the build this Mac has.
+        return LocalTranscriptionService.resolvedModelName(LocalTranscriptionService.buildOnThisMac(for: name))
     }
 
     /// Why a meeting cannot start, or nil.

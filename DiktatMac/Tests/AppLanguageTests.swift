@@ -42,6 +42,10 @@ final class AppLanguageTests: XCTestCase {
         XCTAssertTrue(AppLanguage.german.needsRestart(runningCode: "en", systemCodes: ["en-US"]))
         // Automatic: follows the system, and any language but English falls back to German.
         XCTAssertFalse(AppLanguage.system.needsRestart(runningCode: "de", systemCodes: ["fr-FR"]))
+        // French first, then English, then German: macOS runs the app in English, the first of
+        // the user's languages it has. No restart is due then.
+        XCTAssertFalse(AppLanguage.system.needsRestart(runningCode: "en", systemCodes: ["fr-CH", "en-GB", "de-CH"]))
+        XCTAssertTrue(AppLanguage.system.needsRestart(runningCode: "de", systemCodes: ["fr-CH", "en-GB", "de-CH"]))
         XCTAssertTrue(AppLanguage.system.needsRestart(runningCode: "de", systemCodes: ["en-US"]))
     }
 

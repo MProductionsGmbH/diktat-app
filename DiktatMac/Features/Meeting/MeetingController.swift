@@ -179,6 +179,7 @@ final class MeetingController {
             }
             recordingID = record.id
             store.upsert(record)
+            MeetingStore.excludeFromBackup(record.audioURL)
             // Keeps the Mac awake through a long meeting; closing the lid still sends it to sleep.
             recordingActivity = ProcessInfo.processInfo.beginActivity(
                 options: [.idleSystemSleepDisabled, .userInitiated],
@@ -266,6 +267,7 @@ final class MeetingController {
         }
         do {
             try capture.start(writingTo: record.systemAudioURL, restartOnceSettled: micOpen)
+            MeetingStore.excludeFromBackup(record.systemAudioURL)
             systemCapture = capture
             isRecordingSystemAudio = true
             return nil
@@ -720,6 +722,14 @@ final class MeetingController {
     func rename(speaker: Int, to name: String, in meetingID: UUID) {
         guard var record = store.meeting(id: meetingID) else { return }
         record.speakerNames[speaker] = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        store.upsert(record)
+    }
+
+    /// A title of one's own, e.g. "Workshop mit Anna". An empty one changes nothing.
+    func rename(_ meetingID: UUID, to title: String) {
+        let title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !title.isEmpty, var record = store.meeting(id: meetingID) else { return }
+        record.title = title
         store.upsert(record)
     }
 

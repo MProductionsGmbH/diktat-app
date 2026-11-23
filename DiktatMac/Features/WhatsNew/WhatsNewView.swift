@@ -3,8 +3,15 @@ import SwiftUI
 /// What changed in this release. Shown once per `version`: on the next popover opening,
 /// or right after the first dictation for people who only use the shortcuts.
 enum WhatsNew {
-    /// Bump together with the items when a release deserves a note.
-    static let version = "1.15"
+    /// Names this set of notes; they are shown once per value. Change it together with the
+    /// items when a release deserves a note. It is not shown: the title carries the version of
+    /// the app itself.
+    static let version = "0.1.16"
+
+    /// The version of the running app, for the title.
+    static var appVersion: String {
+        (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? ""
+    }
 
     struct Item: Identifiable {
         let icon: String
@@ -16,18 +23,18 @@ enum WhatsNew {
     static let items: [Item] = [
         Item(
             icon: "video.fill",
-            title: String(localized: "Online-Meetings (Beta)"),
-            detail: String(localized: "Mit dem Schalter \u{201E}Online-Meeting\u{201C} nimmt Diktat auch das System-Audio auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon w\u{00E4}hrend des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen.")
+            title: String(localized: "Meetings: zwei Quellen"),
+            detail: String(localized: "\u{201E}Im Raum\u{201C} nimmt das Mikrofon des Computers auf. \u{201E}Online-Meeting\u{201C} nimmt das System-Audio auf, also die anderen aus Teams, Zoom oder Meet, und dazu dein Mikrofon. Mit einem Headset kommen jetzt wirklich die anderen an. Bitte vorher alle fragen.")
         ),
         Item(
-            icon: "cpu",
-            title: String(localized: "Lokales Sprachmodell (Beta)"),
-            detail: String(localized: "Unter Einstellungen > Modelle l\u{00E4}sst sich Gemma 4 laden. Es fasst lange Meetings genauer zusammen als Apple Intelligence, ganz auf diesem Mac. Diktat zeigt, welche Gr\u{00F6}\u{00DF}e zu deinem Mac passt.")
+            icon: "exclamationmark.triangle.fill",
+            title: String(localized: "Probleme fallen sofort auf"),
+            detail: String(localized: "Liefert das Mikrofon keinen Ton oder ist es weg, warnt Diktat gro\u{00DF} auf der Meeting-Seite, in der schwebenden Anzeige, in der Men\u{00FC}leiste und mit einer Mitteilung. Schlie\u{00DF}t du einen Monitor an, l\u{00E4}uft die Aufnahme weiter.")
         ),
         Item(
-            icon: "text.cursor",
-            title: String(localized: "Text landet am richtigen Ort"),
-            detail: String(localized: "Klickst du in ein anderes Feld, w\u{00E4}hrend ein KI-Modus noch arbeitet, kommt der Text in die Zwischenablage statt ins falsche Feld. Nach einem KI-Modus bietet das Men\u{00FC} \u{201E}Wortgenau statt \u{2026}\u{201C} an. Das erste Wort bleibt erhalten, und Diktat sagt, wenn das Mikrofon fehlt oder sehr leise ist.")
+            icon: "waveform",
+            title: String(localized: "Mundart und Schweizer Schreibweise"),
+            detail: String(localized: "Unter Einstellungen > Modelle stehen zwei weitere Whisper-Modelle zur Wahl, die Schweizerdeutsch oft besser verstehen. Lange Aufnahmen verlieren keine Passagen mehr. Mit \u{201E}Schweizer Schreibweise\u{201C} in den Einstellungen schreibt Diktat ohne Eszett.")
         ),
     ]
 }
@@ -42,7 +49,7 @@ struct WhatsNewView: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
-                Text(String(localized: "Neu in Diktat \(WhatsNew.version)"))
+                Text(String(localized: "Neu in Diktat \(WhatsNew.appVersion)"))
                     .font(DiktatType.publicSans(20, .bold, relativeTo: .title3))
                 Text("Einmal kurz, dann geht es weiter wie gewohnt.")
                     .font(.ui(12))

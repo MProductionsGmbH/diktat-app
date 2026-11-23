@@ -16,6 +16,11 @@ on:
 permissions:
   contents: write
 
+# One release at a time; a second start waits instead of racing the first.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   # A quick check on a small runner: which tag is meant, and is there a release for it already?
   # Only when there is none does the slow Mac build start.
@@ -85,8 +90,8 @@ jobs:
             brew install xcodegen
           fi
 
-      # With an Apple Developer ID the app is signed and notarized, and macOS opens it without a
-      # warning. Without the secrets below the release is signed ad hoc, as before.
+      # The app is signed with an Apple Developer ID and notarized, so macOS opens it without a
+      # warning. Without the secrets below the job fails; nothing goes out unsigned.
       # Needed: DEVELOPER_ID_CERT_P12 (the certificate as base64), DEVELOPER_ID_CERT_PASSWORD,
       # APPLE_ID, APPLE_TEAM_ID and APPLE_APP_PASSWORD (an app-specific password). See docs/releasing.md.
       - name: Import the signing certificate
@@ -95,8 +100,8 @@ jobs:
           DEVELOPER_ID_CERT_PASSWORD: ${{ secrets.DEVELOPER_ID_CERT_PASSWORD }}
         run: |
           if [ -z "$DEVELOPER_ID_CERT_P12" ]; then
-            echo "No signing certificate: the app is signed ad hoc."
-            exit 0
+            echo "The secret DEVELOPER_ID_CERT_P12 is missing. A release is never published unsigned."
+            exit 1
           fi
           keychain="$RUNNER_TEMP/signing.keychain-db"
           keychain_password="$(uuidgen)"
@@ -115,6 +120,22 @@ jobs:
           fi
           echo "DIKTAT_SIGN_IDENTITY=$identity" >> "$GITHUB_ENV"
 
+      # A version with failing tests is not released.
+      - name: Unit tests
+        run: |
+          (cd DiktatMac && xcodegen generate)
+          scripts/pin-packages.sh
+          xcodebuild \
+            -project DiktatMac/DiktatMac.xcodeproj \
+            -scheme DiktatMac \
+            -disableAutomaticPackageResolution \
+            -destination 'platform=macOS,arch=arm64' \
+            ARCHS=arm64 \
+            ONLY_ACTIVE_ARCH=YES \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            test
+
       - name: Build
         run: ./build.sh --release
 
@@ -124,13 +145,14 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
         run: |
-          if [ -z "$DIKTAT_SIGN_IDENTITY" ] || [ -z "$APPLE_ID" ]; then
-            echo "Not signed with a Developer ID or no Apple ID: skipping notarization."
-            exit 0
+          if [ -z "$DIKTAT_SIGN_IDENTITY" ] || [ -z "$APPLE_ID" ] || [ -z "$APPLE_TEAM_ID" ] || [ -z "$APPLE_APP_PASSWORD" ]; then
+            echo "Not signed with a Developer ID, or APPLE_ID, APPLE_TEAM_ID or APPLE_APP_PASSWORD is missing. A release is never published without notarization."
+            exit 1
           fi
           ditto -c -k --keepParent Diktat.app "$RUNNER_TEMP/notarize.zip"
+          # "|| true": a failing notarytool must still get its answer into the log.
           result="$(xcrun notarytool submit "$RUNNER_TEMP/notarize.zip" \
-            --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_PASSWORD" --wait 2>&1)"
+            --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_PASSWORD" --wait 2>&1 || true)"
           echo "$result"
           if ! echo "$result" | grep -q "status: Accepted"; then
             echo "Apple did not accept the app. Run 'xcrun notarytool log <id>' with the id above for the reasons."
@@ -149,15 +171,15 @@ jobs:
           shasum -a 256 dist/Diktat.dmg dist/Diktat.zip | tee dist/SHA256SUMS.txt
 
       # Updates inside the app: the zip is signed with the private update key and listed in
-      # appcast.xml, which the release carries as well. Without the secret the release still goes
-      # out, only without an update entry. See docs/releasing.md.
+      # appcast.xml, which the release carries as well. Without the secret the job fails.
+      # See docs/releasing.md.
       - name: Sign the update and write the appcast
         env:
           SPARKLE_PRIVATE_KEY: ${{ secrets.SPARKLE_PRIVATE_KEY }}
         run: |
           if [ -z "$SPARKLE_PRIVATE_KEY" ]; then
-            echo "No SPARKLE_PRIVATE_KEY secret: no update entry for this release."
-            exit 0
+            echo "The secret SPARKLE_PRIVATE_KEY is missing. Without it installed apps would never see this release."
+            exit 1
           fi
           sign_update="$HOME/Library/Caches/diktat-build/derivedData/SourcePackages/artifacts/sparkle/Sparkle/bin/sign_update"
           key_file="$RUNNER_TEMP/sparkle-key"
@@ -191,10 +213,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          files=(dist/Diktat.dmg dist/Diktat.zip dist/SHA256SUMS.txt)
-          if [ -f dist/appcast.xml ]; then
-            files+=(dist/appcast.xml)
-          fi
+          files=(dist/Diktat.dmg dist/Diktat.zip dist/SHA256SUMS.txt dist/appcast.xml)
           # A normal release, not a pre-release: only then does "releases/latest" point at it.
           # For a push to main the tag does not exist yet; --target makes the release create it.
           gh release create "$TAG" "${files[@]}" \

@@ -2,6 +2,10 @@ import Foundation
 import ServiceManagement
 
 enum DiktatCleanupService {
+    /// The local data was removed in this run of the app. From then on nothing writes history,
+    /// meetings or settings back from memory: what was deleted stays deleted.
+    nonisolated(unsafe) static var didRemoveUserData = false
+
     struct CleanupItemFailure: Identifiable, Equatable {
         let id = UUID()
         let url: URL
@@ -19,7 +23,8 @@ enum DiktatCleanupService {
     }
 
     static func cleanupUserData() -> CleanupReport {
-        cleanup(paths: [
+        didRemoveUserData = true
+        return cleanup(paths: [
             AppSupportPaths.settingsURL,
             AppSupportPaths.credentialsURL,
             AppSupportPaths.appSupportDirectoryURL,

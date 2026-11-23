@@ -78,6 +78,17 @@
         }
       }
     },
+    "%@ auf %@ ist eingerichtet, ein Rechner in deinem Netz. Glättung und KI-Modi nutzen ihn erst, wenn bei KI-Modi „Immer Modell-Anbieter“ steht. Meetings nutzen ihn nie.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ at %@ is set up, a computer in your network. Smoothing and the AI modes use it only once “Immer Modell-Anbieter” is set for the AI modes. Meetings never use it."
+          }
+        }
+      }
+    },
     "%@ auf %@ ist eingerichtet. Meetings nutzen es erst, wenn bei KI-Modi „Immer Modell-Anbieter“ steht.": {
       "extractionState": "manual",
       "localizations": {
@@ -85,6 +96,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ at %@ is set up. Meetings only use it when AI modes is set to “Always model provider”."
+          }
+        }
+      }
+    },
+    "%@ auf %@. Glättung und KI-Modi nutzen es: der Text geht dazu an diesen Rechner in deinem Netz. Meetings bleiben auf diesem Mac und nutzen ihn nicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ at %@. Smoothing and the AI modes use it: for that the text goes to this computer in your network. Meetings stay on this Mac and do not use it."
           }
         }
       }
@@ -243,6 +265,17 @@
         }
       }
     },
+    "%@ löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete %@"
+          }
+        }
+      }
+    },
     "%@ wird formuliert ...": {
       "extractionState": "manual",
       "localizations": {
@@ -276,13 +309,24 @@
         }
       }
     },
-    "%@, %@. Im Diktat-Menü unter Meeting.": {
+    "%@, %@. Ein Klick öffnet es.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@, %@. In the Diktat menu under Meeting."
+            "value": "%@, %@. Click to open it."
+          }
+        }
+      }
+    },
+    "%@, umbenennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, rename"
           }
         }
       }
@@ -749,13 +793,13 @@
         }
       }
     },
-    "Anmeldestart und lokale Daten wurden bereinigt. Jetzt Diktat beenden und aus /Applications löschen.": {
+    "Anmeldestart und lokale Daten wurden bereinigt. Diktat beendet sich jetzt. Lösche es danach aus /Applications.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Launch at login and local data were cleaned up. Now quit Diktat and delete it from /Applications."
+            "value": "Launch at login and local data were removed. Diktat quits now. Delete it from /Applications afterwards."
           }
         }
       }
@@ -1112,6 +1156,17 @@
         }
       }
     },
+    "Aufnahme verwerfen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard the recording?"
+          }
+        }
+      }
+    },
     "Aufnahmen": {
       "extractionState": "manual",
       "localizations": {
@@ -1306,6 +1361,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "With the MacBook closed, connect a headset or an external microphone."
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bei zugeklapptem MacBook ein Headset oder externes Mikrofon anschliessen."
           }
         }
       }
@@ -1527,6 +1588,12 @@
             "state": "translated",
             "value": "The meeting could not be saved, for example because the storage is full. The recording is kept."
           }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Meeting liess sich nicht sichern, zum Beispiel weil der Speicher voll ist. Die Aufnahme bleibt erhalten."
+          }
         }
       }
     },
@@ -1614,6 +1681,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The system audio could not be evaluated, only the microphone is evaluated. (%@)"
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das System-Audio liess sich nicht auswerten, ausgewertet wird nur das Mikrofon. (%@)"
           }
         }
       }
@@ -1717,6 +1790,17 @@
         }
       }
     },
+    "Datei wählen ...": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose file ..."
+          }
+        }
+      }
+    },
     "Daten konnten nicht verschlüsselt werden.": {
       "extractionState": "manual",
       "localizations": {
@@ -1735,6 +1819,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Privacy"
+          }
+        }
+      }
+    },
+    "Den eingerichteten Modell-Anbieter ersetzen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Replace the model provider that is set up?"
+          }
+        }
+      }
+    },
+    "Den ganzen Verlauf löschen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the whole history?"
           }
         }
       }
@@ -1904,6 +2010,17 @@
         }
       }
     },
+    "Die Aufnahme bleibt auf diesem Mac, bis du sie auswertest oder löschst.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The recording stays on this Mac until you evaluate or delete it."
+          }
+        }
+      }
+    },
     "Die Aufnahme ließ sich nicht starten. Darf Diktat das Mikrofon nutzen?": {
       "extractionState": "manual",
       "localizations": {
@@ -1911,6 +2028,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The recording could not be started. Is Diktat allowed to use the microphone?"
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Aufnahme liess sich nicht starten. Darf Diktat das Mikrofon nutzen?"
           }
         }
       }
@@ -1922,6 +2045,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "The recording could not be started: %@"
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Aufnahme liess sich nicht starten: %@"
+          }
+        }
+      }
+    },
+    "Die Aufnahme wird gelöscht und kann nicht mehr ausgewertet werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The recording is deleted and can no longer be evaluated."
+          }
+        }
+      }
+    },
+    "Die Aufnahme wird gelöscht und nicht ausgewertet. Das lässt sich nicht rückgängig machen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The recording is deleted and not evaluated. This cannot be undone."
           }
         }
       }
@@ -2003,6 +2154,17 @@
         }
       }
     },
+    "Die KI-Modi senden den erkannten Text an %@. Kein Konto, keine Telemetrie. Audio wird nach dem Diktat gelöscht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The AI modes send the recognized text to %@. No account, no telemetry. Audio is deleted after the dictation."
+          }
+        }
+      }
+    },
     "Die Modelle ließen sich nicht laden. Das geht nur mit Internet. (%@)": {
       "extractionState": "manual",
       "localizations": {
@@ -2010,6 +2172,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The models could not be loaded. That needs internet. (%@)"
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Modelle liessen sich nicht laden. Das geht nur mit Internet. (%@)"
           }
         }
       }
@@ -2043,6 +2211,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "The voices could not be recognized. At the first meeting Diktat downloads a model for this and needs internet. (%@)"
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Stimmen liessen sich nicht erkennen. Beim ersten Meeting lädt Diktat dafür ein Modell und braucht Internet. (%@)"
           }
         }
       }
@@ -2421,6 +2595,17 @@
         }
       }
     },
+    "Diktat kennt einen Modell-Anbieter. Mit einem Server auf diesem Mac löst du ihn ab, die KI-Modi nutzen dann den Server.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat knows a model provider. A server on this Mac replaces it, and the AI modes then use the server."
+          }
+        }
+      }
+    },
     "Diktat konnte nicht nach /Applications kopiert werden.": {
       "extractionState": "manual",
       "localizations": {
@@ -2737,6 +2922,12 @@
             "state": "translated",
             "value": "You can close the menu, the recording keeps running. The icon in the menu bar shows it. Please do not close the Mac."
           }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du kannst das Menü schliessen, die Aufnahme läuft weiter. Das Symbol in der Menüleiste zeigt sie an. Bitte den Mac nicht zuklappen."
+          }
         }
       }
     },
@@ -2857,6 +3048,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "A section could not be added to the notes. Nothing is missing in the transcript after the meeting."
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Abschnitt liess sich nicht in die Notizen übernehmen. Im Transkript nach dem Meeting fehlt nichts."
           }
         }
       }
@@ -3147,6 +3344,34 @@
         }
       }
     },
+    "Erkennt die Sprache selbst, rund 100 Sprachen. Das genaueste Whisper, auch bei Mundart, dafür langsamer und größer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detects the language itself, about 100 languages. The most accurate Whisper, also with dialect, but slower and larger."
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkennt die Sprache selbst, rund 100 Sprachen. Das genaueste Whisper, auch bei Mundart, dafür langsamer und grösser."
+          }
+        }
+      }
+    },
+    "Erkennt die Sprache selbst, rund 100 Sprachen. Kommt mit Mundart, etwa Schweizerdeutsch, klar besser zurecht als die kompakte Fassung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detects the language itself, about 100 languages. Copes clearly better with dialect, such as Swiss German, than the compact build."
+          }
+        }
+      }
+    },
     "Erkennt die Sprache selbst: Deutsch, Englisch und 23 weitere europäische Sprachen.": {
       "extractionState": "manual",
       "localizations": {
@@ -3187,6 +3412,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Allowed. But there is no microphone right now, with the MacBook closed connect a headset."
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erlaubt. Gerade ist aber kein Mikrofon da, bei zugeklapptem MacBook ein Headset anschliessen."
           }
         }
       }
@@ -4313,17 +4544,6 @@
         }
       }
     },
-    "Klickst du in ein anderes Feld, während ein KI-Modus noch arbeitet, kommt der Text in die Zwischenablage statt ins falsche Feld. Nach einem KI-Modus bietet das Menü „Wortgenau statt …“ an. Das erste Wort bleibt erhalten, und Diktat sagt, wenn das Mikrofon fehlt oder sehr leise ist.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "If you click into another field while an AI mode is still working, the text goes to the clipboard instead of the wrong field. After an AI mode, the menu offers “Word for word instead of …”. The first word is kept, and Diktat tells you when the microphone is missing or very quiet."
-          }
-        }
-      }
-    },
     "Kompakt und schnell": {
       "extractionState": "manual",
       "localizations": {
@@ -4478,6 +4698,23 @@
         }
       }
     },
+    "Liefert das Mikrofon keinen Ton oder ist es weg, warnt Diktat groß auf der Meeting-Seite, in der schwebenden Anzeige, in der Menüleiste und mit einer Mitteilung. Schließt du einen Monitor an, läuft die Aufnahme weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When the microphone delivers no sound or is gone, Diktat warns in large type on the meeting page, in the floating pill, in the menu bar and with a notification. When you connect a monitor, the recording goes on."
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liefert das Mikrofon keinen Ton oder ist es weg, warnt Diktat gross auf der Meeting-Seite, in der schwebenden Anzeige, in der Menüleiste und mit einer Mitteilung. Schliesst du einen Monitor an, läuft die Aufnahme weiter."
+          }
+        }
+      }
+    },
     "Links": {
       "extractionState": "manual",
       "localizations": {
@@ -4584,17 +4821,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Local model is loading."
-          }
-        }
-      }
-    },
-    "Lokales Sprachmodell (Beta)": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Local language model (beta)"
           }
         }
       }
@@ -4753,6 +4979,17 @@
         }
       }
     },
+    "Meeting löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete meeting"
+          }
+        }
+      }
+    },
     "Meeting löschen?": {
       "extractionState": "manual",
       "localizations": {
@@ -4760,6 +4997,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete meeting?"
+          }
+        }
+      }
+    },
+    "Meeting umbenennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename meeting"
           }
         }
       }
@@ -4852,17 +5100,6 @@
         }
       }
     },
-    "Meetings (Rechtsklick zum Löschen)": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meetings (right-click to delete)"
-          }
-        }
-      }
-    },
     "Meetings brauchen einen Mac mit Apple-Chip.": {
       "extractionState": "manual",
       "localizations": {
@@ -4881,6 +5118,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open Meetings"
+          }
+        }
+      }
+    },
+    "Meetings: zwei Quellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meetings: two sources"
           }
         }
       }
@@ -5013,17 +5261,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "With AI writing style: worded factually and politely"
-          }
-        }
-      }
-    },
-    "Mit dem Schalter „Online-Meeting“ nimmt Diktat auch das System-Audio auf, etwa aus Teams, Zoom oder Meet, und trennt die anderen nach Stimme. Live-Notizen zeigen schon während des Meetings Themen, Entscheidungen und To-dos. Bitte vorher alle fragen.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With the “Online meeting” switch, Diktat also records the system audio, for example from Teams, Zoom or Meet, and separates the others by voice. Live notes show topics, decisions and to-dos during the meeting. Please ask everyone beforehand."
           }
         }
       }
@@ -5189,6 +5426,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mode per app"
+          }
+        }
+      }
+    },
+    "Mundart und Schweizer Schreibweise": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swiss German and Swiss spelling"
           }
         }
       }
@@ -5512,13 +5760,13 @@
         }
       }
     },
-    "Noch nicht ausgewertet, klicken zum Auswerten": {
+    "Noch nicht ausgewertet, die Aufnahme liegt auf diesem Mac. Klicken zum Auswerten.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not evaluated yet, click to evaluate"
+            "value": "Not evaluated yet, the recording is on this Mac. Click to evaluate."
           }
         }
       }
@@ -5699,24 +5947,13 @@
         }
       }
     },
-    "Online-Meetings (Beta)": {
+    "OpenAI-kompatible Adresse. Ollama läuft auf jedem Mac unter derselben Adresse (localhost, Port 11434), LM Studio unter Port 1234. Nur wenn du das geändert hast oder ein anderer Rechner das Modell liefert, brauchst du eine andere. Wechselst du den Server, löscht Diktat einen dafür gesicherten API-Key, damit er nicht an den neuen geht.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Online meetings (beta)"
-          }
-        }
-      }
-    },
-    "OpenAI-kompatible Adresse. Ollama läuft auf jedem Mac unter derselben Adresse (localhost, Port 11434), LM Studio unter Port 1234. Nur wenn du das geändert hast oder ein anderer Rechner das Modell liefert, brauchst du eine andere.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OpenAI-compatible address. Ollama runs on every Mac at the same address (localhost, port 11434), LM Studio at port 1234. Only if you changed that or another computer provides the model do you need a different one."
+            "value": "OpenAI-compatible address. Ollama runs at the same address on every Mac (localhost, port 11434), LM Studio at port 1234. You need another one only if you changed that or another computer provides the model. When you change the server, Diktat deletes an API key saved for it, so it does not go to the new one."
           }
         }
       }
@@ -5908,6 +6145,17 @@
         }
       }
     },
+    "Probleme fallen sofort auf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problems stand out at once"
+          }
+        }
+      }
+    },
     "Prüfen": {
       "extractionState": "manual",
       "localizations": {
@@ -5993,6 +6241,40 @@
             "state": "translated",
             "value": "Close"
           }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schliessen"
+          }
+        }
+      }
+    },
+    "Schreibt ss statt ß, zum Beispiel „Strasse“ und „gross“: in Diktaten, in den Texten der KI-Modi und in Meetings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Writes ss instead of ß in German, for example “Strasse” and “gross”: in dictations, in the texts of the AI modes and in meetings."
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreibt ss statt ss, zum Beispiel „Strasse“ und „gross“: in Diktaten, in den Texten der KI-Modi und in Meetings."
+          }
+        }
+      }
+    },
+    "Schweizer Schreibweise": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swiss spelling"
+          }
         }
       }
     },
@@ -6003,6 +6285,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sets spaces and capitalization to fit the text before and after. For this Diktat reads the text field through Accessibility, never password fields."
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setzt Leerzeichen und Gross- und Kleinschreibung passend zum Text davor und danach. Diktat liest dazu das Textfeld über die Bedienungshilfen, Passwortfelder nie."
           }
         }
       }
@@ -6084,6 +6372,17 @@
         }
       }
     },
+    "Sprache auf diesem Mac": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech on this Mac"
+          }
+        }
+      }
+    },
     "Sprache bleibt auf diesem Mac, KI-Modi über %@.": {
       "extractionState": "manual",
       "localizations": {
@@ -6157,6 +6456,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Transcribe a voice memo or WhatsApp voice message. You can also drag files onto the Diktat icon in the Finder."
+          }
+        }
+      }
+    },
+    "Sprachmemo, WhatsApp-Sprachnachricht oder andere Audiodatei": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voice memo, WhatsApp voice message or another audio file"
           }
         }
       }
@@ -6513,17 +6823,6 @@
         }
       }
     },
-    "Text landet am richtigen Ort": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Text lands in the right place"
-          }
-        }
-      }
-    },
     "Text rein. Emojis dazu.": {
       "extractionState": "manual",
       "localizations": {
@@ -6553,6 +6852,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Improving text ..."
+          }
+        }
+      }
+    },
+    "Titel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Title"
           }
         }
       }
@@ -6656,6 +6966,17 @@
         }
       }
     },
+    "Transkript, Zusammenfassung und eine noch nicht ausgewertete Aufnahme werden gelöscht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcript, summary and a recording not yet evaluated are deleted."
+          }
+        }
+      }
+    },
     "Umformulieren läuft über den Modell-Anbieter unten.": {
       "extractionState": "manual",
       "localizations": {
@@ -6678,13 +6999,13 @@
         }
       }
     },
-    "Unter Einstellungen > Modelle lässt sich Gemma 4 laden. Es fasst lange Meetings genauer zusammen als Apple Intelligence, ganz auf diesem Mac. Diktat zeigt, welche Größe zu deinem Mac passt.": {
+    "Unter Einstellungen > Modelle stehen zwei weitere Whisper-Modelle zur Wahl, die Schweizerdeutsch oft besser verstehen. Lange Aufnahmen verlieren keine Passagen mehr. Mit „Schweizer Schreibweise“ in den Einstellungen schreibt Diktat ohne Eszett.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "You can download Gemma 4 under Settings > Models. It summarizes long meetings more precisely than Apple Intelligence, entirely on this Mac. Diktat shows which size fits your Mac."
+            "value": "Settings > Models offers two more Whisper models that often understand Swiss German better. Long recordings no longer lose passages. With “Swiss spelling” in Settings, Diktat writes ss instead of ß."
           }
         }
       }
@@ -6696,6 +7017,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tells the voices apart in meetings (Person 1, Person 2 …). The models are about 20 MB and run on this Mac."
+          }
+        },
+        "de-CH": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unterscheidet in Meetings die Stimmen (Person 1, Person 2 …). Die Modelle sind rund 20 MB gross und laufen auf diesem Mac."
           }
         }
       }
@@ -6964,6 +7291,17 @@
         }
       }
     },
+    "Weiter aufnehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep recording"
+          }
+        }
+      }
+    },
     "Weitere Kopien zeigen": {
       "extractionState": "manual",
       "localizations": {
@@ -6982,6 +7320,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Few"
+          }
+        }
+      }
+    },
+    "Whisper Large v3 (3 GB)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whisper Large v3 (3 GB)"
+          }
+        }
+      }
+    },
+    "Whisper Large v3 Turbo (1,6 GB)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whisper Large v3 Turbo (1.6 GB)"
           }
         }
       }
@@ -7213,6 +7573,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dictionary"
+          }
+        }
+      }
+    },
+    "Zieh eine Datei hierher oder wähle eine aus. Sie wird auf diesem Mac transkribiert und nicht verändert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drop a file here or choose one. It is transcribed on this Mac and not changed."
           }
         }
       }
@@ -7598,6 +7969,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Through your API key. Only the recognized text goes to the provider, never the speech."
+          }
+        }
+      }
+    },
+    "„Im Raum“ nimmt das Mikrofon des Computers auf. „Online-Meeting“ nimmt das System-Audio auf, also die anderen aus Teams, Zoom oder Meet, und dazu dein Mikrofon. Mit einem Headset kommen jetzt wirklich die anderen an. Bitte vorher alle fragen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Im Raum” records the computer's microphone. “Online-Meeting” records the system audio, that is the others from Teams, Zoom or Meet, and your microphone with it. With a headset the others now really arrive. Please ask everyone first."
           }
         }
       }

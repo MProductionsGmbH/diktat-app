@@ -86,6 +86,21 @@ struct AIProviderConfig: Codable, Equatable {
 
     private var host: String? { provider == .custom ? URL(string: baseURL)?.host?.lowercased() : nil }
 
+    /// The server a key saved for "Eigene Adresse" was given to: scheme, host and port. A key
+    /// must not travel on to another server just because the address was edited. Nil for the
+    /// named providers, whose address is fixed.
+    var keyScope: String? {
+        guard provider == .custom, let url = URL(string: baseURL), let host = url.host?.lowercased() else { return nil }
+        let scheme = url.scheme?.lowercased() ?? ""
+        return "\(scheme)://\(host):\(url.port.map(String.init) ?? "")"
+    }
+
+    /// True when changing from `old` to this config moves "Eigene Adresse" to another server.
+    func movesCustomServer(from old: AIProviderConfig?) -> Bool {
+        guard let old, old.provider == .custom, provider == .custom else { return false }
+        return old.keyScope != keyScope
+    }
+
     /// True when the address is a server on this Mac itself (Ollama, LM Studio on localhost):
     /// the text does not leave the Mac. Meetings may use only this.
     var isOnThisMac: Bool {

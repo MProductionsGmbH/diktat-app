@@ -50,7 +50,7 @@ struct TranscriptPostProcessor {
                 isDictionaryWord: isDictionaryWord
             )
         }
-        return Self.normalize(result, capitalizeFirstLetterLike: text)
+        return SwissSpelling.ifEnabled(Self.normalize(result, capitalizeFirstLetterLike: text))
     }
 
     // MARK: - Replacements

@@ -17,13 +17,14 @@ enum SystemAudioPermission {
     private static let service = "kTCCServiceAudioCapture" as CFString
     private static let library = dlopen("/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC", RTLD_NOW)
 
-    private typealias Preflight = @convention(c) (CFString, CFDictionary?) -> Int
+    /// The C function returns a 32-bit int; as `Int` the upper half would be whatever was in the register.
+    private typealias Preflight = @convention(c) (CFString, CFDictionary?) -> Int32
     private typealias Request = @convention(c) (CFString, CFDictionary?, @escaping (Bool) -> Void) -> Void
 
     /// What the permission system answers: 0 allowed, 1 refused, 2 not asked yet. Nil without the call.
     static var rawAnswer: Int? {
         guard let library, let symbol = dlsym(library, "TCCAccessPreflight") else { return nil }
-        return unsafeBitCast(symbol, to: Preflight.self)(service, nil)
+        return Int(unsafeBitCast(symbol, to: Preflight.self)(service, nil))
     }
 
     static var status: Status {

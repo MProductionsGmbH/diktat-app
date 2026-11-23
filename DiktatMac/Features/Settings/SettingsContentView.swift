@@ -348,7 +348,7 @@ struct AboutDiktatSection: View {
                     .help(String(localized: "\u{00D6}ffnet eine vorbereitete Mail an \(FeedbackMail.address). Du siehst alles, bevor sie rausgeht."))
             }
 
-            Button(String(localized: "Neuigkeiten in \(WhatsNew.version) anzeigen")) {
+            Button(String(localized: "Neuigkeiten in \(WhatsNew.appVersion) anzeigen")) {
                 appState.showWhatsNewAgain()
             }
             .buttonStyle(SubtleButtonStyle())
@@ -371,6 +371,12 @@ struct AboutDiktatSection: View {
                         .font(.ui(12))
                         .foregroundStyle(.primary)
                         .fixedSize(horizontal: false, vertical: true)
+                    // The check runs from here as well, so it can be switched off from here.
+                    Toggle("Automatisch nach Updates suchen", isOn: Binding(
+                        get: { appState.appUpdateService.automaticallyChecksForUpdates },
+                        set: { appState.appUpdateService.automaticallyChecksForUpdates = $0 }
+                    ))
+                    .toggleStyle(.trailingSwitch)
                 } else {
                     Button("Nach Updates suchen") {
                         appState.appUpdateService.checkForUpdates()
@@ -480,19 +486,20 @@ struct AboutDiktatSection: View {
         cleanupStatusText = nil
         cleanupErrorText = nil
 
-        let report = deleteLocalDataOnCleanup
-            ? DiktatCleanupService.cleanupUserData()
-            : DiktatCleanupService.removeLaunchAtLoginRegistration()
-
         if deleteLocalDataOnCleanup {
+            // Before the files go: these write the preferences, which the cleanup then removes.
             AIProvider.allCases.forEach(APIKeyStore.delete)
             appState.aiProvider = nil
             appState.aiKeyRevision += 1
         }
 
+        let report = deleteLocalDataOnCleanup
+            ? DiktatCleanupService.cleanupUserData()
+            : DiktatCleanupService.removeLaunchAtLoginRegistration()
+
         if report.failedItems.isEmpty {
             cleanupStatusText = deleteLocalDataOnCleanup
-                ? String(localized: "Anmeldestart und lokale Daten wurden bereinigt. Jetzt Diktat beenden und aus /Applications löschen.")
+                ? String(localized: "Anmeldestart und lokale Daten wurden bereinigt. Diktat beendet sich jetzt. Lösche es danach aus /Applications.")
                 : String(localized: "Anmeldestart wurde deaktiviert. Jetzt Diktat beenden und aus /Applications löschen.")
             showCleanupOptions = false
 
@@ -500,6 +507,11 @@ struct AboutDiktatSection: View {
                 ? [DiktatInstallLocationService.bundleURL]
                 : report.knownInstallBundleURLs
             revealInFinder(urls: urlsToReveal)
+            if deleteLocalDataOnCleanup {
+                // A running Diktat still holds history, meetings and settings in memory and
+                // would put them back on disk. It quits, so the removal holds.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) { NSApp.terminate(nil) }
+            }
             return
         }
 
