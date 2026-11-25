@@ -75,7 +75,7 @@ curl -fsSL -o /tmp/Diktat.zip https://github.com/MProductionsGmbH/diktat-app/rel
 - **Ollama for meetings (beta):** if you run Ollama or LM Studio on this Mac and enter its address (`http://localhost:11434/v1`) as your own provider, meetings can summarize with that model too. With "Immer Modell-Anbieter" it comes first; otherwise it is the fallback when Apple Intelligence is missing. Only a server on this Mac itself counts: meetings never go to another device or to the internet.
 - **Local language model for meetings (beta):** download Gemma 4 in the settings (E4B from 16 GB of memory, 12B from 24 GB). It summarizes long meetings more exactly than Apple Intelligence, on your Mac.
 - **Text lands in the right place:** if you click into another field while a writing mode still works, the text goes to the clipboard instead of the wrong field. After a writing mode, "Wortgenau statt ..." in the menu swaps in what you actually said.
-- **Voice memos and WhatsApp voice messages:** drop an audio file on Diktat and get the text, optionally with paragraphs.
+- **Voice memos and WhatsApp voice messages:** drop an audio file on Diktat and get the text, optionally with paragraphs. The texts of the last 7 days stay listed on the audio file page.
 - **Dictionary:** names and terms spelled your way, fixed replacements ("n acht n" becomes "n8n").
 - **History:** recent results, stored only on your Mac and encrypted with a key bound to it.
 - **Updates in the app:** Diktat offers new versions from this repository's releases, signed and notarized by Apple.

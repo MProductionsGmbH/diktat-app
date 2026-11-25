@@ -4,7 +4,8 @@ import Observation
 
 /// Transcribes an audio file on this Mac: Voice Memos from the iPhone (m4a), WhatsApp
 /// voice messages (Opus in Ogg) and anything else macOS can decode. The result lands on
-/// the clipboard and in the history; the AI modes can rewrite it afterwards.
+/// the clipboard and in the list of earlier files on the page "Audiodatei" (not in the history
+/// of dictations); the AI modes can rewrite it afterwards.
 @Observable
 @MainActor
 final class AudioFileController {
@@ -22,6 +23,8 @@ final class AudioFileController {
     private(set) var text = ""
     private(set) var mode: WorkflowType = .tapTalk
     private(set) var copied = false
+    /// The entry in the list of earlier files that is shown, nil when nothing is kept.
+    private(set) var entryID: UUID?
 
     private var task: Task<Void, Never>?
 
@@ -38,6 +41,7 @@ final class AudioFileController {
         text = ""
         mode = .tapTalk
         copied = false
+        entryID = nil
 
         guard appState.selectedLocalModelIsInstalled else {
             phase = .failed(String(localized: "Zuerst in den Einstellungen ein lokales Sprachmodell laden."))
@@ -77,7 +81,7 @@ final class AudioFileController {
                 }
                 if Task.isCancelled { return }
 
-                transcript = processed
+                transcript = SwissSpelling.ifEnabled(processed)
                 finish(processed, mode: .tapTalk, appState: appState)
             } catch {
                 phase = .failed(error.localizedDescription)
@@ -110,7 +114,43 @@ final class AudioFileController {
         guard !transcript.isEmpty else { return }
         text = transcript
         mode = .tapTalk
+        if let entryID { appState.audioFiles.update(entryID, text: transcript, mode: .tapTalk) }
         copy(appState: appState)
+    }
+
+    /// Shows an earlier file again. The clipboard stays as it is until "Kopieren".
+    func open(_ entry: AudioFileEntry) {
+        task?.cancel()
+        task = nil
+        entryID = entry.id
+        fileName = entry.fileName
+        duration = entry.duration
+        transcript = entry.transcript
+        text = entry.text
+        mode = entry.workflow
+        copied = false
+        phase = .done
+    }
+
+    /// Deletes an earlier file's text; the page empties when it is the one shown.
+    func delete(_ entry: AudioFileEntry, appState: AppState) {
+        appState.audioFiles.remove(entry)
+        guard entryID == entry.id else { return }
+        reset()
+    }
+
+    /// Back to the empty page: no file, no text.
+    func reset() {
+        task?.cancel()
+        task = nil
+        entryID = nil
+        fileName = ""
+        duration = 0
+        transcript = ""
+        text = ""
+        mode = .tapTalk
+        copied = false
+        phase = .idle
     }
 
     func copy(appState: AppState) {
@@ -128,7 +168,11 @@ final class AudioFileController {
         let result = SwissSpelling.ifEnabled(written)
         text = result
         self.mode = mode
-        appState.history.add(result, workflow: mode)
+        if let entryID {
+            appState.audioFiles.update(entryID, text: result, mode: mode)
+        } else {
+            entryID = appState.audioFiles.add(fileName: fileName, duration: duration, transcript: transcript, text: result)
+        }
         copy(appState: appState)
         phase = .done
     }

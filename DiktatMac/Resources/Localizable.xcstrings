@@ -991,6 +991,17 @@
         }
       }
     },
+    "Audiodateien mit eigener Liste": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio files get their own list"
+          }
+        }
+      }
+    },
     "Auf GitHub ansehen": {
       "extractionState": "manual",
       "localizations": {
@@ -998,6 +1009,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "View on GitHub"
+          }
+        }
+      }
+    },
+    "Auf der Seite „Audiodatei“ stehen jetzt die Texte der Dateien, die du in den letzten 7 Tagen transkribiert hast. Du kannst sie wieder öffnen, kopieren oder löschen. Im Verlauf erscheinen sie nicht mehr. Die Tondatei speichert Diktat weiterhin nicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The page “Audio file” now lists the texts of the files you transcribed in the last 7 days. You can open them again, copy or delete them. They no longer appear in the history. Diktat still does not store the sound file."
           }
         }
       }
@@ -1823,6 +1845,17 @@
         }
       }
     },
+    "Den Text von „%@“ löschen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete the text of “%@”?"
+          }
+        }
+      }
+    },
     "Den eingerichteten Modell-Anbieter ersetzen?": {
       "extractionState": "manual",
       "localizations": {
@@ -2006,6 +2039,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The audio file is empty."
+          }
+        }
+      }
+    },
+    "Die Audiodatei selbst bleibt, wo sie ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The audio file itself stays where it is."
           }
         }
       }
@@ -2228,6 +2272,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The globe key starts Diktat without a second key. Diktat waits a moment (0.15 s) to tell fn alone apart from fn + Shift etc. In macOS under System Settings > Keyboard, set “Press 🌐 key to” to “Do Nothing”, otherwise the emoji picker opens."
+          }
+        }
+      }
+    },
+    "Die Texte bleiben 7 Tage, nur auf diesem Mac und verschlüsselt. Die Tondatei speichert Diktat nicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The texts stay for 7 days, only on this Mac and encrypted. Diktat does not store the audio file."
           }
         }
       }
@@ -3653,6 +3708,17 @@
         }
       }
     },
+    "Frühere Dateien werden nicht aufbewahrt, weil der Verlauf in den Einstellungen aus ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Earlier files are not kept because the history is turned off in Settings."
+          }
+        }
+      }
+    },
     "Funktioniert": {
       "extractionState": "manual",
       "localizations": {
@@ -4694,23 +4760,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Last text: %@"
-          }
-        }
-      }
-    },
-    "Liefert das Mikrofon keinen Ton oder ist es weg, warnt Diktat groß auf der Meeting-Seite, in der schwebenden Anzeige, in der Menüleiste und mit einer Mitteilung. Schließt du einen Monitor an, läuft die Aufnahme weiter.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "When the microphone delivers no sound or is gone, Diktat warns in large type on the meeting page, in the floating pill, in the menu bar and with a notification. When you connect a monitor, the recording goes on."
-          }
-        },
-        "de-CH": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Liefert das Mikrofon keinen Ton oder ist es weg, warnt Diktat gross auf der Meeting-Seite, in der schwebenden Anzeige, in der Menüleiste und mit einer Mitteilung. Schliesst du einen Monitor an, läuft die Aufnahme weiter."
           }
         }
       }
@@ -5859,13 +5908,13 @@
         }
       }
     },
-    "Nur auf diesem Mac und verschlüsselt. Aus löscht den Verlauf sofort.": {
+    "Nur auf diesem Mac und verschlüsselt. Aus löscht den Verlauf sofort, auch die Texte transkribierter Audiodateien. Diese bleiben sonst immer 7 Tage.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Only on this Mac and encrypted. Off deletes the history immediately."
+            "value": "Only on this Mac and encrypted. Off deletes the history at once, including the texts of transcribed audio files. Otherwise those always stay for 7 days."
           }
         }
       }
@@ -6141,17 +6190,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Problem with the recording"
-          }
-        }
-      }
-    },
-    "Probleme fallen sofort auf": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Problems stand out at once"
           }
         }
       }
@@ -6823,6 +6861,28 @@
         }
       }
     },
+    "Text kopieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy text"
+          }
+        }
+      }
+    },
+    "Text löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete text"
+          }
+        }
+      }
+    },
     "Text rein. Emojis dazu.": {
       "extractionState": "manual",
       "localizations": {
@@ -6830,6 +6890,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text in. Emojis added."
+          }
+        }
+      }
+    },
+    "Text wieder anzeigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the text again"
           }
         }
       }
@@ -6929,6 +7000,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Transcribe"
+          }
+        }
+      }
+    },
+    "Transkribierte Dateien": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transcribed files"
           }
         }
       }
@@ -7441,6 +7523,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "In use"
+          }
+        }
+      }
+    },
+    "Wird oben angezeigt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shown above"
           }
         }
       }

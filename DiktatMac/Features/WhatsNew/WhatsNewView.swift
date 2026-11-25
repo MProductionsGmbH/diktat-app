@@ -6,7 +6,7 @@ enum WhatsNew {
     /// Names this set of notes; they are shown once per value. Change it together with the
     /// items when a release deserves a note. It is not shown: the title carries the version of
     /// the app itself.
-    static let version = "0.1.16"
+    static let version = "0.1.17"
 
     /// The version of the running app, for the title.
     static var appVersion: String {
@@ -22,14 +22,14 @@ enum WhatsNew {
 
     static let items: [Item] = [
         Item(
+            icon: "doc.text",
+            title: String(localized: "Audiodateien mit eigener Liste"),
+            detail: String(localized: "Auf der Seite \u{201E}Audiodatei\u{201C} stehen jetzt die Texte der Dateien, die du in den letzten 7 Tagen transkribiert hast. Du kannst sie wieder \u{00F6}ffnen, kopieren oder l\u{00F6}schen. Im Verlauf erscheinen sie nicht mehr. Die Tondatei speichert Diktat weiterhin nicht.")
+        ),
+        Item(
             icon: "video.fill",
             title: String(localized: "Meetings: zwei Quellen"),
             detail: String(localized: "\u{201E}Im Raum\u{201C} nimmt das Mikrofon des Computers auf. \u{201E}Online-Meeting\u{201C} nimmt das System-Audio auf, also die anderen aus Teams, Zoom oder Meet, und dazu dein Mikrofon. Mit einem Headset kommen jetzt wirklich die anderen an. Bitte vorher alle fragen.")
-        ),
-        Item(
-            icon: "exclamationmark.triangle.fill",
-            title: String(localized: "Probleme fallen sofort auf"),
-            detail: String(localized: "Liefert das Mikrofon keinen Ton oder ist es weg, warnt Diktat gro\u{00DF} auf der Meeting-Seite, in der schwebenden Anzeige, in der Men\u{00FC}leiste und mit einer Mitteilung. Schlie\u{00DF}t du einen Monitor an, l\u{00E4}uft die Aufnahme weiter.")
         ),
         Item(
             icon: "waveform",

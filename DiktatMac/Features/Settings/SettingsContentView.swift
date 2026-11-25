@@ -714,7 +714,7 @@ struct CustomizeSettingsView: View {
                         label: { $0.displayName }
                     )
 
-                    Text("Nur auf diesem Mac und verschl\u{00FC}sselt. Aus l\u{00F6}scht den Verlauf sofort.")
+                    Text("Nur auf diesem Mac und verschl\u{00FC}sselt. Aus l\u{00F6}scht den Verlauf sofort, auch die Texte transkribierter Audiodateien. Diese bleiben sonst immer 7 Tage.")
                         .font(.ui(12))
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)

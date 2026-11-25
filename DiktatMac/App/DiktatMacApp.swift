@@ -1242,6 +1242,16 @@ enum MacSnapshots {
                 let view = MainWindowView(appState: appState).frame(width: 1040, height: 700)
                 capture(view, appearance: appearance, to: folder.appendingPathComponent("\(mode)-window-\(page.rawValue).png"))
             }
+            // An earlier audio file opened again, in the window and in the popover.
+            if let earlier = appState.audioFiles.entries.first {
+                appState.audioFile.open(earlier)
+                appState.mainWindowPage = .audioFile
+                let window = MainWindowView(appState: appState).frame(width: 1040, height: 700)
+                capture(window, appearance: appearance, to: folder.appendingPathComponent("\(mode)-window-audioFile-open.png"))
+                appState.page = .audioFile
+                capture(MenuBarView(appState: appState), appearance: appearance, to: folder.appendingPathComponent("\(mode)-audiofile.png"))
+                appState.audioFile.reset()
+            }
             let speaking: [Float] = [0.1, 0.25, 0.5, 0.72, 0.4, 0.62, 0.88, 0.5, 0.3, 0.45, 0.2]
             let pillStates: [(MenuBarStatus, String)] = [
                 (.recording(.tapTalk), "recording-hint"), (.recording(.tapTalk), "recording"), (.recording(.tapTalk), "recording-quiet"),

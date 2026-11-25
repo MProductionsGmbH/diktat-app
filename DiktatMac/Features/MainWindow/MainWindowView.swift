@@ -475,7 +475,10 @@ struct MainAudioFilePage: View {
             } else {
                 AudioFileView(appState: appState, embedded: true)
             }
+
+            AudioFileHistoryList(appState: appState)
         }
+        .onAppear { appState.audioFiles.prune() }
         .overlay {
             if isDropTarget {
                 RoundedRectangle(cornerRadius: 16, style: .continuous)

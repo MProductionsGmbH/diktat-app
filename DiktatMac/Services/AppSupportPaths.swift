@@ -21,6 +21,11 @@ enum AppSupportPaths {
         appSupportDirectoryURL.appendingPathComponent(".history")
     }
 
+    /// The texts of transcribed audio files, see `AudioFileHistoryStore`.
+    static var audioFilesURL: URL {
+        appSupportDirectoryURL.appendingPathComponent(".audio-files")
+    }
+
     static var localModelsDirectoryURL: URL {
         appSupportDirectoryURL.appendingPathComponent("models", isDirectory: true)
     }

@@ -87,6 +87,7 @@ final class AppState {
             }
             if oldValue.historyRetention != appSettings.historyRetention {
                 history.updateRetention(appSettings.historyRetention)
+                audioFiles.setEnabled(appSettings.historyRetention != .off)
             }
             if oldValue.showsRecordingIndicator != appSettings.showsRecordingIndicator
                 || oldValue.pillPosition != appSettings.pillPosition {
@@ -113,6 +114,8 @@ final class AppState {
     let hotkeyService = HotkeyService()
     let appUpdateService = AppUpdateService()
     let history: TranscriptHistoryStore
+    /// The texts of transcribed audio files, listed on the page "Audiodatei".
+    let audioFiles: AudioFileHistoryStore
     let audioFile = AudioFileController()
     let callDetector = CallDetector()
     @ObservationIgnored private(set) lazy var meeting = MeetingController(store: MeetingStore(persistent: !Self.isToolRun)) { [unowned self] in
@@ -210,6 +213,7 @@ final class AppState {
         self.dampfAblassenSettings = Self.loadDampfAblassenSettings()
         self.emojiTextSettings = Self.loadEmojiTextSettings()
         self.history = TranscriptHistoryStore(retention: loadedAppSettings.historyRetention)
+        self.audioFiles = AudioFileHistoryStore(isEnabled: loadedAppSettings.historyRetention != .off)
         if Self.isToolRun { return }
         meeting.onPhaseChange = { [unowned self] in self.publishMenuBarStatus() }
         meeting.onProblemChange = { [unowned self] problem in
@@ -639,6 +643,7 @@ final class AppState {
         microphoneIssue = MicrophoneCheck.issue
         noteSetupProgress()
         history.prune()
+        audioFiles.prune()
         // A running file transcription or meeting comes before the assistant.
         let hasWorkInProgress = audioFile.isWorking || meeting.isRecording || meeting.isProcessing
         if let activeWorkflow, activeWorkflow.phase.isActive {
