@@ -27,6 +27,8 @@ final class MeetingController {
         /// "Immer Modell-Anbieter" with a server on this Mac (Ollama): it comes before the
         /// downloaded model and Apple Intelligence.
         var prefersServerOnThisMac = false
+        /// "Stimmen wiedererkennen": keep a voiceprint per person and name known voices.
+        var recognisesVoices = false
     }
 
     private(set) var phase: Phase = .idle {
@@ -79,8 +81,12 @@ final class MeetingController {
     /// Only the latest evaluation may change the phase; a cancelled one must not reset it.
     @ObservationIgnored private var evaluation = 0
 
-    init(store: MeetingStore, settings: @escaping () -> Settings) {
+    /// The voices known across meetings. Nil for tool runs, which recognise nobody.
+    let voices: VoiceprintStore?
+
+    init(store: MeetingStore, voices: VoiceprintStore? = nil, settings: @escaping () -> Settings) {
         self.store = store
+        self.voices = voices
         settingsProvider = settings
     }
 
@@ -491,6 +497,8 @@ final class MeetingController {
 
                 let paragraphs: [SpeakerAlignment.Paragraph]
                 let turns: [SpeakerTurn]
+                // Who spoke, with a voiceprint per person for recognising them next time.
+                let analysis: SpeakerDiarizer.Analysis
                 // An online meeting: the system sound holds the other people.
                 var system: (words: [TimedWord], wav: URL)?
                 if FileManager.default.fileExists(atPath: record.systemAudioURL.path) {
@@ -515,10 +523,11 @@ final class MeetingController {
                 update(.processing(String(localized: "Stimmen werden erkannt ...")))
                 do {
                     if let system {
-                        turns = try await SpeakerDiarizer.shared.turns(in: system.wav)
+                        analysis = try await SpeakerDiarizer.shared.analysis(of: system.wav)
                     } else {
-                        turns = try await SpeakerDiarizer.shared.turns(in: record.audioURL)
+                        analysis = try await SpeakerDiarizer.shared.analysis(of: record.audioURL)
                     }
+                    turns = analysis.turns
                 } catch {
                     try Task.checkCancellation()
                     // Keep the audio, so the people can still be told apart once this works.
@@ -554,6 +563,17 @@ final class MeetingController {
                 }
                 record.turns = transcribed
 
+                // Known voices get their name before the summary is written, so it uses them.
+                // "Ich" (the microphone of an online meeting) has no voiceprint and stays "Ich".
+                let present = Set(transcribed.map(\.speaker))
+                let prints = analysis.prints.filter { present.contains($0.key) }
+                if let voices {
+                    let known = voices.recognisedNames(prints: prints, speech: analysis.speech, enabled: settings.recognisesVoices)
+                    for (speaker, name) in known where (record.speakerNames[speaker] ?? "").isEmpty {
+                        record.speakerNames[speaker] = name
+                    }
+                }
+
                 if settings.summarizes {
                     let model = LocalModelStore.shared.preferredInstalled
                     update(.processing(model.map { String(localized: "Wird zusammengefasst (\($0.name), lokal) ...") } ?? String(localized: "Wird zusammengefasst ...")))
@@ -566,6 +586,8 @@ final class MeetingController {
                 if store.upsert(record) {
                     try? FileManager.default.removeItem(at: record.audioURL)
                     try? FileManager.default.removeItem(at: record.systemAudioURL)
+                    // Voiceprints are kept only for a meeting that is safely evaluated.
+                    voices?.register(meetingID: record.id, prints: prints, speech: analysis.speech, enabled: settings.recognisesVoices)
                 } else {
                     notice = String(localized: "Das Meeting lie\u{00DF} sich nicht sichern, zum Beispiel weil der Speicher voll ist. Die Aufnahme bleibt erhalten.")
                 }
@@ -719,9 +741,37 @@ final class MeetingController {
         phase = .showing(meetingID)
     }
 
-    func rename(speaker: Int, to name: String, in meetingID: UUID) {
+    /// `rememberVoice`: Diktat also learns the voice under this name, for later meetings.
+    func rename(speaker: Int, to name: String, in meetingID: UUID, rememberVoice: Bool = false) {
         guard var record = store.meeting(id: meetingID) else { return }
         record.speakerNames[speaker] = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        store.upsert(record)
+        voices?.name(speaker: speaker, in: meetingID, as: name, remember: rememberVoice, enabled: recognisesVoices)
+    }
+
+    // MARK: - Known voices
+
+    var recognisesVoices: Bool { settingsProvider().recognisesVoices }
+
+    /// Whether naming this person can teach Diktat the voice.
+    func canRememberVoice(of speaker: Int, in meetingID: UUID) -> Bool {
+        voices?.canRemember(speaker: speaker, in: meetingID, enabled: recognisesVoices) ?? false
+    }
+
+    /// Diktat named this person by itself.
+    func isRecognised(_ speaker: Int, in meetingID: UUID) -> Bool {
+        voices?.isRecognised(speaker: speaker, in: meetingID) ?? false
+    }
+
+    /// The name Diktat asks about ("Ist das Anna?") for a person it is unsure of.
+    func suggestedName(for speaker: Int, in meetingID: UUID) -> String? {
+        voices?.suggestion(for: speaker, in: meetingID)?.name
+    }
+
+    func answerSuggestion(for speaker: Int, in meetingID: UUID, isSame: Bool) {
+        guard let name = voices?.answer(speaker: speaker, in: meetingID, isSame: isSame, enabled: recognisesVoices),
+              var record = store.meeting(id: meetingID) else { return }
+        record.speakerNames[speaker] = name
         store.upsert(record)
     }
 
@@ -737,6 +787,7 @@ final class MeetingController {
     func delete(_ meetingID: UUID) {
         guard meetingID != recordingID else { return }
         store.delete(id: meetingID)
+        voices?.removeMeeting(meetingID)
         switch phase {
         case .showing(let id) where id == meetingID, .failed(_, let id?) where id == meetingID:
             notice = nil

@@ -187,6 +187,9 @@ struct AppSettings: Codable {
     var summarizesMeetings: Bool = true
     /// A notification offers to record the meeting when a call app opens the microphone.
     var suggestsMeetingOnCall: Bool = true
+    /// Remembers the voice of people the user names in a meeting and names them in later
+    /// meetings. On from the start; switching it off keeps what is stored (spec STIM-01).
+    var recognisesVoices: Bool = true
     /// "ss" instead of the sharp s in everything Diktat writes. On from the start in Switzerland
     /// and Liechtenstein.
     var swissSpelling: Bool = SwissSpelling.isUsualHere
@@ -233,6 +236,7 @@ struct AppSettings: Codable {
         case microphoneUID
         case summarizesMeetings
         case suggestsMeetingOnCall
+        case recognisesVoices
         case swissSpelling
     }
 
@@ -273,6 +277,7 @@ struct AppSettings: Codable {
         microphoneUID = try? container.decodeIfPresent(String.self, forKey: .microphoneUID)
         summarizesMeetings = try container.decodeIfPresent(Bool.self, forKey: .summarizesMeetings) ?? true
         suggestsMeetingOnCall = try container.decodeIfPresent(Bool.self, forKey: .suggestsMeetingOnCall) ?? true
+        recognisesVoices = try container.decodeIfPresent(Bool.self, forKey: .recognisesVoices) ?? true
         swissSpelling = try container.decodeIfPresent(Bool.self, forKey: .swissSpelling) ?? SwissSpelling.isUsualHere
     }
 

@@ -10,6 +10,10 @@ struct MeetingSettingsPane: View {
     @State private var speakerModels = SpeakerModels.State.current
     @State private var isLoadingSpeakerModels = false
     @State private var speakerModelError: String?
+    @State private var renamingVoice: KnownVoice?
+    @State private var newVoiceName = ""
+    @State private var forgettingVoice: KnownVoice?
+    @State private var confirmDeleteAllVoices = false
 
     private var source: Binding<MeetingSource> {
         Binding(
@@ -74,6 +78,10 @@ struct MeetingSettingsPane: View {
 
         SettingsSection(title: String(localized: "Sprecher-Erkennung")) {
             speakerContent
+        }
+
+        SettingsSection(title: String(localized: "Bekannte Stimmen")) {
+            knownVoicesContent
         }
 
         SettingsSection(title: String(localized: "Aufnahmen")) {
@@ -167,6 +175,98 @@ struct MeetingSettingsPane: View {
                 .foregroundStyle(DiktatTheme.danger)
                 .fixedSize(horizontal: false, vertical: true)
         }
+
+        Toggle(isOn: $appState.appSettings.recognisesVoices) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Stimmen wiedererkennen")
+                    .font(.ui(12, .semibold))
+                Text("Diktat merkt sich die Stimme von Personen, die du benennst, und erkennt sie in sp\u{00E4}teren Meetings wieder. Die Stimmabdr\u{00FC}cke bleiben verschl\u{00FC}sselt auf diesem Mac, bis du sie l\u{00F6}schst. Bitte frag die Personen vorher.")
+                    .font(.ui(11.5))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .toggleStyle(.trailingSwitch)
+        .padding(.top, 4)
+    }
+
+    // MARK: - Known voices
+
+    /// The voices Diktat remembers. Listed and removable whether the function is on or off:
+    /// switching it off deletes nothing, so this is where the prints are deleted by hand.
+    @ViewBuilder
+    private var knownVoicesContent: some View {
+        let store = appState.voiceprints
+        if store.voices.isEmpty {
+            Text("Noch keine bekannten Stimmen. Benenne eine Person in einem Meeting, dann merkt sich Diktat ihre Stimme.")
+                .font(.ui(12))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        } else {
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(store.voices) { voice in
+                    HStack(spacing: 10) {
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(voice.name)
+                                .font(.ui(12.5, .semibold))
+                            Text(Self.detail(of: voice))
+                                .font(.ui(11.5))
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer(minLength: 8)
+                        Button("Umbenennen") {
+                            newVoiceName = voice.name
+                            renamingVoice = voice
+                        }
+                        .buttonStyle(.subtle)
+                        Button("Vergessen", role: .destructive) { forgettingVoice = voice }
+                            .buttonStyle(.subtle)
+                    }
+                    .padding(.vertical, 2)
+                }
+            }
+            .alert("Stimme umbenennen", isPresented: Binding(get: { renamingVoice != nil }, set: { if !$0 { renamingVoice = nil } })) {
+                TextField("Name", text: $newVoiceName)
+                Button("Sichern") {
+                    if let voice = renamingVoice { store.rename(voice, to: newVoiceName) }
+                    renamingVoice = nil
+                }
+                Button("Abbrechen", role: .cancel) { renamingVoice = nil }
+            }
+            .confirmationDialog(
+                String(localized: "Die Stimme von \u{201E}\(forgettingVoice?.name ?? "")\u{201C} vergessen?"),
+                isPresented: Binding(get: { forgettingVoice != nil }, set: { if !$0 { forgettingVoice = nil } }),
+                titleVisibility: .visible
+            ) {
+                Button("Vergessen", role: .destructive) {
+                    if let voice = forgettingVoice { store.forget(voice) }
+                    forgettingVoice = nil
+                }
+            } message: {
+                Text("Die Namen in bisherigen Meetings bleiben.")
+            }
+        }
+
+        if store.hasPrints {
+            Button("Alle Stimmabdr\u{00FC}cke l\u{00F6}schen", role: .destructive) { confirmDeleteAllVoices = true }
+                .buttonStyle(.subtle)
+                .confirmationDialog(
+                    "Alle Stimmabdr\u{00FC}cke l\u{00F6}schen?",
+                    isPresented: $confirmDeleteAllVoices,
+                    titleVisibility: .visible
+                ) {
+                    Button("L\u{00F6}schen", role: .destructive) { store.removeAll() }
+                } message: {
+                    Text("Diktat vergisst alle bekannten Stimmen und die Stimmabdr\u{00FC}cke aus bisherigen Meetings. Die Namen in den Meetings bleiben.")
+                }
+        }
+    }
+
+    private static func detail(of voice: KnownVoice) -> String {
+        let date = voice.lastHeard.formatted(Date.FormatStyle(date: .abbreviated, time: .omitted, locale: AppLocale.current))
+        return voice.meetingCount == 1
+            ? String(localized: "1 Meeting, zuletzt geh\u{00F6}rt am \(date)")
+            : String(localized: "\(voice.meetingCount) Meetings, zuletzt geh\u{00F6}rt am \(date)")
     }
 
     private func loadSpeakerModels() {

@@ -136,6 +136,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
             }
             return
         }
+        if let files = MacVoiceCheck.files {
+            NSApp.setActivationPolicy(.prohibited)
+            Task {
+                await MacVoiceCheck.run(files)
+                NSApp.terminate(nil)
+            }
+            return
+        }
         if let path = UserDefaults.standard.string(forKey: "DiktatMicRestartCheck") {
             // A permission question needs an app that may show windows.
             NSApp.setActivationPolicy(.accessory)
@@ -586,6 +594,90 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, UNU
 /// Design reviews: `-DiktatSnapshotDir /path` renders the popover pages, the settings
 /// panes and the recording pill to PNG files, light and dark, and quits. No status item,
 /// no hotkeys, nothing is recorded. Not compiled into Release builds.
+/// How alike the voices of several recordings are, to set the limits of `VoiceMatching` from
+/// real audio: `-DiktatVoiceCheck /a.wav,/b.wav`. Prints the people of each file, how similar
+/// each is to each person of the other files, and what a library that knows everybody of the
+/// first file would do with the others. Stores nothing.
+@MainActor
+enum MacVoiceCheck {
+    static var files: [URL]? {
+        UserDefaults.standard.string(forKey: "DiktatVoiceCheck").map {
+            $0.split(separator: ",").map { URL(fileURLWithPath: String($0)) }
+        }
+    }
+
+    static func run(_ files: [URL]) async {
+        var analyses: [(name: String, analysis: SpeakerDiarizer.Analysis)] = []
+        for file in files {
+            do {
+                let wav = try AudioFileConverter.convertToWAV(file)
+                defer { try? FileManager.default.removeItem(at: wav.url) }
+                let analysis = try await SpeakerDiarizer.shared.analysis(of: wav.url)
+                analyses.append((file.deletingPathExtension().lastPathComponent, analysis))
+                print("\(file.lastPathComponent): \(Int(wav.duration)) s")
+                for speaker in analysis.prints.keys.sorted() {
+                    let seconds = Int(analysis.speech[speaker] ?? 0)
+                    print("  Person \(speaker): \(seconds) s Sprache, Abdruck mit \(analysis.prints[speaker]?.count ?? 0) Werten")
+                }
+            } catch {
+                print("\(file.lastPathComponent): FEHLER \(error.localizedDescription)")
+            }
+        }
+        for (index, a) in analyses.enumerated() {
+            for b in analyses.dropFirst(index + 1) {
+                print("\n\(a.name) / \(b.name)")
+                for (speakerA, printA) in a.analysis.prints.sorted(by: { $0.key < $1.key }) {
+                    let row = b.analysis.prints.sorted { $0.key < $1.key }.map { speakerB, printB in
+                        String(format: "P%d %.2f", speakerB, VoiceMatching.similarity(printA, printB))
+                    }
+                    print("  P\(speakerA): " + row.joined(separator: "   "))
+                }
+            }
+        }
+        guard let first = analyses.first else { return }
+        var library = VoiceLibrary()
+        let firstID = UUID()
+        library.register(meetingID: firstID, prints: first.analysis.prints, speech: first.analysis.speech, enabled: true, now: Date())
+        for speaker in first.analysis.prints.keys {
+            library.name(speaker: speaker, in: firstID, as: "\(first.name)-P\(speaker)", remember: true, enabled: true, now: Date())
+        }
+        print("\nBekannt aus \(first.name): " + library.voices.map(\.name).sorted().joined(separator: ", "))
+        for other in analyses.dropFirst() {
+            let id = UUID()
+            let names = library.register(meetingID: id, prints: other.analysis.prints, speech: other.analysis.speech, enabled: true, now: Date())
+            for speaker in other.analysis.prints.keys.sorted() {
+                let outcome = names[speaker].map { "erkannt als \($0)" }
+                    ?? library.suggestion(for: speaker, in: id).map { "Frage: Ist das \($0.name)?" }
+                    ?? "unbekannt"
+                print("  \(other.name) P\(speaker): \(outcome)")
+            }
+        }
+        diskCheck(first.analysis)
+    }
+
+    /// Writes voices to a throwaway file like the app does and prints what lies on disk.
+    private static func diskCheck(_ analysis: SpeakerDiarizer.Analysis) {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("diktat-voicecheck-\(UUID().uuidString)", isDirectory: true)
+        let file = folder.appendingPathComponent(".voiceprints")
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let meetingID = UUID()
+        let store = VoiceprintStore(persistent: true, fileURL: file)
+        store.register(meetingID: meetingID, prints: analysis.prints, speech: analysis.speech, enabled: true)
+        store.name(speaker: 1, in: meetingID, as: "Anna Beispiel", remember: true, enabled: true)
+
+        let data = (try? Data(contentsOf: file)) ?? Data()
+        let attributes = try? FileManager.default.attributesOfItem(atPath: file.path)
+        let mode = (attributes?[.posixPermissions] as? NSNumber)?.intValue ?? 0
+        let excluded = (try? file.resourceValues(forKeys: [.isExcludedFromBackupKey]))?.isExcludedFromBackup ?? false
+        let readable = data.range(of: Data("Anna Beispiel".utf8)) != nil || (try? JSONSerialization.jsonObject(with: data)) != nil
+        let reloaded = VoiceprintStore(persistent: true, fileURL: file)
+        print("\nAblage: \(data.count) Bytes, Rechte \(String(mode, radix: 8)), vom Backup ausgenommen: \(excluded)")
+        print("  Klartext lesbar: \(readable), nach Neustart gleich: \(reloaded.library == store.library), bekannte Stimmen: \(reloaded.voices.map(\.name))")
+        store.removeAll()
+        print("  nach \u{00AB}Alle l\u{00F6}schen\u{00BB} Datei vorhanden: \(FileManager.default.fileExists(atPath: file.path))")
+    }
+}
+
 /// Runs the meeting evaluation on an audio file and prints the result, without microphone,
 /// keychain or stored meetings: `-DiktatMeetingCheck /path/to/file.m4a`. Uses the installed
 /// Parakeet model and downloads the speaker models if they are missing.
@@ -598,15 +690,23 @@ enum MacMeetingCheck {
     static func run(_ file: URL) async {
         let store = MeetingStore(persistent: false)
         // Only the on-device model, so no API key is read from the keychain.
-        let summarizes = TextRewriter.isLocalAvailable
-        let controller = MeetingController(store: store) {
+        let summarizes = TextRewriter.isLocalAvailable && !UserDefaults.standard.bool(forKey: "DiktatMeetingNoSummary")
+        // `-DiktatMeetingVoices /path/to/file` recognises voices with a library kept in that
+        // file (never the real one), so two runs show a voice named in the first being
+        // recognised in the second. `-DiktatMeetingNames "1=Anna,2=Ben"` names people after
+        // the evaluation, with the tick "Stimme für künftige Meetings merken".
+        let voices = UserDefaults.standard.string(forKey: "DiktatMeetingVoices").map {
+            VoiceprintStore(persistent: true, fileURL: URL(fileURLWithPath: $0))
+        }
+        let controller = MeetingController(store: store, voices: voices) {
             MeetingController.Settings(
                 language: "de",
                 postProcessor: TranscriptPostProcessor(
                     customTerms: [], replacements: [], correctCustomTerms: false, removeFillerWords: true,
                     language: "de", isDictionaryWord: DictionaryWordChecker.isKnownWord
                 ),
-                summarizes: summarizes
+                summarizes: summarizes,
+                recognisesVoices: voices != nil
             )
         }
         var audioURL: URL?
@@ -654,6 +754,21 @@ enum MacMeetingCheck {
                     guard let result = store.meeting(id: id) else { return }
                     if let notice = controller.notice { print("Hinweis: \(notice)") }
                     print("\nPersonen: \(result.speakers.count)\n\n" + result.transcriptText)
+                    if voices != nil {
+                        print("\n--- Stimmen ---")
+                        for speaker in result.speakers {
+                            let state = controller.isRecognised(speaker, in: id) ? "erkannt"
+                                : controller.suggestedName(for: speaker, in: id).map { "Frage: Ist das \($0)?" }
+                                ?? (controller.canRememberVoice(of: speaker, in: id) ? "unbekannt, lernbar" : "kein Abdruck")
+                            print("\(result.name(for: speaker)): \(state)")
+                        }
+                        for pair in (UserDefaults.standard.string(forKey: "DiktatMeetingNames") ?? "").split(separator: ",") {
+                            let parts = pair.split(separator: "=")
+                            guard parts.count == 2, let speaker = Int(parts[0]) else { continue }
+                            controller.rename(speaker: speaker, to: String(parts[1]), in: id, rememberVoice: true)
+                        }
+                        print("Bekannte Stimmen: " + (voices?.voices.map { "\($0.name) (\($0.meetingCount))" }.joined(separator: ", ") ?? ""))
+                    }
                     print("\n--- Zusammenfassung ---\n" + (result.summary ?? result.summaryNote ?? "keine"))
                     return
                 case .failed(let message, _):
@@ -1312,6 +1427,11 @@ enum MacSnapshots {
                     .frame(width: MenuBarView.width)
                     .background(DiktatTheme.page)
                 capture(full, appearance: appearance, to: folder.appendingPathComponent("\(mode)-meeting-result-full.png"))
+                // Naming a person, with the tick that makes it a known voice.
+                let renaming = MeetingView(appState: appState, height: 1100, previewRenaming: 1)
+                    .frame(width: MenuBarView.width)
+                    .background(DiktatTheme.page)
+                capture(renaming, appearance: appearance, to: folder.appendingPathComponent("\(mode)-meeting-result-rename.png"))
                 // In the window, where "Alle Meetings" leads back to the list.
                 appState.mainWindowPage = .meetings
                 let window = MainWindowView(appState: appState).frame(width: 1040, height: 700)
@@ -1322,7 +1442,7 @@ enum MacSnapshots {
     }
 
     private static let sampleMeeting = MeetingRecord(
-        id: UUID(uuidString: "5A3B1E00-0000-4000-8000-0000000000AC")!,
+        id: VoiceprintStore.snapshotMeetingID,
         createdAt: Date(),
         title: MeetingRecord.title(startedAt: Date()),
         duration: 62,

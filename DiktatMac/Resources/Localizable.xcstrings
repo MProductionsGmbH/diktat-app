@@ -419,6 +419,17 @@
         }
       }
     },
+    "%lld Meetings, zuletzt gehört am %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld meetings, last heard on %@"
+          }
+        }
+      }
+    },
     "%lld Min.": {
       "extractionState": "manual",
       "localizations": {
@@ -470,6 +481,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld:%@ min"
+          }
+        }
+      }
+    },
+    "1 Meeting, zuletzt gehört am %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 meeting, last heard on %@"
           }
         }
       }
@@ -613,6 +635,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "All meetings"
+          }
+        }
+      }
+    },
+    "Alle Stimmabdrücke löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all voiceprints"
+          }
+        }
+      }
+    },
+    "Alle Stimmabdrücke löschen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all voiceprints?"
           }
         }
       }
@@ -1404,6 +1448,17 @@
         }
       }
     },
+    "Bekannte Stimmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Known voices"
+          }
+        }
+      }
+    },
     "Belegt, anderes wählen": {
       "extractionState": "manual",
       "localizations": {
@@ -1411,6 +1466,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Taken, pick another"
+          }
+        }
+      }
+    },
+    "Benennst du eine Person in einem Meeting, merkt sich Diktat ihre Stimme und setzt den Namen in späteren Meetings selbst. Die Funktion ist eingeschaltet. Ausschalten und Stimmen löschen kannst du unter Einstellungen > Meetings. Die Stimmabdrücke bleiben verschlüsselt auf diesem Mac. Bitte frag die Personen vorher.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you name a person in a meeting, Diktat remembers their voice and sets the name in later meetings by itself. The feature is on. You can switch it off and delete voices in Settings > Meetings. The voiceprints stay encrypted on this Mac. Please ask the people first."
           }
         }
       }
@@ -2226,6 +2292,17 @@
         }
       }
     },
+    "Die Namen in bisherigen Meetings bleiben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The names in earlier meetings stay."
+          }
+        }
+      }
+    },
     "Die Notizen sind zu lang für das Modell geworden.": {
       "extractionState": "manual",
       "localizations": {
@@ -2244,6 +2321,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The language of the app changes after a restart."
+          }
+        }
+      }
+    },
+    "Die Stimme von „%@“ vergessen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forget the voice of “%@”?"
           }
         }
       }
@@ -2705,6 +2793,17 @@
         }
       }
     },
+    "Diktat merkt sich die Stimme von Personen, die du benennst, und erkennt sie in späteren Meetings wieder. Die Stimmabdrücke bleiben verschlüsselt auf diesem Mac, bis du sie löschst. Bitte frag die Personen vorher.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat remembers the voice of people you name and recognizes them in later meetings. The voiceprints stay encrypted on this Mac until you delete them. Please ask the people first."
+          }
+        }
+      }
+    },
     "Diktat muss in /Applications liegen, damit der Anmeldestart verfügbar ist.": {
       "extractionState": "manual",
       "localizations": {
@@ -2800,6 +2899,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diktat always transcribes on this Mac. The audio does not leave the device."
+          }
+        }
+      }
+    },
+    "Diktat vergisst alle bekannten Stimmen und die Stimmabdrücke aus bisherigen Meetings. Die Namen in den Meetings bleiben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diktat forgets all known voices and the voiceprints from earlier meetings. The names in the meetings stay."
           }
         }
       }
@@ -4291,6 +4401,28 @@
         }
       }
     },
+    "Ist das %@?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Is that %@?"
+          }
+        }
+      }
+    },
+    "Ja": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yes"
+          }
+        }
+      }
+    },
     "Jeder Modus hat sein eigenes Kürzel. Du hältst es, sprichst, und Diktat schreibt den Text so, wie der Modus es verlangt. Ein Klick startet einen Modus auch ohne Kürzel.": {
       "extractionState": "manual",
       "localizations": {
@@ -5171,17 +5303,6 @@
         }
       }
     },
-    "Meetings: zwei Quellen": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Meetings: two sources"
-          }
-        }
-      }
-    },
     "Mein Mikrofon mit aufnehmen": {
       "extractionState": "manual",
       "localizations": {
@@ -5567,6 +5688,17 @@
         }
       }
     },
+    "Nein": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No"
+          }
+        }
+      }
+    },
     "Neu erstellen": {
       "extractionState": "manual",
       "localizations": {
@@ -5805,6 +5937,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No summary yet."
+          }
+        }
+      }
+    },
+    "Noch keine bekannten Stimmen. Benenne eine Person in einem Meeting, dann merkt sich Diktat ihre Stimme.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No known voices yet. Name a person in a meeting and Diktat remembers their voice."
           }
         }
       }
@@ -6696,6 +6839,28 @@
         }
       }
     },
+    "Stimme für künftige Meetings merken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remember the voice for future meetings"
+          }
+        }
+      }
+    },
+    "Stimme umbenennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename voice"
+          }
+        }
+      }
+    },
     "Stimmen werden erkannt ...": {
       "extractionState": "manual",
       "localizations": {
@@ -6703,6 +6868,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recognizing voices ..."
+          }
+        }
+      }
+    },
+    "Stimmen wiedererkennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recognize voices"
           }
         }
       }
@@ -7059,6 +7235,17 @@
         }
       }
     },
+    "Umbenennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
+          }
+        }
+      }
+    },
     "Umformulieren läuft über den Modell-Anbieter unten.": {
       "extractionState": "manual",
       "localizations": {
@@ -7160,6 +7347,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Test connection"
+          }
+        }
+      }
+    },
+    "Vergessen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forget"
           }
         }
       }
@@ -7846,6 +8044,17 @@
         }
       }
     },
+    "erkannt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "recognized"
+          }
+        }
+      }
+    },
     "fn geht nicht": {
       "extractionState": "manual",
       "localizations": {
@@ -8062,17 +8271,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Through your API key. Only the recognized text goes to the provider, never the speech."
-          }
-        }
-      }
-    },
-    "„Im Raum“ nimmt das Mikrofon des Computers auf. „Online-Meeting“ nimmt das System-Audio auf, also die anderen aus Teams, Zoom oder Meet, und dazu dein Mikrofon. Mit einem Headset kommen jetzt wirklich die anderen an. Bitte vorher alle fragen.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "“Im Raum” records the computer's microphone. “Online-Meeting” records the system audio, that is the others from Teams, Zoom or Meet, and your microphone with it. With a headset the others now really arrive. Please ask everyone first."
           }
         }
       }

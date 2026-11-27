@@ -118,12 +118,17 @@ final class AppState {
     let audioFiles: AudioFileHistoryStore
     let audioFile = AudioFileController()
     let callDetector = CallDetector()
-    @ObservationIgnored private(set) lazy var meeting = MeetingController(store: MeetingStore(persistent: !Self.isToolRun)) { [unowned self] in
+    /// The voices Diktat knows across meetings, see the settings tab "Meetings".
+    let voiceprints = VoiceprintStore(persistent: !AppState.isToolRun)
+    @ObservationIgnored private(set) lazy var meeting = MeetingController(
+        store: MeetingStore(persistent: !Self.isToolRun), voices: voiceprints
+    ) { [unowned self] in
         MeetingController.Settings(
             language: self.transcriptionSettings.language,
             postProcessor: self.postProcessor,
             summarizes: self.appSettings.summarizesMeetings,
-            prefersServerOnThisMac: self.appSettings.rewriteEngine == .provider
+            prefersServerOnThisMac: self.appSettings.rewriteEngine == .provider,
+            recognisesVoices: self.appSettings.recognisesVoices
         )
     }
 
@@ -195,6 +200,7 @@ final class AppState {
         #if DEBUG
         UserDefaults.standard.string(forKey: "DiktatSnapshotDir") != nil
             || UserDefaults.standard.string(forKey: "DiktatMeetingCheck") != nil
+            || UserDefaults.standard.string(forKey: "DiktatVoiceCheck") != nil
             || UserDefaults.standard.string(forKey: "DiktatSystemSoundCheck") != nil
             || UserDefaults.standard.string(forKey: "DiktatMicRestartCheck") != nil
         #else

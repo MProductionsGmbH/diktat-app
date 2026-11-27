@@ -8,9 +8,15 @@ struct MeetingView: View {
     var height: CGFloat = 560
     /// In the main window: no back header, and the height is the window's.
     var embedded = false
+    /// For snapshots: shows the rename editor of this person without a click.
+    var previewRenaming: Int?
 
     @State private var renaming: Int?
+    private var renamedSpeaker: Int? { renaming ?? previewRenaming }
     @State private var newName = ""
+    /// The tick "Stimme für künftige Meetings merken" of the person being renamed.
+    @State private var rememberVoice = true
+    @FocusState private var nameFieldFocused: Bool
     @State private var isResummarizing = false
     @State private var copied: CopyTarget?
     @State private var confirmDelete = false
@@ -84,13 +90,6 @@ struct MeetingView: View {
         // Back from the system settings, where the permission may have been given.
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             permission = SystemAudioPermission.status
-        }
-        .alert("Person umbenennen", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
-            TextField("Name", text: $newName)
-            Button("Sichern") { saveName() }
-            Button("Abbrechen", role: .cancel) { renaming = nil }
-        } message: {
-            Text(String(localized: "Der Name ersetzt \u{201E}Person \(renaming ?? 0)\u{201C} im Transkript."))
         }
     }
 
@@ -699,11 +698,19 @@ struct MeetingView: View {
                     ForEach(record.speakers, id: \.self) { speaker in
                         Button {
                             newName = record.speakerNames[speaker] ?? ""
+                            rememberVoice = true
                             renaming = speaker
+                            nameFieldFocused = true
                         } label: {
                             HStack(spacing: 5) {
                                 Circle().fill(color(for: speaker)).frame(width: 7, height: 7)
                                 Text(record.name(for: speaker))
+                                // Diktat set this name itself, from a voice it knows.
+                                if meeting.isRecognised(speaker, in: record.id) {
+                                    Text("erkannt")
+                                        .font(.ui(10, .medium))
+                                        .foregroundStyle(DiktatTheme.accent)
+                                }
                                 Image(systemName: "pencil")
                                     .font(.ui(9, .semibold))
                                     .foregroundStyle(.secondary)
@@ -716,6 +723,14 @@ struct MeetingView: View {
                             .contentShape(Capsule())
                         }
                         .buttonStyle(.plain)
+                    }
+                }
+                if let speaker = renamedSpeaker, record.speakers.contains(speaker) {
+                    renameEditor(speaker, in: record)
+                }
+                ForEach(record.speakers, id: \.self) { speaker in
+                    if speaker != renamedSpeaker, let name = meeting.suggestedName(for: speaker, in: record.id) {
+                        voiceQuestion(speaker, name: name, in: record)
                     }
                 }
             }
@@ -827,8 +842,67 @@ struct MeetingView: View {
 
     private func saveName() {
         guard let speaker = renaming, case .showing(let id) = meeting.phase else { return }
-        meeting.rename(speaker: speaker, to: newName, in: id)
+        let remembers = rememberVoice && meeting.canRememberVoice(of: speaker, in: id)
+        meeting.rename(speaker: speaker, to: newName, in: id, rememberVoice: remembers)
         renaming = nil
+    }
+
+    /// Name and, where Diktat has a voiceprint of the person, the tick that makes it a known
+    /// voice. Below the people instead of an alert, which cannot hold a tick.
+    private func renameEditor(_ speaker: Int, in record: MeetingRecord) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Person umbenennen")
+                .font(.ui(12, .semibold))
+            Text(String(localized: "Der Name ersetzt \u{201E}Person \(speaker)\u{201C} im Transkript."))
+                .font(.ui(11.5))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            TextField("Name", text: $newName)
+                .textFieldStyle(.roundedBorder)
+                .font(.ui(12.5))
+                .focused($nameFieldFocused)
+                .onSubmit { saveName() }
+            if meeting.canRememberVoice(of: speaker, in: record.id) {
+                Toggle(isOn: $rememberVoice) {
+                    Text("Stimme f\u{00FC}r k\u{00FC}nftige Meetings merken")
+                        .font(.ui(12))
+                }
+                .toggleStyle(.checkbox)
+            }
+            HStack(spacing: 8) {
+                Spacer()
+                Button("Abbrechen") { renaming = nil }
+                    .buttonStyle(.subtle)
+                    .keyboardShortcut(.cancelAction)
+                Button("Sichern") { saveName() }
+                    .buttonStyle(.glassAction)
+                    .keyboardShortcut(.defaultAction)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassPanel()
+    }
+
+    /// Diktat is unsure whether a person is a voice it knows, and asks instead of guessing.
+    private func voiceQuestion(_ speaker: Int, name: String, in record: MeetingRecord) -> some View {
+        HStack(spacing: 8) {
+            Circle().fill(color(for: speaker)).frame(width: 7, height: 7)
+            Text(record.name(for: speaker))
+                .font(.ui(12, .medium))
+            Text(String(localized: "Ist das \(name)?"))
+                .font(.ui(12))
+                .foregroundStyle(.secondary)
+            Spacer(minLength: 8)
+            Button("Ja") { meeting.answerSuggestion(for: speaker, in: record.id, isSame: true) }
+                .buttonStyle(.subtle)
+            Button("Nein") { meeting.answerSuggestion(for: speaker, in: record.id, isSame: false) }
+                .buttonStyle(.subtle)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glassPanel()
     }
 
     private func resummarize(_ id: UUID) {

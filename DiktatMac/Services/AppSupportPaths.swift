@@ -26,6 +26,11 @@ enum AppSupportPaths {
         appSupportDirectoryURL.appendingPathComponent(".audio-files")
     }
 
+    /// The voiceprints of known voices and of the people in meetings, see `VoiceprintStore`.
+    static var voiceprintsURL: URL {
+        appSupportDirectoryURL.appendingPathComponent(".voiceprints")
+    }
+
     static var localModelsDirectoryURL: URL {
         appSupportDirectoryURL.appendingPathComponent("models", isDirectory: true)
     }
